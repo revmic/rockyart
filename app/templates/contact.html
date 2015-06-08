@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="row">
+    <div class="box">
+        <div class="col-lg-12">
+            <hr>
+            <h2 class="intro-text text-center"><strong>Contact</strong></h2>
+            <hr>
+            <p> I am currently taking orders by phone or email only.
+                Feel free to ask about anything you find in the gallery or
+                if you'd like to discuss a something custom. I can't wait to
+                work on a unique piece for you!
+            </p>
+            <form id="contactForm" role="form" data-toggle="validator" method="post">
+                {{ form.hidden_tag() }}
+                <div class="row">
+                    <div class="form-group col-lg-4">
+                        {{ form.name.label }}
+                        {{ form.name(type="text", class="form-control",
+                        placeholder="First Last", required=True) }}
+                    </div>
+                    <div class="form-group col-lg-4">
+                        {{ form.email.label }}
+                        {{ form.email(type="email", class="form-control",
+                        placeholder="example@email.com", required=True) }}
+                    </div>
+                    <div class="form-group col-lg-4">
+                        {{ form.phone.label }}
+                        {{ form.phone(type="tel", class="form-control",
+                        placeholder="123-456-7890") }}
+                        <span class="help-block">
+                            Not required if you prefer email
+                        </span>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="form-group col-lg-12">
+                        {{ form.body.label }}
+                        {{ form.body(class="form-control", rows="6",
+                        placeholder="How can we help you?", required=True) }}
+                    </div>
+                    <div class="form-group col-lg-12">
+                        <button id="send" class="btn btn-default">
+                            <span id="btn_icon" class="glyphicon glyphicon-envelope"></span> Send
+                        </button>
+{#                        <span id="button_icon" class="glyphicon glyphicon-envelope"></span>#}
+{#                        {{ form.send(class="btn btn-default", id="send") }}#}
+                    </div>
+                    <div class="help-block"></div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+$(document).ready(function() {
+    $('#send').click(function () {
+        $("#btn_icon").attr('class', 'fa fa-spinner fa-spin fa-lg')
+    });
+});
+
+/*$('#contactForm').validator().on('submit', function (e) {
+    if (e.isDefaultPrevented()) {
+        // handle the invalid form...
+    } else {
+        $("#btn_icon").attr('class', 'fa fa-spinner fa-spin fa-lg');
+    }
+})*/
+</script>
+
+{% endblock %}
+

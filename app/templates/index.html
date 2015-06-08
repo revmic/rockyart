@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="row">
+    <div class="box">
+        <div class="col-lg-12 text-center">
+            <div id="carousel-main" class="carousel slide">
+                <!-- Indicators -->
+                <ol class="carousel-indicators hidden-xs">
+                    <li data-target="#carousel-main" data-slide-to="0" class="active"></li>
+                    <li data-target="#carousel-main" data-slide-to="1"></li>
+                    <li data-target="#carousel-main" data-slide-to="2"></li>
+                </ol>
+
+                <!-- Wrapper for slides -->
+                <div class="carousel-inner">
+                    <div class="item active">
+                        <img class="img-responsive img-full" src={{ url_for('static', filename="img/j1.jpg") }} alt="">
+                    </div>
+                    <div class="item">
+                        <img class="img-responsive img-full" src={{ url_for('static', filename="img/j6.jpg") }} alt="">
+                    </div>
+                    <div class="item">
+                        <img class="img-responsive img-full" src={{ url_for('static', filename="img/j7.jpg") }} alt="">
+                    </div>
+                </div>
+
+                <!-- Controls -->
+                <a class="left carousel-control" href="#carousel-main" data-slide="prev">
+                    <span class="icon-prev"></span>
+                </a>
+                <a class="right carousel-control" href="#carousel-main" data-slide="next">
+                    <span class="icon-next"></span>
+                </a>
+            </div>
+{#            <h2 class="brand-before">#}
+{#                <small>Welcome to</small>#}
+{#            </h2>#}
+{#            <h1 class="brand-name">Rocky Pardo Art Studio</h1>#}
+{#            <hr class="tagline-divider">#}
+{#            <h2>#}
+{#                <small>#}
+{#                    <strong>Rocky Pardo</strong>#}
+{#                </small>#}
+{#            </h2>#}
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="box">
+        <div class="col-lg-12">
+            <hr>
+            <h2 class="intro-text text-center">About <strong>Me</strong></h2>
+            <hr>
+            <img class="img-responsive img-border img-left" src="{{ url_for('static', filename='img/studio2_200x150.jpg') }}" alt="">
+            <hr class="visible-xs">
+            {# TODO image alignment#}
+{#            <br><br>#}
+            <p>My name is Rocky. I live and create in Edwardsville, Illinois amidst fruit trees, a feisty pup, and a hop farm. I received a BFA in metalsmithing at Southern Illinois University Edwardsville. I absolutely love what I do and I especially love creating jewelry. I hope you enjoy my work.</p>
+            <br>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="box">
+        <div class="col-lg-12 text-center">
+            <hr>
+            <h2 class="intro-text text-center">Artist <strong>Statement</strong></h2>
+            <hr>
+            <p>My fascination with the minutia within a grand whole is one of the drives behind my art. I relish in the little observed, hard to find, quiet and lavishly ornate beauties of the small and insignificant; or “unevents” as I see them. I examine the world as if to hold every dust mite and sand grain under a microscope, breaking down the smallest into even smaller. It is from that point that I then create my art ...</p>
+            <a href="{{ url_for('main.blog') }}" class="btn btn-default btn-lg">Read More</a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

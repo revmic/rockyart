@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="box">
+    <div class="row">
+    {% for i in range(1, 9) %}
+        <div class="col-md-3 gallery-item">
+            <a data-toggle="modal" data-target="{{ '#modal%s' % i }}">
+                <img class="img-responsive" src="{{ url_for('static', filename='img/j%s.jpg' % i) }}" alt="">
+            </a>
+        </div>
+    {% if i % 4 == 0 %}
+        {# start a new row every 4 items #}
+        </div>
+        <div class="row">
+    {% endif %}
+    {% endfor %}
+    </div>
+</div>
+
+<!-- Modal -->
+{% for i in range(1, 9) %}
+    <div class="modal fade" id="{{ 'modal%s' % i }}" tabindex="-1" role="dialog" aria-labelledby="LABEL" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+{#            <h4 class="modal-title" id="myModalLabel">ITEM DETAILS</h4>#}
+          </div>
+          <div class="modal-body">
+            <img class="img-responsive" src="{{ url_for('static', filename='img/j%s.jpg' % i) }}" alt="">
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+{#            <button type="button" class="btn btn-primary">Save changes</button>#}
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+{% endfor %}
+
+<div class="box">
+    <div class="row">
+        <div class="col-lg-12 text-center">
+            <p>If you are interested in anything you see or want to discuss a custom piece, please <a href="{{ url_for('main.contact') }}">contact me</a>. Online sales coming soon!</p>
+        </div>
+    </div>
+</div>
+
+{#<hr>#}
+
+<!-- Pagination -->
+{#<div class="row text-center">#}
+{#    <div class="col-lg-12">#}
+{#        <ul class="pagination">#}
+{#            <li>#}
+{#                <a data-toggle="modal" data-target="#myModal">&laquo;</a>#}
+{#            </li>#}
+{#            <li class="active">#}
+{#                <a data-toggle="modal" data-target="#myModal">1</a>#}
+{#            </li>#}
+{#            <li>#}
+{#                <a data-toggle="modal" data-target="#myModal">2</a>#}
+{#            </li>#}
+{#            <li>#}
+{#                <a data-toggle="modal" data-target="#myModal">3</a>#}
+{#            </li>#}
+{#            <li>#}
+{#                <a data-toggle="modal" data-target="#myModal">4</a>#}
+{#            </li>#}
+{#            <li>#}
+{#                <a data-toggle="modal" data-target="#myModal">5</a>#}
+{#            </li>#}
+{#            <li>#}
+{#                <a data-toggle="modal" data-target="#myModal">&raquo;</a>#}
+{#            </li>#}
+{#        </ul>#}
+{#    </div>#}
+{#</div>#}
+<!-- /.row -->
+
+{% endblock %}
