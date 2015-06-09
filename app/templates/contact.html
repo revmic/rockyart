@@ -53,22 +53,25 @@
 </div>
 
 <script>
-// Email button spinner
+
 $(document).ready(function() {
+
+    // Email button spinner
     $('#send').click(function () {
         $("#btn_icon").attr('class', 'fa fa-spinner fa-spin fa-lg');
     });
-});
-// Reset after a time in case of invalid form
-setInterval(function () { $("#btn_icon").attr('class', 'glyphicon glyphicon-envelope') }, 6000);
+    // Reset after a time in case of invalid form
+    setInterval(function () { $("#btn_icon").attr('class', 'glyphicon glyphicon-envelope') }, 6000);
 
-// Contact phone is a tel link on mobile or a tooltip on desktop
-if ($(window).width() < 768) {
-    $('#phone').append("<a href='tel://314-630-8983'>phone</a>");
-} else {
-    $('#phone').append("<a href='#' data-toggle='tooltip' title='314-630-8983'>phone</a>");
-    $('[data-toggle="tooltip"]').tooltip();
-}
+    // Contact phone is a tel link on mobile or a tooltip on desktop
+    if ($(window).width() < 768) {
+        $('#phone').append("<a href='tel://314-630-8983'>phone</a>");
+    } else {
+        $('#phone').append("<a href='#' data-toggle='tooltip' title='314-630-8983'>phone</a>");
+        $('[data-toggle="tooltip"]').tooltip();
+    }
+
+});
 
 /*$('#contactForm').validator().on('submit', function (e) {
     if (e.isDefaultPrevented()) {
