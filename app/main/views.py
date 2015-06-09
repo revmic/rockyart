@@ -29,7 +29,8 @@ def gallery():
         for i in range(1, 6):
             imgs.append("d%s.jpg" % i)
 
-    return render_template("gallery.html", title='About', imgs=imgs, c=category)
+    return render_template("gallery.html", title='Gallery',
+                           imgs=imgs, c=category)
 
 
 @main.route('/contact', methods=['GET', 'POST'])
