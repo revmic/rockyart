@@ -17,7 +17,6 @@
     <link href="../static/css/business-casual.css" rel="stylesheet">
     <link rel="stylesheet" href="../static/css/bootstrap-image-gallery.min.css">
     <link rel="stylesheet" href="http://blueimp.github.io/Gallery/css/blueimp-gallery.min.css">
-
 {#    <link href="../static/css/montserrat.css" rel="stylesheet">#}
     <!-- Fonts -->
     <link href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
@@ -40,10 +39,6 @@
 </style>
 
 <body>
-
-    <div class="brand heading">Rocky Pardo Art</div>
-    <div class="address-bar heading">Fine Jewelry | Edwardsville IL, 62025 | 314.630.8983</div>
-
     <!-- Navigation -->
     <nav class="navbar navbar-default" role="navigation">
         <div class="container">
@@ -61,20 +56,26 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
+                    <li class="hidden-xs">
+                        <a href="{{ url_for('main.index') }}" class="pull-left">
+                            <a class="navbar-brand" href="{{ url_for('main.index') }}">Rocky Pardo</a>
+                        </a>
+                    </li>
                     <li><a href="{{ url_for('main.index') }}">Home</a></li>
                     <li><a href="{{ url_for('main.gallery') }}">Gallery</a></li>
                     <li><a href="{{ url_for('main.blog') }}">Blog</a></li>
                     <li><a href="{{ url_for('main.contact') }}">Contact</a></li>
+                    <li>
+{#                    <a href="{{ url_for('main.index') }}" class="pull-left">#}
+{#                        <img src="{{ url_for('static', filename='img/cart_128.png') }}" height="50px">#}
+{#                    </a>#}
+                    </li>
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
         </div>
         <!-- /.container -->
     </nav>
-
-{#    Eventually should move this here once there is a logo and only include on index #}
-{#    <div class="brand heading">Rocky Pardo Art</div>#}
-{#    <div class="address-bar heading">Fine Jewelry | Edwardsville IL, 62025 | 123.456.7890</div>#}
 
     <div class="row">
         {% for message in get_flashed_messages() %}
@@ -95,7 +96,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 text-center">
-                    <p>Website by <strong>RevmicDev</strong></p>
+                    <p style="padding:15px">Website by <strong>RevmicDev</strong></p>
                 </div>
             </div>
         </div>

@@ -1,4 +1,4 @@
-from flask import render_template, session, redirect, url_for, flash
+from flask import render_template, session, redirect, url_for, flash, request
 from flask.ext.login import login_required
 
 from app import email, db
@@ -19,7 +19,17 @@ def blog():
 
 @main.route('/gallery')
 def gallery():
-    return render_template("gallery.html", title='About')
+    category = request.args.get("c")
+    imgs = []
+
+    if category == "jewelry" or not category:
+        for i in range(1, 8):
+            imgs.append("j%s.jpg" % i)
+    elif category == "drawings":
+        for i in range(1, 6):
+            imgs.append("d%s.jpg" % i)
+
+    return render_template("gallery.html", title='About', imgs=imgs, c=category)
 
 
 @main.route('/contact', methods=['GET', 'POST'])

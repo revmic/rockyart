@@ -8,7 +8,7 @@
             <hr>
             <h2 class="intro-text text-center"><strong>Contact</strong></h2>
             <hr>
-            <p> I am currently only taking orders by phone and email.
+            <p> I am currently only taking orders by <span id="phone"></span> and email.
                 Feel free to ask about anything you find in the gallery or
                 if you'd like to discuss something custom. I can't wait to
                 work on a unique piece for you!
@@ -55,15 +55,20 @@
 </div>
 
 <script>
+// Email button spinner
 $(document).ready(function() {
     $('#send').click(function () {
         $("#btn_icon").attr('class', 'fa fa-spinner fa-spin fa-lg')
     });
 });
 
-//if ($(window).width() < 800){
- //   alert("small screen");
-//}
+// Contact phone is a link on mobile or a tooltip on desktop
+if ($(window).width() < 800){
+    $('#phone').append("<a href='tel://314-630-8983'>phone</a>")
+} else {
+    $('#phone').append("<a href='#' data-toggle='tooltip' title='314-630-8983'>phone</a>")
+    $('[data-toggle="tooltip"]').tooltip();
+}
 
 /*$('#contactForm').validator().on('submit', function (e) {
     if (e.isDefaultPrevented()) {
