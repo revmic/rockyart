@@ -30,7 +30,7 @@
                         {{ form.phone.label }}
                         {{ form.phone(type="tel", class="form-control",
                         placeholder="123-456-7890") }}
-                        <span class="help-block">
+                        <span class="help-block" style="font-size:small">
                             Not required if you prefer email
                         </span>
                     </div>
@@ -44,8 +44,6 @@
                         <button id="send" class="btn btn-default">
                             <span id="btn_icon" class="glyphicon glyphicon-envelope"></span> Send
                         </button>
-{#                        <span id="button_icon" class="glyphicon glyphicon-envelope"></span>#}
-{#                        {{ form.send(class="btn btn-default", id="send") }}#}
                     </div>
                     <div class="help-block"></div>
                 </div>
@@ -58,15 +56,17 @@
 // Email button spinner
 $(document).ready(function() {
     $('#send').click(function () {
-        $("#btn_icon").attr('class', 'fa fa-spinner fa-spin fa-lg')
+        $("#btn_icon").attr('class', 'fa fa-spinner fa-spin fa-lg');
     });
 });
+// Reset after a time in case of invalid form
+setInterval(function () { $("#btn_icon").attr('class', 'glyphicon glyphicon-envelope') }, 6000);
 
-// Contact phone is a link on mobile or a tooltip on desktop
-if ($(window).width() < 800){
-    $('#phone').append("<a href='tel://314-630-8983'>phone</a>")
+// Contact phone is a tel link on mobile or a tooltip on desktop
+if ($(window).width() < 768) {
+    $('#phone').append("<a href='tel://314-630-8983'>phone</a>");
 } else {
-    $('#phone').append("<a href='#' data-toggle='tooltip' title='314-630-8983'>phone</a>")
+    $('#phone').append("<a href='#' data-toggle='tooltip' title='314-630-8983'>phone</a>");
     $('[data-toggle="tooltip"]').tooltip();
 }
 
