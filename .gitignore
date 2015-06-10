@@ -57,5 +57,5 @@ docs/_build/
 target/
 
 # Misc
-*idea/
+.idea/
 *DS_Store
