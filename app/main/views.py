@@ -1,9 +1,12 @@
+import os
+
 from flask import render_template, session, redirect, url_for, flash, request
 from flask.ext.login import login_required
 
 from app import email, db
 from app.main import main
 from app.main.forms import ContactForm
+from config import basedir
 
 
 @main.route('/')
@@ -19,18 +22,21 @@ def blog():
 
 @main.route('/gallery')
 def gallery():
+    img_dir = os.path.join(basedir, 'app', 'static', 'img', 'gallery', 'full')
     category = request.args.get("c")
-    imgs = []
+    images = []
 
-    if category == "jewelry" or not category:
-        for i in range(1, 8):
-            imgs.append("j%s.jpg" % i)
+    if category == "jewelry":
+        for img in os.listdir(img_dir):
+            if 'j' in img.split('.')[0]:
+                images.append(img)
     elif category == "drawings":
-        for i in range(1, 6):
-            imgs.append("d%s.jpg" % i)
+        for img in os.listdir(img_dir):
+            if 'd' in img.split('.')[0]:
+                images.append(img)
 
     return render_template("gallery.html", title='Gallery',
-                           imgs=imgs, c=category)
+                           images=images, c=category)
 
 
 @main.route('/contact', methods=['GET', 'POST'])

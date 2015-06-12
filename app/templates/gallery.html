@@ -5,9 +5,9 @@
 <div class="box-container">
     <div class="row">
         <div class="col-lg-12 text-center">
-            <a href="{{ url_for('main.gallery', c='jewelry') }}" class="btn btn-default
+            <a href="{{ url_for('main.gallery', c='jewelry') }}" class="btn btn-default btn-sm
                 {% if c=='jewelry' %}active{% endif %}" style="opacity: 0.8">Jewelry</a>
-            <a href="{{ url_for('main.gallery', c='drawings') }}" class="btn btn-default
+            <a href="{{ url_for('main.gallery', c='drawings') }}" class="btn btn-default btn-sm
                 {% if c=='drawings' %}active{% endif %}" style="opacity: 0.8">Drawings</a>
         </div>
     </div>
@@ -16,7 +16,7 @@
 <!-- Populate gallery elements -->
 <div class="box" align="center">
     <div id="links">
-        {% for i in imgs %}
+        {% for i in images %}
             <a href="{{ url_for('static', filename='img/gallery/full/%s' % i) }}" title="" data-gallery>
                 <img src="{{ url_for('static', filename='img/gallery/thumb/%s' % i) }}" class="gallery-item" alt="">
             </a>
@@ -58,45 +58,6 @@
         </div>
     </div>
 </div>
-
-{##}
-{#<div class="box">#}
-{#    <div class="row">#}
-{#    {% for i in range(1, 9) %}#}
-{#        <div class="col-md-3 gallery-item">#}
-{#            <a data-toggle="modal" data-target="{{ '#modal%s' % i }}">#}
-{#                <img class="img-responsive" src="{{ url_for('static', filename='img/gallery/thumb/j%s.jpg' % i) }}" alt="">#}
-{#            </a>#}
-{#        </div>#}
-{#    {% if i % 4 == 0 %}#}
-        {# start a new row every 4 items #}
-{#        </div>#}
-{#        <div class="row">#}
-{#    {% endif %}#}
-{#    {% endfor %}#}
-{#    </div>#}
-{#</div>#}
-{##}
-{#<!-- Modal -->#}
-{#{% for i in range(1, 9) %}#}
-{#    <div class="modal fade" id="{{ 'modal%s' % i }}" tabindex="-1" role="img" aria-labelledby="LABEL" aria-hidden="true">#}
-{#      <div class="modal-dialog">#}
-{#        <div class="modal-content">#}
-{#          <div class="modal-header">#}
-{#            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>#}
-{#            <h4 class="modal-title" id="myModalLabel">ITEM DETAILS</h4>#}
-{#          </div>#}
-{#          <div class="modal-body">#}
-{#            <img class="img-responsive" src="{{ url_for('static', filename='img/gallery/full/j%s.jpg' % i) }}" alt="">#}
-{#          </div>#}
-{#          <div class="modal-footer">#}
-{#            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>#}
-{#            <button type="button" class="btn btn-primary">Save changes</button>#}
-{#          </div>#}
-{#        </div><!-- /.modal-content -->#}
-{#      </div><!-- /.modal-dialog -->#}
-{#    </div><!-- /.modal -->#}
-{#{% endfor %}#}
 
 <div class="box">
     <div class="row">
