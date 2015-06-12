@@ -17,8 +17,8 @@
 <div class="box" align="center">
     <div id="links">
         {% for i in images %}
-            <a href="{{ url_for('static', filename='img/gallery/full/%s' % i) }}" title="" data-gallery>
-                <img src="{{ url_for('static', filename='img/gallery/thumb/%s' % i) }}" class="gallery-item" alt="">
+            <a href="{{ url_for('static', filename='img/gallery/%s/full/%s' % (c, i)) }}" title="" data-gallery>
+                <img src="{{ url_for('static', filename='img/gallery/%s/thumb/%s' % (c, i)) }}" class="gallery-item" alt="" width="200">
             </a>
         {% endfor %}
     </div>

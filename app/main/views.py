@@ -22,18 +22,21 @@ def blog():
 
 @main.route('/gallery')
 def gallery():
-    img_dir = os.path.join(basedir, 'app', 'static', 'img', 'gallery', 'full')
+    img_dir = os.path.join(basedir, 'app', 'static', 'img', 'gallery')
     category = request.args.get("c")
     images = []
 
     if category == "jewelry":
-        for img in os.listdir(img_dir):
-            if 'j' in img.split('.')[0]:
-                images.append(img)
+        ipath = os.path.join(img_dir, 'jewelry', 'full')
     elif category == "drawings":
-        for img in os.listdir(img_dir):
-            if 'd' in img.split('.')[0]:
-                images.append(img)
+        ipath = os.path.join(img_dir, 'drawings', 'full')
+
+    print(ipath)
+
+    for img in os.listdir(ipath):
+        if 'g' in img:
+            print(img)
+            images.append(img)
 
     return render_template("gallery.html", title='Gallery',
                            images=images, c=category)
