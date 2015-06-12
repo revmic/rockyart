@@ -1,12 +1,23 @@
-import os
-
 from flask.ext.script import Manager, Shell
 from flask.ext.migrate import Migrate, MigrateCommand
 
 from app import create_app, db
-# from app.models import *
+from config import basedir
 
-app = create_app(os.getenv('FLASK_CONFIG') or 'default')
+
+def get_env():
+    """
+    Figure out environment from the application path
+    """
+    if 'test' in basedir:
+        return 'test'
+    if 'revmic' in basedir:
+        return 'prod'
+    if 'michael' in basedir:
+        return 'dev'
+    return 'default'
+
+app = create_app(get_env())
 manager = Manager(app)
 migrate = Migrate(app, db)
 
