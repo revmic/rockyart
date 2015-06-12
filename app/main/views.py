@@ -27,16 +27,19 @@ def gallery():
     images = []
 
     if category == "jewelry":
-        ipath = os.path.join(img_dir, 'jewelry', 'full')
+        img_path = os.path.join(img_dir, 'jewelry', 'full')
     elif category == "drawings":
-        ipath = os.path.join(img_dir, 'drawings', 'full')
+        img_path = os.path.join(img_dir, 'drawings', 'full')
+    else:
+        img_path = os.path.join(img_dir, 'jewelry', 'full')
 
-    print(ipath)
-
-    for img in os.listdir(ipath):
-        if 'g' in img:
-            print(img)
+    for img in os.listdir(img_path):
+        if 'j' in img and 'g' in img:
             images.append(img)
+
+    # Sort reverse if jewelry
+    if category == "jewelry":
+        images = sorted(images, reverse=True)
 
     return render_template("gallery.html", title='Gallery',
                            images=images, c=category)
