@@ -1,12 +1,14 @@
 import os
+import requests
+import datetime
 
-from flask import render_template, session, redirect, url_for, flash, request
+from flask import render_template, redirect, url_for, flash, request, Markup
 from flask.ext.login import login_required
 
 from app import email, db
 from app.main import main
 from app.main.forms import ContactForm
-from config import basedir
+from config import basedir, INSTAGRAM_KEY
 
 
 @main.route('/')
@@ -17,7 +19,27 @@ def index():
 
 @main.route('/blog')
 def blog():
-    return render_template("blog.html", title='Blog')
+    uri = 'https://api.instagram.com/v1/users/2099685218/media/recent/' \
+          '?client_id=' + INSTAGRAM_KEY
+    r = requests.get(uri)
+    instagrams = []
+
+    for instagram in r.json()['data']:
+        caption = ""
+        for line in instagram['caption']['text'].split('\n'):
+            caption += Markup.escape(line) + Markup('<br />')
+        img = instagram['images']['standard_resolution']['url']
+        caption = instagram['caption']['text']
+        dt = datetime.datetime.fromtimestamp(int(instagram['created_time']))
+        date_str = dt.strftime('%B %-d, %Y')
+        link = instagram['link']
+        instagrams.append({'date_str': date_str, 'datetime': dt, 'image': img,
+                           'caption': caption, 'link': link})
+
+        # print(instagram['caption']['text'])
+        # print(instagram)
+
+    return render_template("blog.html", title='Blog', instagrams=instagrams)
 
 
 @main.route('/gallery')

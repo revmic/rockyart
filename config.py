@@ -4,6 +4,7 @@ import configparser
 basedir = os.path.abspath(os.path.dirname(__file__))
 configp = configparser.RawConfigParser()
 configp.read(os.path.expanduser('~/.rockyart.cfg'))
+INSTAGRAM_KEY = configp['instagram']['client_id']
 
 
 class Config:
