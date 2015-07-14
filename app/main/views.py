@@ -19,25 +19,34 @@ def index():
 
 @main.route('/blog')
 def blog():
+    instagrams = []
     uri = 'https://api.instagram.com/v1/users/2099685218/media/recent/' \
           '?client_id=' + INSTAGRAM_KEY
     r = requests.get(uri)
-    instagrams = []
+    try:
+        r.raise_for_status()
+    except Exception as e:
+        print(e, "\nProblem connecting with Instagram api\n", uri)
+        return render_template("blog.html", title='Blog', instagrams=instagrams)
 
     for instagram in r.json()['data']:
-        caption = ""
-        for line in instagram['caption']['text'].split('\n'):
-            caption += Markup.escape(line) + Markup('<br />')
         img = instagram['images']['standard_resolution']['url']
-        caption = instagram['caption']['text']
-        dt = datetime.datetime.fromtimestamp(int(instagram['created_time']))
-        date_str = dt.strftime('%B %-d, %Y')
         link = instagram['link']
+        # Might not contain a caption
+        try:
+            caption = instagram['caption']['text']
+        except Exception as e:
+            print(e, "\nDoesn't appear to be a caption for instagram\n", link)
+            caption = ""
+        # Just in case we can't parse the date
+        try:
+            dt = datetime.datetime.fromtimestamp(int(instagram['created_time']))
+            date_str = dt.strftime('%B %-d, %Y')
+        except Exception as e:
+            print("Problem getting datetime info\n", e)
+
         instagrams.append({'date_str': date_str, 'datetime': dt, 'image': img,
                            'caption': caption, 'link': link})
-
-        # print(instagram['caption']['text'])
-        # print(instagram)
 
     return render_template("blog.html", title='Blog', instagrams=instagrams)
 
@@ -98,3 +107,8 @@ def admin():
 def inquiry():
     form = ContactForm()
     return render_template("inquiry.html", title='Inquiry', form=form)
+
+
+@main.route('/500')
+def e500():
+    return render_template('500.html', path=request.path, title='Something Wrong')

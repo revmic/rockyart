@@ -71,9 +71,21 @@ p.watermark {
     line-height: 300%;
 }
 
+.error-template {
+    padding: 15px 15px;
+    text-align: center;
+}
+.error-actions {
+    margin-top:15px;
+    margin-bottom:15px;
+}
+.error-actions .btn {
+    margin-right:10px;
+}
+
 @media screen and (max-width:768px) {
     .haiku {
-        line-height: 100%;
+        line-height: 125%;
         font-size: medium;
         font-weight: lighter;
     }

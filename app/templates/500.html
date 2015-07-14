@@ -1,10 +1,30 @@
-<!DOCTYPE html>
-<html>
-<head lang="en">
-    <meta charset="UTF-8">
-    <title>Sorry, something went wrong</title>
-</head>
-<body>
-Something went wrong. The page cannot heretofore... The aforementioned circumstance... Just call my lawyer.
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="row">
+    <div class="box">
+        <div class="col-md-12">
+            <div class="error-template">
+                <h1>Oof!</h1>
+                <h4>Something went wrong</h4>
+                <div class="error-details">
+                    But don't panic. Programmers make mistakes, too. <br>
+                    Apologies for any inconvenience.
+                </div>
+                <div class="error-actions">
+                    <a href="{{ url_for('main.index') }}" class="btn btn-success">
+                        <span class="glyphicon glyphicon-home"></span>
+                        Take Me Home
+                    </a>
+                    <a href="{{ url_for('main.contact') }}" class="btn btn-default">
+                        <span class="glyphicon glyphicon-envelope"></span>
+                        Contact Support
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{%  endblock %}

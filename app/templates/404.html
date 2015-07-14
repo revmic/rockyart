@@ -1,10 +1,29 @@
-<!DOCTYPE html>
-<html>
-<head lang="en">
-    <meta charset="UTF-8">
-    <title>Sorry, couldn't find it</title>
-</head>
-<body>
-I can't find the page your're looking for. Please give us a shout if you think this is our error.
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="row">
+    <div class="box">
+        <div class="col-md-12">
+            <div class="error-template">
+                <h1>Whoops!</h1>
+                <h4>This page ({{ path }})? I can't find it.</h4>
+                <div class="error-details">
+                    Please give us a shout if you think this is our error.
+                </div>
+                <div class="error-actions">
+                    <a href="{{ url_for('main.index') }}" class="btn btn-success">
+                        <span class="glyphicon glyphicon-home"></span>
+                        Take Me Home
+                    </a>
+                    <a href="{{ url_for('main.contact') }}" class="btn btn-default">
+                        <span class="glyphicon glyphicon-envelope"></span>
+                        Contact Support
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{%  endblock %}
