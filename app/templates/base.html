@@ -2,7 +2,6 @@
 <html lang="en">
 
 <head>
-
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,16 +15,14 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="../static/css/bootstrap-image-gallery.min.css">
     <link rel="stylesheet" href="http://blueimp.github.io/Gallery/css/blueimp-gallery.min.css">
+    <link rel="stylesheet" href="../static/css/flexslider.css">
     <link rel="stylesheet" href="../static/css/business-casual.css">
     <link rel="stylesheet" href="../static/css/rockyart.css">
     <!-- Fonts -->
     <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Montserrat:400,700">
     <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800">
-    <!-- Scripts -->
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-    <script src="http://blueimp.github.io/Gallery/js/jquery.blueimp-gallery.min.js"></script>
-{#    <script src="../static/js/bootstrap-image-gallery.min.js"></script>#}
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -34,6 +31,34 @@
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 </head>
+
+<style>
+    /* Position dropdown cart to left of icon */
+    .dropdown-menu {
+        position: absolute;
+        top: 110%;
+        width:300px;
+        left: -250px;
+        right: 250px;
+        z-index: 1001;
+        display: none;
+        float: right;
+        min-width: 200px;
+        padding: 10px 10px;
+        margin: 0 0 0;
+        list-style: none;
+    }
+    .cart-toggle {
+        position: relative;
+        top: 12px;
+        background: none;
+        opacity: .1;
+    }
+    .badge-cart {
+        position:relative;
+        left:10px;
+    }
+</style>
 
 <body>
     <!-- Navigation -->
@@ -59,14 +84,47 @@
                         </a>
                     </li>
                     <li><a href="{{ url_for('main.index') }}">Home</a></li>
-                    <li><a href="{{ url_for('main.gallery', c='jewelry') }}">Gallery</a></li>
+{#                    <li><a href="{{ url_for('main.gallery', c='jewelry') }}">Shop</a></li>#}
+                    <li><a href="{{ url_for('main.products') }}">Shop</a></li>
                     <li><a href="{{ url_for('main.blog') }}">Posts</a></li>
+                    <li><a href="#">Events</a></li>
                     <li><a href="{{ url_for('main.contact') }}">Contact</a></li>
+
                     <li>
+                        <div class="btn-group">
+                          <button class="btn dropdown-toggle cart-toggle" data-toggle="dropdown" aria-expanded="false">
+                              <span class="badge badge-cart"><div class="simpleCart_quantity"></div></span>
+                              <i class="fa fa-shopping-cart fa-2x"></i>
+                          </button><!--data-hover="dropdown"-->
+
+                          <ul class="dropdown-menu">
+{#                              <li id="cart-dropdown-heading" class="text-center">2 Shopping Cart Items</li>#}
+                              <li id="cart-dropdown-heading" class="text-center"></li>
+                              <li>
+                                <table class="table" id="cart-dropdown-table">
+{#                                    <tr>#}
+{#                                        <td width="33%"><img class="img-responsive" src="{{ url_for('static', filename='img/gallery/jewelry/full/j01.jpg') }}"></td>#}
+                                      <tr><td width="25%"><img class="img-responsive" src=/static/img/gallery/jewelry/thumb/j01.jpg/></td>
+                                          <td>Sterling Silver with Emeralds</td></tr>
+{#                                        <td><a tabindex="-1" href="#">Gold Necklace w/ Emeralds</a></td>#}
+{#                                    </tr>#}
+{#                                    <tr>#}
+{#                                        <td width="33%"><img class="img-responsive" src="{{ url_for('static', filename='img/gallery/jewelry/full/j02.jpg') }}"></td>#}
+{#                                        <td><a tabindex="-1" href="#">Silver Lining w/ Other Things</a></td>#}
+{#                                    </tr>#}
+                                </table>
+                              </li>
+                              <li class="text-center"><a class="btn btn-default" href="{{ url_for('main.cart') }}">View Cart & Checkout</a></li>
+                          </ul>
+                        </div>
+                    </li>
+
+{#                    <li>#}
 {#                    <a href="{{ url_for('main.index') }}" class="pull-left">#}
 {#                        <img src="{{ url_for('static', filename='img/cart_128.png') }}" height="50px">#}
 {#                    </a>#}
-                    </li>
+{#                    </li>#}
+
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
@@ -100,13 +158,16 @@
         </div>
     </footer>
 
-    <!-- Activate the Carousel -->
-    <script>
-    $('.carousel').carousel({
-        interval: 5000 //changes the speed
-    })
-    </script>
+    <!-- Scripts -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+{#    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>#}
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script src="http://blueimp.github.io/Gallery/js/jquery.blueimp-gallery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tinysort/2.2.2/tinysort.min.js"></script>
+    <script src="../static/js/bootstrap-hover-dropdown.min.js"></script>
+    <script src="../static/js/simpleCart.js"></script>
+    <script src="../static/js/jquery.flexslider-min.js"></script>
+    <script src="../static/js/rockyart.js"></script>
 
 </body>
-
 </html>

@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{# TODO create mobile view for category header #}
+
+<div class="box-container">
+    <div class="row text-center">
+{#            foreach category, make an image with category name as popover#}
+        <div class="col-sm-3">
+            <div class="item-thumbnail">
+                <div class="item-caption">
+                    <h4>Necklaces</h4>
+                </div>
+                <img class="img-rounded" src="{{ url_for('static', filename='img/gallery/necklaces.jpg') }}">
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="item-thumbnail">
+                <div class="item-caption">
+                    <h4>Earrings</h4>
+                </div>
+                <img class="img-rounded" src="{{ url_for('static', filename='img/gallery/earings.jpg') }}">
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="item-thumbnail">
+                <div class="item-caption">
+                    <h4>Rings</h4>
+                </div>
+               <img class="img-rounded" src="{{ url_for('static', filename='img/gallery/rings.jpg') }}">
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="item-thumbnail">
+                <div class="item-caption">
+                    <h4>Bracelets</h4>
+                </div>
+               <img class="img-rounded" src="{{ url_for('static', filename='img/gallery/necklaces.jpg') }}">
+            </div>
+        </div>
+    </div>
+
+{#    <div class="dropdown">#}
+{#      <button class="btn btn-default dropdown-toggle" type="button" id="sortBy" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">#}
+{#        Default Sorting#}
+{#        <span class="caret"></span>#}
+{#      </button>#}
+{#      <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">#}
+{#        <li><a href="#" class="selected">Sort by Newness</a></li>#}
+{#        <li><a href="#">Sort by Price</a></li>#}
+{#        <li><a href="#">Separated link</a></li>#}
+{#      </ul>#}
+{#    </div>#}
+</div>
+
+    <div class="box">
+        <div class="row">
+            <div class="col-sm-4">
+                
+                <div class="item-thumbnail product-box text-center">
+                    <img class="img-responsive" src="{{ url_for('static', filename='img/gallery/jewelry/full/j01.jpg') }}">
+                    <h6>Sterling Silver with Emeralds</h6>
+                    <h4 class="text-muted">$125</h4>
+                    <div class="item-caption">
+                        <a class="btn btn-default btn-lg view-details" href="{{ url_for('main.example_product') }}">
+                            VIEW DETAILS
+                        </a>
+                    </div>
+                </div>
+
+                <div class="item-thumbnail product-box text-center">
+                    <img class="img-responsive" src="{{ url_for('static', filename='img/gallery/jewelry/full/j07.jpg') }}">
+                    <h6>A Necklace</h6>
+                    <h4 class="text-muted">$125</h4>
+                    <div class="item-caption">
+                        <a class="btn btn-default btn-lg view-details" href="{{ url_for('main.example_product') }}">
+                            VIEW DETAILS
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

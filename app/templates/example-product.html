@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    .item_image {
+        display: none;
+    }
+</style>
+
+<div class="box">
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="links">
+                <a href="{{ url_for('static', filename='img/gallery/jewelry/full/j01.jpg') }}" title="" data-gallery>Fullscreen Slideshow</a>
+                <a href="{{ url_for('static', filename='img/gallery/jewelry/full/j02.jpg') }}" title="" data-gallery></a>
+                <a href="{{ url_for('static', filename='img/gallery/jewelry/full/j03.jpg') }}" title="" data-gallery></a>
+                <a href="{{ url_for('static', filename='img/gallery/jewelry/full/j04.jpg') }}" title="" data-gallery></a>
+            </div>
+            <div class="flexslider">
+              <ul class="slides">
+                <li data-thumb="{{ url_for('static', filename='img/gallery/jewelry/thumb/j01.jpg') }}">
+                  <img src="{{ url_for('static', filename='img/gallery/jewelry/full/j01.jpg') }}" />
+                </li>
+                <li data-thumb="{{ url_for('static', filename='img/gallery/jewelry/thumb/j02.jpg') }}">
+                  <img src="{{ url_for('static', filename='img/gallery/jewelry/full/j02.jpg') }}" />
+                </li>
+                <li data-thumb="{{ url_for('static', filename='img/gallery/jewelry/thumb/j03.jpg') }}">
+                  <img src="{{ url_for('static', filename='img/gallery/jewelry/full/j03.jpg') }}" />
+                </li>
+                <li data-thumb="{{ url_for('static', filename='img/gallery/jewelry/full/j04.jpg') }}">
+                  <img src="{{ url_for('static', filename='img/gallery/jewelry/full/j04.jpg') }}" />
+                </li>
+              </ul>
+            </div>
+
+        </div>
+
+{#        <script>#}
+{#            $(document).ready(function() {#}
+{#                var gallery = blueimp.Gallery([#}
+{#                    // use Jinja to append all product images#}
+{#                    'https://placeholdit.imgix.net/~text?txtsize=33&txt=350%C3%97150&w=350&h=150',#}
+{#                    'https://placeholdit.imgix.net/~text?txtsize=33&txt=350%C3%97150&w=350&h=150',#}
+{#                    'https://placeholdit.imgix.net/~text?txtsize=33&txt=350%C3%97150&w=350&h=150'#}
+{#                ]);#}
+{#                gallery.startSlideshow = false;#}
+{#            })#}
+{#        </script>#}
+
+
+
+        <div class="col-lg-6 text-left">
+            <div class="simpleCart_shelfItem">
+                <!-- Add a hidden reference to the item image for sake of cart display -->
+                <img alt="image" src="{{ url_for('static', filename='img/gallery/jewelry/thumb/j01.jpg') }}" class="item_image"/>
+
+                <h4 class="item_name">Sterling Silver with Emeralds</h4>
+                <h3 class="item_price">$125</h3>
+                <hr>
+                <p>Made from rainbows and kisses. You'll love this newest piece.</p>
+                <div class="text-right">
+                    <a class="item_add btn btn-sm btn-success" href="javascript:;"><i class="fa fa-cart-plus"></i> Add to Cart</a>
+{#                    <button class="btn btn-sm btn-success"><i class="fa fa-cart-plus fa-1x"> </i> Add to Cart</button>#}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{# TODO move blueimp stuff into its own template #}
+<!-- Populate gallery elements -->
+{#<div id="links">#}
+{#    {% for i in range(1,4) %}#}
+{#        <a href="{{ url_for('static', filename='img/gallery/jewelry/full/%s' % (c, i)) }}" title="" data-gallery>#}
+{#            <img src="{{ url_for('static', filename='img/gallery/jewlery/thumb/%s' % (c, i)) }}" class="gallery-item" alt="" width="200">#}
+{#        </a>#}
+{#    {% endfor %}#}
+{#</div>#}
+
+<!-- Bootstrap Image Gallery lightbox -->
+<div id="blueimp-gallery" class="blueimp-gallery blueimp-gallery-controls">
+    <!-- The container for the modal slides -->
+    <div class="slides"></div>
+    <!-- Controls for the borderless lightbox -->
+    <h3 class="title"></h3>
+    <a class="prev">‹</a>
+    <a class="next">›</a>
+    <a class="close">×</a>
+    <a class="play-pause"></a>
+    <ol class="indicator"></ol>
+    <!-- The modal dialog, which will be used to wrap the lightbox content -->
+    <div class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title"></h4>
+                </div>
+                <div class="modal-body next"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left prev">
+                        <i class="glyphicon glyphicon-chevron-left"></i>
+                        Previous
+                    </button>
+                    <button type="button" class="btn btn-primary next">
+                        Next
+                        <i class="glyphicon glyphicon-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

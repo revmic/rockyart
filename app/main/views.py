@@ -5,7 +5,7 @@ import datetime
 from flask import render_template, redirect, url_for, flash, request, Markup
 from flask.ext.login import login_required
 
-from app import email, db
+from app import mailer, db
 from app.main import main
 from app.main.forms import ContactForm
 from config import basedir, INSTAGRAM_KEY
@@ -27,6 +27,7 @@ def blog():
         r.raise_for_status()
     except Exception as e:
         print(e, "\nProblem connecting with Instagram api\n", uri)
+        mailer.send_email("Instagram API Error", "inquiry")
         return render_template("blog.html", title='Blog', instagrams=instagrams)
 
     for instagram in r.json()['data']:
@@ -36,7 +37,7 @@ def blog():
         try:
             caption = instagram['caption']['text']
         except Exception as e:
-            print(e, "\nDoesn't appear to be a caption for instagram\n", link)
+            print(e, "\nThere doesn't appear to be a caption for this instagram\n", link)
             caption = ""
         # Just in case we can't parse the date
         try:
@@ -44,6 +45,8 @@ def blog():
             date_str = dt.strftime('%B %-d, %Y')
         except Exception as e:
             print("Problem getting datetime info\n", e)
+            dt = datetime.now()
+            date_str = dt.strftime('%B %-d, %Y')
 
         instagrams.append({'date_str': date_str, 'datetime': dt, 'image': img,
                            'caption': caption, 'link': link})
@@ -76,13 +79,28 @@ def gallery():
                            images=images, c=category)
 
 
+@main.route('/products', methods=['GET'])
+def products():
+    return render_template("products.html", title='Products')
+
+
+@main.route('/example-product', methods=['GET'])
+def example_product():
+    return render_template("example-product.html", title='Products')
+
+
+@main.route('/cart', methods=['GET'])
+def cart():
+    return render_template("cart.html", title='Shopping Cart')
+
+
 @main.route('/contact', methods=['GET', 'POST'])
 def contact():
     form = ContactForm()
 
     if form.validate_on_submit():
         try:
-            email.send_email("Customer Inquiry", "inquiry")
+            mailer.send_email("Customer Inquiry", "inquiry")
         except:
             flash("Something went wrong while sending your message. "
                   "Please email rockypardo.art@gmail.com with your question. "
