@@ -15,23 +15,55 @@ simpleCart({
     cartStyle : "table",
 
     cartColumns: [
-        //{view:'image' , attr:'thumb', label: false},
-        { view: function(item, column){
-            return"<img src='"+item.get('image')+"'>";
-        }, attr: 'image' },
-        { attr: "name" , label: "Name" } ,
-        { attr: "price" , label: "Price", view: 'currency' } ,
-        //{ view: "decrement" , label: false , text: "-" } ,
-        { attr: "quantity" , label: "Qty" } ,
-        //{ view: "increment" , label: false , text: "+" } ,
-        { attr: "total" , label: "SubTotal", view: 'currency' } ,
-        { view: "remove" , text: "Remove" , label: false }
+        //{view:'image', attr:'thumb', label: false},
+        { attr: "image",
+            view: function(item, column) {
+                if ($(window).width() > 768) {
+                    return "<div class='col-md-4'><img src='" + item.get('image') + "'></div>";
+                } else {
+                    return "";
+                }
+        }},
+
+        //{ attr: "name", label: "Name" },
+        { attr: "name",
+            view: function(item, column){
+                return '<div class="col-md-4">' + item.get('name') + "</div>";
+        },  label: "<div class='col-md-3'>Item</div>" },
+
+        { attr: "price", view: 'currency', label: "Price" },
+        //{ attr: "price",
+        //    view: function(item, column){
+        //        return '<div class="col-md-4">' + item.get('currency') + "</div>";
+        //},  label: "<div class='col-md-4'>Price</div>" },
+
+        { view: "decrement" , label: false , text: "<i class='fa fa-minus'></i>" },
+
+        { attr: "quantity", label: "Qty" },
+        //{ attr: "quantity",
+        //    view: function(item, column){
+        //        return '<div class="col-md-4">' + item.get('currency') + "</div>";
+        //},  label: "<div class='col-md-4'>Price</div>" },
+
+        { view: "increment" , label: false , text: '<i class="fa fa-plus"></i>' },
+
+        { attr: "total", view: 'currency', label: "SubTotal" },
+        //{ attr: "total",
+        //    view: function(item, column){
+        //        return '<div class="col-md-4">' + item.get('currency') + "</div>";
+        //},  label: "<div class='col-md-4'>Subtotal</div>" },
+
+        //{ view: "remove", text: "Remove", label: false }
+        { view: "remove", text: '<i class="fa fa-times-circle-o fa-2x" style="color:red">',
+            label: false }
+
     ]
 });
 
-<!-- Assign Bootstrap styles to simpleCart table -->
+<!-- Assign Bootstrap styles to simpleCart table/div -->
 simpleCart.bind("afterCreate", function() {
-   $(".simpleCart_items table").addClass("table").addClass("table-hover");
+    $(".simpleCart_items table").addClass("table").addClass("table-hover");
+    //$(".simpleCart_items div").addClass("div").addClass("col-lg-12");
 });
 
 <!-- Handle cart opacity and animation -->
@@ -87,11 +119,9 @@ function updateCartDropdown() {
 }
 
 function clearCartDropdown() {
-    var shop_link = "/products";
-    var row = '<tr><td>Your cart is empty, but you could <a href="'
-        + shop_link + '">Go Shopping</a></tr></td>';
     var cart = $('#cart-dropdown-table');
     cart.empty();
+    var row = '<tr><td>Your cart is empty, but you could <a href="/products">Go Shopping</a></tr></td>';
     cart.append(row);
 }
 
@@ -118,5 +148,33 @@ $('.flexslider').flexslider({
     controlNav: "thumbnails"
 });
 
+//////////////////
+// Contact Form //
+//////////////////
 
+$(document).ready(function() {
 
+    // Email button spinner
+    $('#send').click(function () {
+        $("#btn_icon").attr('class', 'fa fa-spinner fa-spin fa-lg');
+    });
+    // Reset after a time in case of invalid form
+    setInterval(function () { $("#btn_icon").attr('class', 'glyphicon glyphicon-envelope') }, 6000);
+
+    // Contact phone is a tel link on mobile or a tooltip on desktop
+    if ($(window).width() < 768) {
+        $('#phone').append("<a href='tel://314-630-8983'>phone</a>");
+    } else {
+        $('#phone').append("<a href='#' data-toggle='tooltip' title='314-630-8983'>phone</a>");
+        $('[data-toggle="tooltip"]').tooltip();
+    }
+
+});
+
+/*$('#contactForm').validator().on('submit', function (e) {
+    if (e.isDefaultPrevented()) {
+        // handle the invalid form...
+    } else {
+        $("#btn_icon").attr('class', 'fa fa-spinner fa-spin fa-lg');
+    }
+})*/

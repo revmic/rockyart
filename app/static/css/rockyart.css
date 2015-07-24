@@ -1,8 +1,6 @@
-/*!
- * Start Bootstrap - Business Casual Bootstrap Theme (http://startbootstrap.com)
- * Code licensed under the Apache License v2.0.
- * For details, see http://www.apache.org/licenses/LICENSE-2.0.
- */
+/*
+    General Styles
+*/
 
 html {
     position: relative;
@@ -52,6 +50,10 @@ p.watermark {
     height: 72px;
 }
 
+/*
+    Custom Containers
+*/
+
 .box-shade {
     margin-bottom: 15px;
     /*padding-bottom: 15px;*/
@@ -66,6 +68,16 @@ p.watermark {
     background: none;
 }
 
+
+.haiku {
+    white-space:pre-line;
+    line-height: 300%;
+}
+
+/*
+    Product Styles
+*/
+
 .product-box {
     margin-bottom: 15px;
     padding: 0;
@@ -73,12 +85,6 @@ p.watermark {
     background: rgba(184, 184, 184, 0.3);
     border-radius: 4px;
 }
-
-.haiku {
-    white-space:pre-line;
-    line-height: 300%;
-}
-
 .item-thumbnail {
     position: relative;
     overflow: hidden;
@@ -97,12 +103,45 @@ p.watermark {
     color: #fff !important;
     z-index: 2;
 }
-
 .view-details {
     position:relative;
     top:25%;
     width:90%
 }
+
+/*
+    Shopping Cart
+*/
+
+.dropdown-menu {
+    /* Position cart dropdown left of icon */
+    position: absolute;
+    top: 150%;
+    width:300px;
+    left: -225px;
+    /*right: 225px;*/
+    z-index: 1001;
+    display: none;
+    float: right;
+    min-width: 200px;
+    padding: 20px 10px;
+    margin: 0 0 0;
+    list-style: none;
+}
+.cart-toggle {
+    position: relative;
+    top: 12px;
+    background: none;
+    opacity: .1;
+}
+.badge-cart {
+    position:relative;
+    left:10px;
+}
+
+/*
+    Error Pages
+*/
 
 .error-template {
     padding: 15px 15px;

@@ -45,7 +45,7 @@ def blog():
             date_str = dt.strftime('%B %-d, %Y')
         except Exception as e:
             print("Problem getting datetime info\n", e)
-            dt = datetime.now()
+            dt = datetime.datetime.now()
             date_str = dt.strftime('%B %-d, %Y')
 
         instagrams.append({'date_str': date_str, 'datetime': dt, 'image': img,
