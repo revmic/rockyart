@@ -6,47 +6,98 @@
 th {
     background-color: #ffffff;
 }
-.cart-format {
-    font-weight: bolder;
+.cart-info {
+    color: darkgray;
+    position: relative;
+    top: 5px;
+}
+.cart-buttons {
+    position:relative;
+    bottom:4px
+}
+
+.tooltip.left .tooltip-inner {
+    background-color: gray;
+}
+.tooltip.left .tooltip-arrow {
+{#            border-top-color: gray;#}
+{#            background-color: gray;#}
+    color: gray;
+
+}
+
+.table-condensed {
+    border-spacing: 1px;
+    border-collapse: separate;
+}
+
+.table-condensed td.title {
+    background:#ebeaec;
+    border-radius: 4px;
+    width: 250px;
 }
 </style>
 
-<div class="box">
+<div class="box" style="padding:0">
+{#    <div class="row">#}
+{#        <div class="col-lg-12">#}
+{#            <h4 class="text-center">Shopping Cart</h4>#}
+{#            <a href="{{ url_for('main.index') }}">Home</a> - <a href="{{ url_for('main.products') }}">Continue Shopping</a>#}
+{#        </div>#}
+{#    </div>#}
     <div class="row">
         <div class="col-lg-12">
-            <h4>Shopping Cart</h4>
-            <a href="{{ url_for('main.index') }}">Home</a> - <a href="{{ url_for('main.products') }}">Continue Shopping</a>
+            <h3 class="text-center">Shopping Cart</h3>
+            <hr>
+            <ol class="breadcrumb" style="padding-bottom:0">
+                <li><a href="{{ url_for('main.index') }}">Home</a></li>
+                <li><a href="{{ url_for('main.shop') }}">Shop</a></li>
+                <li class="active">Cart</li>
+            </ol>
         </div>
     </div>
 </div>
 
 <div class="box">
     <div class="row">
-{#        <div class="col-lg-12">#}
-            <div class="simpleCart_items"></div>
-{#        </div>#}
+        <div class="simpleCart_items"></div>
     </div>
+
     <hr>
-    <style>
-        .tooltip.left .tooltip-inner {
-            background-color: gray;
-        }
-{#        .tooltip.left .tooltip-arrow {#}
-{#            border-top-color: gray;#}
-{#            background-color: gray;#}
-{#        }#}
-    </style>
-    <p class="text-right" style="padding-right: 25px">
-        <a href="#" data-toggle='tooltip' data-placement="left"
-           title='For both of our sakes, none of your financial information is stored on this site. Transactions happen securely through Paypal.'>
-            <i class="fa fa-info-circle fa-2x" style="color:darkgray; position:relative; top:5px;"></i>
-        </a>
-        <a href="javascript:" class="simpleCart_checkout btn btn-primary">
-            <span style="position:relative; bottom:4px">Checkout with</span>
-            <i class="fa fa-cc-paypal fa-2x"></i>
-        </a>
-{#        <p class="text-muted small">* For both of our sakes, none of your information is stored on this site. Financial transactions happen through Paypal.</p>#}
-    </p>
+
+    <div class="row">
+        <table class="table-condensed pull-right" style="margin-right: 25px; margin-bottom: 10px">
+            <tr>
+                <td class="title">Cart Subtotal</td>
+                <td class="simpleCart_total"></td>
+            </tr>
+            <tr>
+                <td class="title">Shipping</td>
+                <td class="simpleCart_shipping"></td>
+            </tr>
+            <tr>
+                <td class="title">Order Total</td>
+                <td class="simpleCart_grandTotal"></td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="row">
+        <p class="text-right" style="padding-right: 25px">
+            <a href="#" data-toggle='tooltip' data-placement="left"
+               title='For all our sakes, none of your financial information is stored on this site. Transactions happen securely through Paypal.'>
+                <i class="fa fa-info-circle fa-2x cart-info"></i>
+            </a>
+            <a href="javascript:" class="simpleCart_empty btn btn-warning">
+                <span class="cart-buttons">Empty Cart</span>
+                <i class="fa fa-trash-o fa-2x"></i>
+            </a>
+            <a href="javascript:" class="simpleCart_checkout btn btn-primary">
+                <span class="cart-buttons">Checkout with</span>
+                <i class="fa fa-cc-paypal fa-2x"></i>
+            </a>
+        </p>
+    </div>
 </div>
 
 {% endblock %}

@@ -1,0 +1,245 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <style>
+    .category-button {
+        background:none!important;
+        border:none;
+        padding:0!important;
+        font: inherit;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .quick-add-cart {
+        position: relative;
+        top: 120px;
+        left: 95px;
+    }
+    </style>
+
+{# TODO create mobile view for category header #}
+
+<!-- Shop Categories -->
+
+<div class="box-container">
+    <div class="row text-center">
+{#            foreach category, make an image with category name as popover#}
+        <div class="button-group filter-button-group">
+            <div class="col-sm-3 col-xs-2">
+                <button data-filter=".necklace" class="item-thumbnail category-button">
+                    <img class="img-rounded" src="{{ url_for('static', filename='img/gallery/necklaces.jpg') }}">
+                    <div class="item-caption">
+                        <h4>Necklaces</h4>
+                    </div>
+                </button>
+
+            </div>
+            <div class="col-sm-3 col-xs-2">
+                <button data-filter=".earring" class="item-thumbnail category-button">
+                    <img class="img-rounded" src="{{ url_for('static', filename='img/gallery/earings.jpg') }}">
+                    <div class="item-caption">
+                        <h4>Earrings</h4>
+                    </div>
+                </button>
+            </div>
+            <div class="col-sm-3 col-xs-2">
+                <button data-filter=".ring" class="item-thumbnail category-button">
+                    <img class="img-rounded" src="{{ url_for('static', filename='img/gallery/rings.jpg') }}">
+                    <div class="item-caption">
+                        <h4>Rings</h4>
+                    </div>
+                </button>
+            </div>
+            <div class="col-sm-3 col-xs-2">
+                <button data-filter=".bracelet" class="item-thumbnail category-button">
+                    <img class="img-rounded" src="{{ url_for('static', filename='img/gallery/necklaces.jpg') }}">
+                    <div class="item-caption">
+                        <h4>Bracelets</h4>
+                    </div>
+                </button>
+            </div>
+{#            <div class="col-sm-2">#}
+{#                <a href="{{ url_for('main.gallery', c='jewelry') }}">#}
+{#                    <img class="img-rounded" src="{{ url_for('static', filename='img/gallery/earings.jpg') }}">#}
+{#                </a>#}
+{#                <div class="item-caption">#}
+{#                    <h4>Gallery</h4>#}
+{#                </div>#}
+{#            </div>#}
+        </div>
+    </div>
+</div>
+
+<div class="box">
+
+    <div class="button-group sort-by-button-group">
+        <p>Sort by:
+            <button class="btn btn-default" data-sort-by="price">price</button>
+            <button class="btn btn-default" data-sort-by="date">newness</button>
+        </p>
+    </div>
+
+    <div class="store-grid">
+        {% for item in items %}
+            <div class="store-item simpleCart_shelfItem {{ item.category }} item-thumbnail text-center" data-category="{{ item.category }}">
+                <img alt="image" class="item_image img-responsive"
+                     src="{{ url_for('static', filename='img/gallery/jewelry/full/j01.jpg') }}">
+                <h6 class="item_name">{{ item.title }}</h6>
+                <h6 style="display:inline">$</h6>
+                <h4 class="item_price price text-muted" style="display:inline">{{ item.price }}</h4>
+
+                <div class="item-caption">
+                    <a class="btn btn-default btn-lg view-details" href="{{ url_for('main.example_product') }}">
+                        VIEW DETAILS
+                    </a>
+                    <a class="item_add btn quick-add-cart" href="javascript:">
+                        <i class="fa fa-cart-plus fa-inverse fa-3x"></i>
+                    </a>
+                </div>
+
+                <div class="hidden date">2015-01-01</div>
+            </div>
+        {% endfor %}
+
+{#        <div class="store-item simpleCart_shelfItem necklace item-thumbnail text-center" data-category="necklace">#}
+{#            <img alt="image" class="item_image img-responsive" src="{{ url_for('static', filename='img/gallery/jewelry/full/j01.jpg') }}">#}
+{#            <h6 class="item_name">Sterling Silver with Emeralds</h6>#}
+{#            <h6 style="display:inline">$</h6><h4 class="item_price price text-muted" style="display:inline">100</h4>#}
+{##}
+{#            <div class="item-caption">#}
+{#                <a class="btn btn-default btn-lg view-details" href="{{ url_for('main.example_product') }}">#}
+{#                    VIEW DETAILS#}
+{#                </a>#}
+{#                <a class="item_add btn quick-add-cart" href="javascript:">#}
+{#                    <i class="fa fa-cart-plus fa-inverse fa-3x"></i>#}
+{#                </a>#}
+{#            </div>#}
+{##}
+{#            <div class="hidden date">2015-01-01</div>#}
+{#        </div>#}
+
+
+{#        <div class="store-item simpleCart_shelfItem earring item-thumbnail text-center" data-category="earring">#}
+{#            <img alt="image" class="item_image img-responsive" src="{{ url_for('static', filename='img/gallery/jewelry/full/j03.jpg') }}">#}
+{#            <h6 class="item_name">Gold with Emeralds</h6>#}
+{#            <h6 style="display:inline">$</h6><h4 class="item_price price text-muted" style="display:inline">25</h4>#}
+{#            <div class="item-caption">#}
+{#                <a class="btn btn-default btn-lg view-details" href="{{ url_for('main.example_product') }}">#}
+{#                    VIEW DETAILS#}
+{#                </a>#}
+{#                <a class="item_add btn quick-add-cart" href="javascript:">#}
+{#                    <i class="fa fa-cart-plus fa-inverse fa-3x"></i>#}
+{#                </a>#}
+{#            </div>#}
+{#            <div class="hidden date">2015-07-01</div>#}
+{#        </div>#}
+{#        <div class="store-item earring item-thumbnail text-center" data-category="earring">#}
+{#            <img alt="image" class="item_image img-responsive" src="{{ url_for('static', filename='img/gallery/jewelry/full/j03.jpg') }}">#}
+{#            <h6>Beautiful Necklace with Stones</h6>#}
+{#            <h6 style="display:inline">$</h6><h4 class="price text-muted" style="display:inline">10</h4>#}
+{#            <div class="item-caption">#}
+{#                <a class="btn btn-default btn-lg view-details" href="{{ url_for('main.example_product') }}">#}
+{#                    VIEW DETAILS#}
+{#                </a>#}
+{#            </div>#}
+{#            <div class="hidden date">2014-01-01</div>#}
+{#        </div>#}
+{#        <div class="store-item bracelet item-thumbnail text-center" data-category="bracelet">#}
+{#            <img alt="image" class="item_image img-responsive" src="{{ url_for('static', filename='img/gallery/jewelry/full/j07.jpg') }}">#}
+{#            <h6>Rings made of Silver</h6>#}
+{#            <h6 style="display:inline">$</h6><h4 class="price text-muted" style="display:inline">500</h4>#}
+{#            <div class="item-caption">#}
+{#                <a class="btn btn-default btn-lg view-details" href="{{ url_for('main.example_product') }}">#}
+{#                    VIEW DETAILS#}
+{#                </a>#}
+{#            </div>#}
+{#            <div class="hidden date">2015-06-01</div>#}
+{#        </div>#}
+{#    </div>#}
+
+
+</div>
+
+<script>
+    $(document).ready( function() {
+        // init isotope grid after images have loaded
+        var $grid = $('.store-grid').imagesLoaded(function() {
+            $grid.isotope({
+                itemSelector: '.store-item',
+                masonry: {
+                    columnWidth: 250,
+                    isFitWidth: true,
+                    gutter: 10
+                },
+
+                getSortData: {
+                    price: '.price parseInt',
+                    date: '.date'
+                }
+            });
+        });
+
+        // filter items on button click
+        $('.filter-button-group').on( 'click', 'button', function() {
+          var filterValue = $(this).attr('data-filter');
+          $grid.isotope({ filter: filterValue });
+        });
+
+        // sort items on button click
+        $('.sort-by-button-group').on( 'click', 'button', function() {
+          var sortByValue = $(this).attr('data-sort-by');
+          $grid.isotope({ sortBy: sortByValue });
+        });
+
+
+{#        // Images Loaded plugin#}
+{#        $.fn.isotopeImagesReveal = function( $items ) {#}
+{#            var iso = this.data('isotope');#}
+{#            var itemSelector = iso.options.itemSelector;#}
+{#            // hide by default#}
+{#            $items.hide();#}
+{#            // append to container#}
+{#            this.append( $items );#}
+{#            $items.imagesLoaded().progress( function( imgLoad, image ) {#}
+{#                // get item#}
+{#                // image is imagesLoaded class, not <img>, <img> is image.img#}
+{#                var $item = $( image.img ).parents( itemSelector );#}
+{#                // un-hide item#}
+{#                $item.show();#}
+{#                // isotope does its thing#}
+{#                iso.appended( $item );#}
+{#             });#}
+{##}
+{#            return this;#}
+{#        };#}
+{##}
+{#        function getItems() {#}
+{#            var items = '';#}
+{#            for ( var i=0; i < 12; i++ ) {#}
+{#                items += getItem();#}
+{#            }#}
+{#            // return jQuery object#}
+{#            return $( items );#}
+{#        }#}
+{##}
+{#        function getItem() {#}
+{#            var width = randomInt( 150, 400 );#}
+{#            var height = randomInt( 150, 250 );#}
+{#            var item = '<div class="item">'+#}
+{#                    '<img src="http://lorempixel.com/' +#}
+{#                    width + '/' + height + '/nature" /></div>';#}
+{#            return item;#}
+{#        }#}
+{##}
+{#        function randomInt( min, max ) {#}
+{#            return Math.floor( Math.random() * max + min );#}
+{#        }#}
+{##}
+{#        var $items = getItems();#}
+{#        $grid.isotopeImagesReveal( $items );#}
+    });
+</script>
+
+{% endblock %}

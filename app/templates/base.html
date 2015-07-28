@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 
 <head>
     <meta charset="utf-8">
@@ -86,7 +86,7 @@
                     </li>
                     <li><a href="{{ url_for('main.index') }}">Home</a></li>
 {#                    <li><a href="{{ url_for('main.gallery', c='jewelry') }}">Shop</a></li>#}
-                    <li><a href="{{ url_for('main.products') }}">Shop</a></li>
+                    <li><a href="{{ url_for('main.shop') }}">Shop</a></li>
                     <li><a href="{{ url_for('main.blog') }}">Posts</a></li>
                     <li><a href="#">Events</a></li>
                     <li><a href="{{ url_for('main.contact') }}">Contact</a></li>
@@ -166,6 +166,7 @@
     <script src="http://blueimp.github.io/Gallery/js/jquery.blueimp-gallery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tinysort/2.2.2/tinysort.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/2.2.1/isotope.pkgd.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/3.1.8/imagesloaded.min.js"></script>
     <script src="../static/js/bootstrap-hover-dropdown.min.js"></script>
     <script src="../static/js/simpleCart.js"></script>
     <script src="../static/js/jquery.flexslider-min.js"></script>

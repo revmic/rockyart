@@ -48,11 +48,10 @@
 {#        </script>#}
 
 
-
         <div class="col-lg-6 text-left">
             <div class="simpleCart_shelfItem">
                 <!-- Add a hidden reference to the item image for sake of cart display -->
-                <img alt="image" src="{{ url_for('static', filename='img/gallery/jewelry/thumb/j01.jpg') }}" class="item_image"/>
+                <img alt="image" src="{{ url_for('static', filename='img/gallery/jewelry/full/j01.jpg') }}" class="item_image" />
 
                 <h4 class="item_name">Sterling Silver with Emeralds</h4>
                 <h3 class="item_price">$125</h3>
@@ -64,6 +63,7 @@
                 </div>
             </div>
         </div>
+
     </div>
 </div>
 
@@ -77,7 +77,7 @@
 {#    {% endfor %}#}
 {#</div>#}
 
-<!-- Bootstrap Image Gallery lightbox -->
+<!-- BlueImp Gallery -->
 <div id="blueimp-gallery" class="blueimp-gallery blueimp-gallery-controls">
     <!-- The container for the modal slides -->
     <div class="slides"></div>

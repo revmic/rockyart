@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_admin import Admin
 from flask.ext.bootstrap import Bootstrap
 from flask.ext.mail import Mail
 from flask.ext.moment import Moment
@@ -10,6 +11,7 @@ from config import config
 bootstrap = Bootstrap()
 mail = Mail()
 moment = Moment()
+admin = Admin(name='rockyart manager', template_mode='bootstrap3')
 db = SQLAlchemy()
 
 login_manager = LoginManager()
@@ -24,6 +26,7 @@ def create_app(config_name):
     bootstrap.init_app(app)
     mail.init_app(app)
     moment.init_app(app)
+    admin.init_app(app)
     db.init_app(app)
     login_manager.init_app(app)
 

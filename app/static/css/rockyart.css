@@ -78,13 +78,25 @@ p.watermark {
     Product Styles
 */
 
-.product-box {
-    margin-bottom: 15px;
-    padding: 0;
+.store-grid {
+    padding: 25px;
+    margin: 0 auto;
+}
+.store-item {
+    float: left;
+    width: 250px;
+    /*height: 100px;*/
+    margin-bottom: 10px;
     background: #aeaeae;
     background: rgba(184, 184, 184, 0.3);
     border-radius: 4px;
 }
+
+/*.product-box {*/
+    /*margin-bottom: 15px;*/
+    /*padding: 0;*/
+/*}*/
+
 .item-thumbnail {
     position: relative;
     overflow: hidden;
@@ -137,6 +149,14 @@ p.watermark {
 .badge-cart {
     position:relative;
     left:10px;
+}
+
+.cart-remove {
+    color: gray;
+}
+
+i.cart-remove:hover {
+    color: #b00000;
 }
 
 /*

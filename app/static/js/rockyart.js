@@ -19,7 +19,7 @@ simpleCart({
         { attr: "image",
             view: function(item, column) {
                 if ($(window).width() > 768) {
-                    return "<div class='col-md-4'><img src='" + item.get('image') + "'></div>";
+                    return "<div class='col-md-4'><img width='100px' src='" + item.get('image') + "'></div>";
                 } else {
                     return "";
                 }
@@ -54,10 +54,14 @@ simpleCart({
         //},  label: "<div class='col-md-4'>Subtotal</div>" },
 
         //{ view: "remove", text: "Remove", label: false }
-        { view: "remove", text: '<i class="fa fa-times-circle-o fa-2x" style="color:red">',
+        { view: "remove", text: '<i class="fa fa-times-circle-o fa-2x cart-remove">',
             label: false }
 
     ]
+});
+
+simpleCart.currency({
+    accuracy: 0
 });
 
 <!-- Assign Bootstrap styles to simpleCart table/div -->
@@ -110,7 +114,7 @@ function updateCartDropdown() {
     cart.empty();
 
     simpleCart.each(function(item, x) {
-        var image = '<img class="img-responsive" src="' + item.get('image') + '" />';
+        var image = '<img class="img-responsive" src="' + item.get('image') + '"/>';
         var image_td = '<td width="25%">' + image + '</td>';
         var name_td = '<td>' + item.get('name') + '</td>';
         var row = '<tr>' + image_td + name_td + '</tr>';

@@ -1,7 +1,43 @@
 from flask.ext.login import UserMixin, AnonymousUserMixin
+from flask_admin.contrib.sqla import ModelView
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from . import db, login_manager
+from . import db, login_manager, admin
+
+
+order_line = db.Table('association',
+    db.Column('product_id', db.Integer, db.ForeignKey('products.id')),
+    db.Column('order_id', db.Integer, db.ForeignKey('orders.id'))
+)
+
+
+class Order(db.Model):
+    __tablename__ = 'orders'
+    id = db.Column(db.Integer, primary_key=True)
+    order_date = db.Column(db.DateTime, index=True)
+    status = db.Column(db.String(64), index=True)
+    products = db.relationship("Product", secondary=order_line,
+                               backref=db.backref('products', lazy='dynamic'),
+                               lazy='dynamic')
+
+
+class Product(db.Model):
+    __tablename__ = 'products'
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(64), index=True)
+    category = db.Column(db.String(64), index=True)
+    description = db.Column(db.String(64), index=True)
+    price = db.Column(db.Float, default=0.0, index=True)
+    quantity = db.Column(db.Integer, default=1)
+    images = db.relationship("ProductImage")
+
+
+class ProductImage(db.Model):
+    __tablename__ = 'product_images'
+    id = db.Column(db.Integer, primary_key=True)
+    path = db.Column(db.String(128))
+    product_id = db.Column(db.Integer, db.ForeignKey('products.id'))
+    main_image = db.Column(db.Boolean, default=False)
 
 
 class Role(db.Model):
@@ -10,7 +46,7 @@ class Role(db.Model):
     name = db.Column(db.String(64), unique=True)
     default = db.Column(db.Boolean, default=False, index=True)
     permissions = db.Column(db.Integer)
-    users = db.relationship('User', backref='role', lazy='dynamic')
+    users = db.relationship('User', backref='roles', lazy='dynamic')
 
     @staticmethod
     def insert_roles():
@@ -83,3 +119,12 @@ class Permission:
     WRITE_ARTICLES = 0x04
     MODERATE_COMMENTS = 0x08
     ADMINISTER = 0x80
+
+
+###############
+# ADMIN VIEWS #
+###############
+# TODO move this stuff to views, figure out import paths
+
+admin.add_view(ModelView(Product, db.session))
+admin.add_view(ModelView(Order, db.session))

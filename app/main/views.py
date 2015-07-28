@@ -5,9 +5,10 @@ import datetime
 from flask import render_template, redirect, url_for, flash, request, Markup
 from flask.ext.login import login_required
 
-from app import mailer, db
+from app import mailer, models, db, admin
 from app.main import main
 from app.main.forms import ContactForm
+# from app.models import Product, Order
 from config import basedir, INSTAGRAM_KEY
 
 
@@ -79,9 +80,14 @@ def gallery():
                            images=images, c=category)
 
 
-@main.route('/products', methods=['GET'])
-def products():
-    return render_template("products.html", title='Products')
+@main.route('/shop', methods=['GET'])
+def shop():
+    items = models.Product.query.all()
+
+    for i in items:
+        print(i.title)
+
+    return render_template("shop.html", title='Rocky Shop', items=items)
 
 
 @main.route('/example-product', methods=['GET'])
@@ -116,7 +122,7 @@ def contact():
 
 
 @main.route('/admin')
-@login_required
+# @login_required
 def admin():
     return render_template("admin.html", title='Admin')
 
@@ -129,4 +135,6 @@ def inquiry():
 
 @main.route('/500')
 def e500():
-    return render_template('500.html', path=request.path, title='Something Wrong')
+    return render_template('500.html', path=request.path,
+                           title='Something Wrong')
+
