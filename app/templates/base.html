@@ -105,7 +105,8 @@
                                 <table class="table" id="cart-dropdown-table">
 {#                                    <tr>#}
 {#                                        <td width="33%"><img class="img-responsive" src="{{ url_for('static', filename='img/gallery/jewelry/full/j01.jpg') }}"></td>#}
-                                      <tr><td width="25%"><img class="img-responsive" src=/static/img/gallery/jewelry/thumb/j01.jpg/></td>
+                                      <tr><td width="25%"><img class="img-responsive"
+                                                               src=/static/img/gallery/jewelry/thumb/j01.jpg/></td>
                                           <td>Sterling Silver with Emeralds</td></tr>
 {#                                        <td><a tabindex="-1" href="#">Gold Necklace w/ Emeralds</a></td>#}
 {#                                    </tr>#}
@@ -115,7 +116,11 @@
 {#                                    </tr>#}
                                 </table>
                               </li>
-                              <li class="text-center"><a class="btn btn-default" href="{{ url_for('main.cart') }}">View Cart & Checkout</a></li>
+                              <li class="text-center">
+                                  <a id="checkout_btn" class="btn btn-default" href="{{ url_for('main.cart') }}">
+                                    View Cart & Checkout
+                                </a>
+                              </li>
                           </ul>
                         </div>
                     </li>
@@ -133,18 +138,16 @@
         <!-- /.container -->
     </nav>
 
-    <div class="row">
+    <div class="container">
         {% for message in get_flashed_messages() %}
-            <div class="col-lg-12">
-                <div class="alert alert-warning">
-                    {{ message }}
-                </div>
+            <div class="alert alert-warning text-center">
+                {{ message }}
             </div>
         {% endfor %}
     </div>
 
     <!-- MAIN CONTENT -->
-    <div class="container">
+    <div class="container-fluid" style="width:90%">
         {% block content %}{% endblock %}
     </div>
     <!-- /.container -->
@@ -169,8 +172,13 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/3.1.8/imagesloaded.min.js"></script>
     <script src="../static/js/bootstrap-hover-dropdown.min.js"></script>
     <script src="../static/js/simpleCart.js"></script>
+    <script src="../static/js/response.js"></script>
     <script src="../static/js/jquery.flexslider-min.js"></script>
     <script src="../static/js/rockyart.js"></script>
+
+    <script>
+
+</script>
 
 </body>
 </html>

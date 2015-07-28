@@ -75,7 +75,7 @@ p.watermark {
 }
 
 /*
-    Product Styles
+    Shop Styles
 */
 
 .store-grid {
@@ -91,11 +91,6 @@ p.watermark {
     background: rgba(184, 184, 184, 0.3);
     border-radius: 4px;
 }
-
-/*.product-box {*/
-    /*margin-bottom: 15px;*/
-    /*padding: 0;*/
-/*}*/
 
 .item-thumbnail {
     position: relative;

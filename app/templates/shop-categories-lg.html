@@ -1,0 +1,50 @@
+<div class="box-container">
+    <div class="row text-center">
+{#            foreach category, make an image with category name as popover#}
+        <div class="col-md-1"></div>
+        <div class="button-group filter-button-group">
+            <div class="col-md-2 col-xs-2">
+                <button data-filter=".necklace" class="item-thumbnail category-button">
+                    <img class="img-rounded img-responsive" src="{{ url_for('static', filename='img/gallery/necklaces.jpg') }}">
+                    <div class="item-caption">
+                        <h4>Necklaces</h4>
+                    </div>
+                </button>
+
+            </div>
+            <div class="col-md-2 col-xs-2">
+                <button data-filter=".earring" class="item-thumbnail category-button">
+                    <img class="img-rounded img-responsive" src="{{ url_for('static', filename='img/gallery/earings.jpg') }}">
+                    <div class="item-caption">
+                        <h4>Earrings</h4>
+                    </div>
+                </button>
+            </div>
+            <div class="col-md-2 col-xs-2">
+                <button data-filter=".ring" class="item-thumbnail category-button">
+                    <img class="img-rounded img-responsive" src="{{ url_for('static', filename='img/gallery/rings.jpg') }}">
+                    <div class="item-caption">
+                        <h4>Rings</h4>
+                    </div>
+                </button>
+            </div>
+            <div class="col-md-2 col-xs-2">
+                <button data-filter=".bracelet" class="item-thumbnail category-button">
+                    <img class="img-rounded img-responsive" src="{{ url_for('static', filename='img/gallery/necklaces.jpg') }}">
+                    <div class="item-caption">
+                        <h4>Bracelets</h4>
+                    </div>
+                </button>
+            </div>
+            <div class="col-md-2 col-xs-2">
+                <button type="button" class="item-thumbnail category-button" data-toggle="modal" data-target="#galleryModal">
+                    <img class="img-rounded img-responsive" src="{{ url_for('static', filename='img/gallery/earings.jpg') }}">
+                    <div class="item-caption">
+                        <h4>Gallery</h4>
+                    </div>
+                </button>
+            </div>
+            <div class="col-md-1"></div>
+        </div>
+    </div>
+</div>

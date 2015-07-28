@@ -82,12 +82,36 @@ def gallery():
 
 @main.route('/shop', methods=['GET'])
 def shop():
+    # Get all shop items
     items = models.Product.query.all()
 
     for i in items:
         print(i.title)
 
-    return render_template("shop.html", title='Rocky Shop', items=items)
+    # Get gallery items
+    gallery_images = []
+    img_dir = os.path.join(basedir, 'app', 'static', 'img', 'gallery')
+    img_path = os.path.join(img_dir, 'jewelry', 'full')
+
+    for img in os.listdir(img_path):
+        if 'j' in img and 'g' in img:
+            gallery_images.append(img)
+    gallery_images = sorted(gallery_images, reverse=True)
+    print(gallery_images)
+
+    return render_template("shop.html", title='Rocky Shop', items=items,
+                           gallery_images=gallery_images)
+
+
+@main.route('/shop/<item_id>')
+def shop_item(item_id):
+    item = models.Product.query.filter_by(id=item_id).first()
+
+    if not item:
+        flash('Item not found (id: %s)' % item_id)
+        return redirect(url_for('main.shop'))
+
+    return render_template('shop_item.html', item=item)
 
 
 @main.route('/example-product', methods=['GET'])

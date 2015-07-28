@@ -85,6 +85,7 @@ simpleCart.bind("update" , function(item) {
     // Update cart dropdown menu on update
     if (simpleCart.quantity() > 0) {
         updateCartDropdown();
+        $("#checkout_btn").unbind('click');
     }
 });
 
@@ -125,8 +126,11 @@ function updateCartDropdown() {
 function clearCartDropdown() {
     var cart = $('#cart-dropdown-table');
     cart.empty();
-    var row = '<tr><td>Your cart is empty, but you could <a href="/products">Go Shopping</a></tr></td>';
+    var row = '<tr><td>Your cart is empty, but you could <a href="/shop">Go Shopping</a></tr></td>';
     cart.append(row);
+    $("#checkout_btn").bind('click', function(e){
+        e.preventDefault();
+    })
 }
 
 
@@ -157,6 +161,36 @@ $('.flexslider').flexslider({
 //////////////////
 
 $(document).ready(function() {
+    // init isotope grid after images have loaded
+    var $grid = $('.store-grid').imagesLoaded(function() {
+        $grid.isotope({
+            itemSelector: '.store-item',
+            masonry: {
+                columnWidth: 250,
+                isFitWidth: true,
+                gutter: 10
+            },
+
+            getSortData: {
+                price: '.price parseInt',
+                date: '.date'
+            }
+        });
+    });
+
+    // filter items on button click
+    $('.filter-button-group').on( 'click', 'button', function() {
+      var filterValue = $(this).attr('data-filter');
+      $grid.isotope({ filter: filterValue });
+    });
+
+    // sort items on button click
+    $('.sort-by-button-group').on( 'click', 'button', function() {
+      var sortByValue = $(this).attr('data-sort-by');
+      $grid.isotope({ sortBy: sortByValue });
+    });
+
+    /////////////////////////////////////////////////////////////
 
     // Email button spinner
     $('#send').click(function () {
@@ -174,6 +208,7 @@ $(document).ready(function() {
     }
 
 });
+
 
 /*$('#contactForm').validator().on('submit', function (e) {
     if (e.isDefaultPrevented()) {
