@@ -29,6 +29,7 @@ class Product(db.Model):
     description = db.Column(db.String(64), index=True)
     price = db.Column(db.Float, default=0.0, index=True)
     quantity = db.Column(db.Integer, default=1)
+    creation_date = db.Column(db.Date)
     images = db.relationship("ProductImage")
 
 
