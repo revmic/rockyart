@@ -99,8 +99,8 @@
     </nav>
 
     <div class="container">
-        {% for message in get_flashed_messages() %}
-            <div class="alert alert-warning text-center">
+        {% for category, message in get_flashed_messages(with_categories=true) %}
+            <div class="alert alert-{{ category }} text-center">
                 {{ message }}
             </div>
         {% endfor %}

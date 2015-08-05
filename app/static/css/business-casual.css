@@ -6,7 +6,7 @@
 
 body {
     font-family: "Montserrat","Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
-    background: url('../img/bg_70.jpg') no-repeat center center fixed;
+    background: url('../img/app/bg_70.jpg') no-repeat center center fixed;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     background-size: cover;

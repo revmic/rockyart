@@ -34,12 +34,20 @@ def blog():
     uri = 'https://api.instagram.com/v1/users/2099685218/media/recent/' \
           '?client_id=' + INSTAGRAM_KEY
     r = requests.get(uri)
+
     try:
         r.raise_for_status()
     except Exception as e:
         print(e, "\nProblem connecting with Instagram api\n", uri)
-        mailer.send_email("Instagram API Error", "inquiry")
+        flash(e, "danger")
+        flash("Error connecting with Instagram api", "danger")
+
+        # mailer.send_email("Instagram API Error", "inquiry")
         return render_template("blog.html", title='Blog', instagrams=instagrams)
+
+    if len(r.json()['data']) == 0:
+        flash("No instagram posts found. Probably an issue with the api. "
+              "Try checking back later.", "warning")
 
     for instagram in r.json()['data']:
         img = instagram['images']['standard_resolution']['url']
@@ -64,6 +72,11 @@ def blog():
                            'caption': caption, 'link': link})
 
     return render_template("blog.html", title='Blog', instagrams=instagrams)
+
+
+@main.route('/blog/statement')
+def statement():
+    return render_template("statement.html", title='Artist Statement')
 
 
 @main.route('/gallery')
@@ -148,7 +161,7 @@ def shop_item(item_id):
     item = Product.query.filter_by(id=item_id).first()
 
     if not item:
-        flash('Item not found (id: %s)' % item_id)
+        flash('Item not found (id: %s)' % item_id, "warning")
         return redirect(url_for('main.shop'))
 
     # Use absolute path for directory listing
@@ -188,7 +201,7 @@ def contact():
                   "Please email rockypardo.art@gmail.com with your question. "
                   "And if you're feeling generous with your time, "
                   "send mhilema@gmail.com a message about this error. "
-                  "Sorry about this!", "error")
+                  "Sorry about this!", "danger")
         else:
             flash("Your message was sent successfully. "
                   "I'll get back to you soon!", "success")
@@ -232,7 +245,7 @@ class ProductView(ModelView):
                 db.session.commit()
             except Exception as e:
                 msg = "Something happened with product creation."
-                flash(msg)
+                flash(msg, "danger")
                 print(msg)
                 print(e)
 
@@ -271,9 +284,9 @@ class ProductView(ModelView):
                 self.save_product(product, form)
                 publish_product(product.id)
                 if product.published:
-                    flash("Published " + product.title)
+                    flash("Published " + product.title, "success")
                 else:
-                    flash("Unpublished " + product.title)
+                    flash("Unpublished " + product.title, "success")
             if 'publish_add' in request.form:
                 print("Publish and add another")
             if 'delete' in request.form:
@@ -281,7 +294,7 @@ class ProductView(ModelView):
                 db.session.delete(product)
                 # TODO delete images
                 flash("Deleted " + product.title +
-                      " (id " + str(product.id) + ")")
+                      " (id " + str(product.id) + ")", "success")
                 return redirect('/admin/product')
 
             return redirect('/admin/product/edit?id=' + product_id)
@@ -301,7 +314,7 @@ class ProductView(ModelView):
 
         msg = "Saved product id " + str(product.id)
         print(msg)
-        flash(msg)
+        flash(msg, "success")
 
 
 # @login_required
@@ -371,9 +384,9 @@ def remove():
         os.remove(img_path)
     except Exception as e:
         print(e)
-        flash("Could not remove " + img_path)
+        flash("Could not remove " + img_path, "danger")
     else:
-        flash("Successfully removed " + os.path.basename(img_path))
+        flash("Successfully removed " + os.path.basename(img_path), "success")
 
     redirect_url = '/admin/product/edit?id=' + product_id
     return redirect(redirect_url)
