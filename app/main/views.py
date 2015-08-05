@@ -1,14 +1,24 @@
 import os
 import requests
-import datetime
+from datetime import datetime
 
-from flask import render_template, redirect, url_for, flash, request, Markup
+from flask import (
+    render_template,
+    redirect,
+    url_for,
+    flash,
+    request,
+    jsonify
+)
+from flask_admin import AdminIndexView, expose
+from flask_admin.contrib.sqla import ModelView
+from flask.ext.uploads import UploadSet, IMAGES
 from flask.ext.login import login_required
 
-from app import mailer, models, db, admin
+from app import mailer, db, admin
 from app.main import main
-from app.main.forms import ContactForm
-# from app.models import Product, Order
+from app.models import Product, ProductImage, Order
+from app.main.forms import ContactForm, ProductForm
 from config import basedir, INSTAGRAM_KEY
 
 
@@ -42,11 +52,11 @@ def blog():
             caption = ""
         # Just in case we can't parse the date
         try:
-            dt = datetime.datetime.fromtimestamp(int(instagram['created_time']))
+            dt = datetime.fromtimestamp(int(instagram['created_time']))
             date_str = dt.strftime('%B %-d, %Y')
         except Exception as e:
             print("Problem getting datetime info\n", e)
-            dt = datetime.datetime.now()
+            dt = datetime.now()
             date_str = dt.strftime('%B %-d, %Y')
 
         instagrams.append({'date_str': date_str, 'datetime': dt, 'image': img,
@@ -83,10 +93,37 @@ def gallery():
 @main.route('/shop', methods=['GET'])
 def shop():
     # Get all shop items
-    items = models.Product.query.all()
+    result = Product.query.all()
+    items = []
 
-    for i in items:
-        print(i.title)
+    # Only show shop item if it's published and is in stock
+    for item in result:
+        if item.published and item.quantity > 0:
+            items.append(item)
+
+    # Get product main images
+    # Use absolute path for directory listing
+    img_base_dir = os.path.join(basedir, 'app/static/img/store')
+    main_images = {}
+
+    for item in items:
+        img_abs_path = os.path.join(img_base_dir, str(item.id))
+        try:
+            main_img = os.listdir(img_abs_path)[0]
+        except:
+            pass
+
+        img_rel_path = os.path.join('img/store/%s/%s' % (item.id, main_img))
+        main_images[item.id] = img_rel_path
+
+    print(main_images)
+
+    # Use absolute path for directory listing
+    # img_path_abs = os.path.join(basedir, 'app/static/img/store/%s' % item_id)
+    # Use relative path to make url building easier
+    # img_path_rel = 'img/store/%s/' % item_id
+    # img_files = os.listdir(img_path_abs)
+    # item_images = []
 
     # Get gallery items
     gallery_images = []
@@ -96,27 +133,40 @@ def shop():
     for img in os.listdir(img_path):
         if 'j' in img and 'g' in img:
             gallery_images.append(img)
+
     gallery_images = sorted(gallery_images, reverse=True)
-    print(gallery_images)
 
     return render_template("shop.html", title='Rocky Shop', items=items,
-                           gallery_images=gallery_images)
+                           gallery_images=gallery_images,
+                           main_images=main_images)
 
 
 @main.route('/shop/<item_id>')
 def shop_item(item_id):
-    item = models.Product.query.filter_by(id=item_id).first()
+    item = Product.query.filter_by(id=item_id).first()
 
     if not item:
         flash('Item not found (id: %s)' % item_id)
         return redirect(url_for('main.shop'))
 
-    return render_template('shop_item.html', item=item)
+    # Use absolute path for directory listing
+    img_path_abs = os.path.join(basedir, 'app/static/img/store/%s' % item_id)
+    # Use relative path to make url building easier
+    img_path_rel = 'img/store/%s/' % item_id
 
+    item_images = []
+    img_files = []
+    try:
+        img_files = os.listdir(img_path_abs)
+    except FileNotFoundError:
+        print("No images for product id " + item_id)
 
-@main.route('/example-product', methods=['GET'])
-def example_product():
-    return render_template("example-product.html", title='Products')
+    for i in img_files:
+        item_images.append(os.path.join(img_path_rel, i))
+
+    print(item_images)
+
+    return render_template('shop_item.html', item=item, images=item_images)
 
 
 @main.route('/cart', methods=['GET'])
@@ -145,12 +195,6 @@ def contact():
     return render_template("contact.html", title='Contact', form=form)
 
 
-@main.route('/admin')
-# @login_required
-def admin():
-    return render_template("admin.html", title='Admin')
-
-
 @main.route('/inquiry')
 def inquiry():
     form = ContactForm()
@@ -162,3 +206,171 @@ def e500():
     return render_template('500.html', path=request.path,
                            title='Something Wrong')
 
+
+###############
+# ADMIN VIEWS #
+###############
+
+admin.base_template = "admin/manage_product.html"
+photos = UploadSet('photos', IMAGES)
+
+
+# @login_required
+class ProductView(ModelView):
+    categories = ['necklace', 'ring', 'earring', 'bracelet']
+
+    @expose('/new/', methods=('GET', 'POST'))
+    def create_view(self):
+        new_product = Product(creation_date=datetime.now(), quantity=1)
+        form = ProductForm(request.form, new_product)
+
+        if request.method == 'POST':
+            try:
+                db.session.add(new_product)
+                db.session.commit()
+            except Exception as e:
+                msg = "Something happened with product creation."
+                flash(msg)
+                print(msg)
+                print(e)
+
+            self.save_product(new_product, form)
+            return redirect('/admin/product/edit?id=' + str(new_product.id))
+
+        return self.render('admin/manage_product.html', form=form,
+                           product=new_product, creating=True,
+                           categories=self.categories)
+
+    @expose('/edit/', methods=('GET', 'POST'))
+    def edit_view(self):
+        product_id = request.args.get('id')
+        img_path_abs = os.path.join(
+            basedir, 'app/static/img/store/%s' % product_id)
+        img_path_rel = 'img/store/%s/' % product_id
+        images = []
+
+        try:
+            for img in os.listdir(img_path_abs):
+                images.append(os.path.join(img_path_rel, img))
+        except FileNotFoundError:
+            # images = ['img/store/placeholder.jpg']
+            print("No images for product id: " + product_id)
+
+        product = Product.query.filter_by(id=product_id).first()
+        form = ProductForm(request.form, product)
+
+        # if form.validate_on_submit():
+        # TODO break up into functions
+        if request.method == 'POST':
+            print(request.form)
+            if 'save' in request.form:
+                self.save_product(product, form)
+            if 'publish' in request.form:
+                self.save_product(product, form)
+                publish_product(product.id)
+                if product.published:
+                    flash("Published " + product.title)
+                else:
+                    flash("Unpublished " + product.title)
+            if 'publish_add' in request.form:
+                print("Publish and add another")
+            if 'delete' in request.form:
+                print("Deleting")
+                db.session.delete(product)
+                # TODO delete images
+                flash("Deleted " + product.title + " (id " + str(product.id) + ")" )
+                return redirect('/admin/product')
+
+            return redirect('/admin/product/edit?id=' + product_id)
+
+        return self.render('admin/manage_product.html',
+                           product=product, images=images, form=form,
+                           categories=self.categories)
+
+    @staticmethod
+    def save_product(product, form):
+        product.title = form.title.data
+        product.category = form.category.data
+        product.quantity = form.quantity.data
+        product.price = form.price.data
+        product.description = form.description.data
+        product.creation_date = form.creation_date.data
+
+        msg = "Saved product id " + str(product.id)
+        print(msg)
+        flash(msg)
+
+
+# @login_required
+class DashboardView(AdminIndexView):
+    @expose('/')
+    def index(self):
+        return self.render('admin/admin_dashboard.html')
+
+# admin.index_view = DashboardView(name='Dashboard', endpoint='dashboard',
+#   template='admin/admin_dashboard.html')
+# admin.add_view(DashboardView(name='Dashboard'))  #, endpoint='dashboard'))
+admin.add_view(ProductView(Product, db.session, name="Products"))
+admin.add_view(ModelView(Order, db.session, name="Orders"))
+admin.add_view(ModelView(ProductImage, db.session, name="Images"))
+
+
+@main.route('/admin/upload', methods=['POST'])
+def upload():
+    f = request.files['file']
+    pid = request.args.get("product_id")
+    upload_dir = os.path.join(basedir, 'app/static/img/store/%s' % pid)
+    print("Uploading " + f.filename + " to " + upload_dir)
+
+    if not os.path.exists(upload_dir):
+        os.mkdir(upload_dir)
+
+    f.save(os.path.join(upload_dir, f.filename))
+    file_size = os.path.getsize(os.path.join(upload_dir, f.filename))
+
+    # TODO create thumbs
+
+    # TODO Write to db ??? Could do FS operations on ID directory
+
+    print(jsonify(name=f.filename, size=file_size))
+    return jsonify(name=f.filename, size=file_size)
+
+
+# @main.route('/admin/product/<id>/publish', methods=['POST'])
+def publish_product(id):
+    """
+    Toggles a product between published and unpublished
+    """
+    product = Product.query.filter_by(id=id).first()
+
+    # product.published = True
+    print(product.published)
+
+    if not product.published:
+        product.published = True
+    else:
+        product.published = False
+
+    db.session.commit()
+    return True
+
+
+@main.route('/admin/remove', methods=['POST'])
+def remove():
+    """Delete an uploaded file."""
+    # img_file = ProductImage.query.get_or_404(img)
+    product_id = request.args.get("product_id")
+    img_arg = request.args.get("img").lstrip(os.path.sep)  # del leading /
+    img_path = os.path.join(basedir, 'app', img_arg)
+
+    try:
+        print("Removing " + img_path)
+        os.remove(img_path)
+    except Exception as e:
+        print(e)
+        flash("Could not remove " + img_path)
+    else:
+        flash("Successfully removed " + os.path.basename(img_path))
+
+    redirect_url = '/admin/product/edit?id=' + product_id
+    return redirect(redirect_url)

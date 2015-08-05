@@ -135,22 +135,33 @@ html[xmlns] .flexslider .slides {
   transition: all 0.3s ease-in-out;
 }
 .flex-direction-nav a:before {
-  font-family: "flexslider-icon";
+  font-family: FontAwesome;
+  content: '\f137';
+  /*content: '\f190';*/
   font-size: 40px;
+  font-style: normal;
+  font-weight: normal;
   display: inline-block;
-  content: '\f001';
+  text-decoration: inherit;
+  /*position: absolute;*/
+  padding: 0;
+  margin-top: -10px;
   color: rgba(0, 0, 0, 0.8);
+
   text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.3);
 }
 .flex-direction-nav a.flex-next:before {
-  content: '\f002';
+  /*content: '\f002';*/
+  content: '\f138';
 }
 .flex-direction-nav .flex-prev {
   left: -50px;
+  top: 150px;
 }
 .flex-direction-nav .flex-next {
   right: -50px;
   text-align: right;
+  top: 150px;
 }
 .flexslider:hover .flex-direction-nav .flex-prev {
   opacity: 0.7;

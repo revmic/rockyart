@@ -10,43 +10,39 @@
 <div class="box">
     <div class="row">
         <div class="col-sm-6">
-            <div class="links">
-                <a href="{{ url_for('static', filename='img/gallery/jewelry/full/j01.jpg') }}" title="" data-gallery>Fullscreen Slideshow</a>
-                <a href="{{ url_for('static', filename='img/gallery/jewelry/full/j02.jpg') }}" title="" data-gallery></a>
-                <a href="{{ url_for('static', filename='img/gallery/jewelry/full/j03.jpg') }}" title="" data-gallery></a>
-                <a href="{{ url_for('static', filename='img/gallery/jewelry/full/j04.jpg') }}" title="" data-gallery></a>
-            </div>
+
             <div class="flexslider">
               <ul class="slides">
-                <li data-thumb="{{ url_for('static', filename='img/gallery/jewelry/thumb/j01.jpg') }}">
-                  <img src="{{ url_for('static', filename='img/gallery/jewelry/full/j01.jpg') }}" />
-                </li>
-                <li data-thumb="{{ url_for('static', filename='img/gallery/jewelry/thumb/j02.jpg') }}">
-                  <img src="{{ url_for('static', filename='img/gallery/jewelry/full/j02.jpg') }}" />
-                </li>
-                <li data-thumb="{{ url_for('static', filename='img/gallery/jewelry/thumb/j03.jpg') }}">
-                  <img src="{{ url_for('static', filename='img/gallery/jewelry/full/j03.jpg') }}" />
-                </li>
-                <li data-thumb="{{ url_for('static', filename='img/gallery/jewelry/full/j04.jpg') }}">
-                  <img src="{{ url_for('static', filename='img/gallery/jewelry/full/j04.jpg') }}" />
-                </li>
+                  {% for img in images %}
+                      <li data-thumb="{{ url_for('static', filename=img) }}">
+                          <img id='flex-image' src="{{ url_for('static', filename=img) }}" />
+                      </li>
+                  {% endfor %}
               </ul>
+            </div>
+
+            <div class="links" style="position:relative; top:-50px">
+                {% for img in images %}
+                    <a href="{{ url_for('static', filename=img) }}" title="" data-gallery>
+                    {% if loop.index == 1 %}
+                        <i class="fa fa-picture-o"></i> Fullscreen Slideshow
+                    {% endif %}
+                    </a>
+                {% endfor %}
             </div>
 
         </div>
 
         <div class="col-lg-6 text-left">
             <div class="simpleCart_shelfItem">
-                <!-- Add a hidden reference to the item image for sake of cart display -->
-                <img alt="image" src="{{ url_for('static', filename='img/gallery/jewelry/full/j01.jpg') }}" class="item_image" />
-
-                <h4 class="item_name">{{ item.title }}</h4>
-                <h3 class="item_price">{{ item.price }}</h3>
+                <!-- Add a hidden reference to the item image for simplecart -->
+                <img alt="image" src="{{ url_for('static', filename=images[0]) }}" class="item_image" />
+                <h4 class="item_name" style="display:inline">{{ item.title }}</h4>
+                <h3 class="item_price text-muted text-right" style="display:inline">${{ item.price|round|int }}</h3>
                 <hr>
                 <p>{{ item.description }}</p>
-                <div class="text-right">
-                    <a class="item_add btn btn-sm btn-success" href="javascript:"><i class="fa fa-cart-plus"></i> Add to Cart</a>
-                </div>
+                <hr>
+                <a class="item_add btn btn-success" href="javascript:"><i class="fa fa-cart-plus"></i> Add to Cart</a>
             </div>
         </div>
 

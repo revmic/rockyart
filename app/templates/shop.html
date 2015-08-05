@@ -2,112 +2,129 @@
 
 {% block content %}
 
-{#  response.js setup  #}
-<body data-responsejs='{
-  "create": [{
-    "prop": "width",
-    "prefix": "min-width- r src",
-    "breakpoints": [0, 320, 481, 641, 961, 1025, 1281]
-  }]
-}'>
+<style>
+#filters label {
+    position: relative;
+    top: 8px;
+}
+#mobile-filters {
+    padding: 0;
+}
+</style>
 
-    <style>
-    .category-button {
-        background:none!important;
-        border:none;
-        padding:0!important;
-        width: 150px;
-        height: 75px;
-        font: inherit;
-{#        position: relative;#}
-{#        overflow: hidden;#}
-    }
-    .quick-add-cart {
-        position: relative;
-        top: 120px;
-        left: 95px;
-    }
-    </style>
+<div class="box">
 
-{# TODO create mobile view for category header #}
+    <div id="mobile-filters" class="container">
+        <!-- Categories -->
+        <div id="filters">
+            <label for="category-select" class="col-xs-3">Category</label>
 
-<!-- Shop Categories -->
+            <div class="col-xs-9">
+                <select id="category-select" class="form-control">
+                    <option value="*">All</option>
+                    <option value=".necklace">Necklaces</option>
+                    <option value=".bracelet">Bracelets</option>
+                    <option value=".ring">Rings</option>
+                    <option value=".earring">Earrings</option>
+                </select>
+            </div>
+        </div>
 
-<div class="box-container">
-    <div class="row text-center">
-        <div class="col-md-1"></div>
-        <div class="button-group filter-button-group">
-            <div class="col-md-2 col-xs-2">
+        <!-- Sorting -->
+        <div id="sorting">
+            <label for="sortby-select" class="col-xs-3">Sort</label>
+
+            <div class="col-xs-9">
+                <select id="sortby-select" class="form-control">
+                    <option value="none">None</option>
+                    <option value="date">Newest First</option>
+                    <option value="price_up">Price Ascending</option>
+                    <option value="price_down">Price Descending</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="desktop-filters">
+        <!-- Categories -->
+        <div class="row text-center" style="margin-top:-15px; margin-bottom: -5px">
+            <div class="btn-group filter-button-group">
+                <button data-filter="*" class="item-thumbnail category-button-all" style="box-shadow:none"><i class="fa fa-asterisk"></i>
+                     <div class="item-caption">
+                        <h6>All</h6>
+                    </div>
+                </button>
                 <button data-filter=".necklace" class="item-thumbnail category-button">
                     <img class="img-rounded img-responsive" src="{{ url_for('static', filename='img/gallery/necklaces.jpg') }}">
                     <div class="item-caption">
-                        <h4>Necklaces</h4>
+                        <h6>Necklaces</h6>
                     </div>
                 </button>
-
-            </div>
-            <div class="col-md-2 col-xs-2">
                 <button data-filter=".earring" class="item-thumbnail category-button">
                     <img class="img-rounded img-responsive" src="{{ url_for('static', filename='img/gallery/earings.jpg') }}">
                     <div class="item-caption">
-                        <h4>Earrings</h4>
+                        <h6>Earrings</h6>
                     </div>
                 </button>
-            </div>
-            <div class="col-md-2 col-xs-2">
                 <button data-filter=".ring" class="item-thumbnail category-button">
                     <img class="img-rounded img-responsive" src="{{ url_for('static', filename='img/gallery/rings.jpg') }}">
                     <div class="item-caption">
-                        <h4>Rings</h4>
+                        <h6>Rings</h6>
                     </div>
                 </button>
-            </div>
-            <div class="col-md-2 col-xs-2">
                 <button data-filter=".bracelet" class="item-thumbnail category-button">
                     <img class="img-rounded img-responsive" src="{{ url_for('static', filename='img/gallery/necklaces.jpg') }}">
                     <div class="item-caption">
-                        <h4>Bracelets</h4>
+                        <h6>Bracelets</h6>
                     </div>
                 </button>
-            </div>
-            <div class="col-md-2 col-xs-2">
                 <button type="button" class="item-thumbnail category-button" data-toggle="modal" data-target="#galleryModal">
-                    <img class="img-rounded img-responsive" src="{{ url_for('static', filename='img/gallery/earings.jpg') }}">
+                    <img class="img-rounded img-responsive" src="{{ url_for('static', filename='img/gallery/gallery.png') }}">
                     <div class="item-caption">
-                        <h4>Gallery</h4>
+                        <h6>Gallery</h6>
                     </div>
                 </button>
             </div>
-            <div class="col-md-1"></div>
         </div>
+
+        <!-- Sorting -->
+        <div class="row text-center" style="margin-bottom: -15px">
+            <div class="btn-group sortby-button-group">
+                <button class="btn btn-default btn-sm" data-sort-by="date">
+                    newest first <i class="fa fa-clock-o"></i>
+                </button>
+                <button class="btn btn-default btn-sm" data-sort-by="price_up">
+                    price <i class="fa fa-chevron-up" style="color:dodgerblue"></i>
+                </button>
+                <button class="btn btn-default btn-sm" data-sort-by="price_down">
+                    price <i class="fa fa-chevron-down" style="color:dodgerblue"></i>
+                </button>
+                <button class="btn btn-default btn-sm">
+                    clear sort <i class="fa fa-minus-square-o" style="color:red"></i>
+                </button>
+            </div>
+        </div>
+
     </div>
 </div>
 
 
-{#<div#}
-{#  data-min-width-320='{% include "shop-categories-sm.html" %}'#}
-{#  data-min-width-961='{% include "shop-categories-lg.html" %}'#}
-{#>#}
-{#  text-only @ <320px and no-js#}
-{#</div>#}
-
-
-<!-- Modal -->
+<!-- Gallery Modal -->
 <div id="galleryModal" class="modal fade" role="dialog">
   <div class="modal-dialog modal-lg">
 
-    <!-- Modal content-->
     <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Gallery</h4>
+      <div class="modal-header" style="height:65px">
+        <button type="button" class="close" data-dismiss="modal"><i class="fa fa-times-circle-o fa-2x"></i></button>
       </div>
       <div class="modal-body">
+          <div class="text-center gallery-logo">Gallery</div>
         <p>The gallery contains items that have been previously sold, created for pleasure, and some for keeps.
             I would love to help you with your next custom piece, and I hope these images help to spark your creative genius.
         </p>
       </div>
-      <div class="modal-footer">
+      <div class="modal-footer" style="height:65px">
           <button type="button" class="btn btn-primary" data-gallery>View Gallery</button>
           <button type="button" class="btn btn-default" data-dismiss="modal">Continue Shopping</button>
       </div>
@@ -116,34 +133,26 @@
   </div>
 </div>
 
-
-
 <div class="box">
-    <div class="button-group sort-by-button-group">
-        <p>Sort by:
-            <button class="btn btn-default" data-sort-by="price">price</button>
-            <button class="btn btn-default" data-sort-by="date">newness</button>
-        </p>
-    </div>
-
     <div class="store-grid">
     {% for item in items %}
         <div class="store-item simpleCart_shelfItem {{ item.category }} item-thumbnail text-center" data-category="{{ item.category }}">
             <img alt="image" class="item_image img-responsive"
-                 src="{{ url_for('static', filename='img/gallery/jewelry/full/j01.jpg') }}">
+                 src="{{ url_for('static', filename=main_images[item.id]) }}">
+{#                 src="{{ url_for('static', filename='img/gallery/jewelry/full/j01.jpg') }}">#}
             <h6 class="item_name">{{ item.title }}</h6>
             <h6 style="display:inline">$</h6>
-            <h4 class="item_price price text-muted" style="display:inline">{{ item.price }}</h4>
+            <h3 class="item_price price text-muted" style="display:inline">{{ item.price|round|int }}</h3>
+            <div style="margin-bottom:10px"></div>
 
             <div class="item-caption">
                 <a class="btn btn-default btn-lg view-details" href="{{ url_for('main.shop_item', item_id=item.id) }}">
                     VIEW DETAILS
                 </a>
                 <a class="item_add btn quick-add-cart" href="javascript:">
-                    <i class="fa fa-cart-plus fa-inverse fa-3x"></i>
+                    <i class="fa fa-cart-plus fa-inverse fa-3x cart-add"></i>
                 </a>
             </div>
-
             <div class="hidden date">{{ item.creation_date }}</div>
         </div>
     {% endfor %}
@@ -168,11 +177,11 @@
     <ol class="indicator"></ol>
     <!-- The modal dialog, which will be used to wrap the lightbox content -->
     <div class="modal fade">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-primary">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title"></h4>
+                    <button type="button" class="close" aria-hidden="true"><i class="fa fa-times-circle-o"></i></button>
+{#                    <h4 class="modal-title"></h4>#}
                 </div>
                 <div class="modal-body next"></div>
                 <div class="modal-footer">
@@ -189,7 +198,5 @@
         </div>
     </div>
 </div>
-
-
 
 {% endblock %}

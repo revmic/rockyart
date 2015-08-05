@@ -1,7 +1,4 @@
-<!-- Activate Index Carousel -->
-$('.carousel').carousel({
-    interval: 5000 //changes the speed
-});
+/**/
 
 ////////////////////
 // simpleCart(js) //
@@ -12,51 +9,50 @@ simpleCart({
         type: "PayPal" ,
         email: "mhilema@gmail.com"
     },
+    shippingQuantityRate: 2,
+
     cartStyle : "table",
 
     cartColumns: [
         //{view:'image', attr:'thumb', label: false},
         { attr: "image",
             view: function(item, column) {
-                if ($(window).width() > 768) {
-                    return "<div class='col-md-4'><img width='100px' src='" + item.get('image') + "'></div>";
+                if ($(window).width() > 600) {
+                    return "<div class='text-center'><img width='150px' src='" + item.get('image') + "'></div>";
                 } else {
                     return "";
+                    //return "<div class='text-center'><img width='150px' src='" + item.get('image') + "'></div>";
                 }
         }},
 
         //{ attr: "name", label: "Name" },
         { attr: "name",
             view: function(item, column){
-                return '<div class="col-md-4">' + item.get('name') + "</div>";
-        },  label: "<div class='col-md-3'>Item</div>" },
+                return '<div>' + item.get('name') + "</div>";
+        },  label: "<div'>Item</div>" },
 
         { attr: "price", view: 'currency', label: "Price" },
-        //{ attr: "price",
-        //    view: function(item, column){
-        //        return '<div class="col-md-4">' + item.get('currency') + "</div>";
-        //},  label: "<div class='col-md-4'>Price</div>" },
 
-        { view: "decrement" , label: false , text: "<i class='fa fa-minus'></i>" },
+        { view: "decrement" , label: false ,
+            text: '<div class="text-center"><i class="fa fa-minus-square fa-2x cart-qty"></i></div>' },
 
-        { attr: "quantity", label: "Qty" },
-        //{ attr: "quantity",
-        //    view: function(item, column){
-        //        return '<div class="col-md-4">' + item.get('currency') + "</div>";
-        //},  label: "<div class='col-md-4'>Price</div>" },
+        //{ attr: "quantity", label: "Qty" },
+        { attr: "quantity",
+            view: function(item, column){
+                return '<div class="text-center">' + item.get('quantity') + "</div>";
+        },  label: '<div class="text-center" style="width:0">Qty</div>' },
 
-        { view: "increment" , label: false , text: '<i class="fa fa-plus"></i>' },
+        { view: "increment" , label: false ,
+            text: '<div class="text-center"><i class="fa fa-plus-square fa-2x cart-qty"></i></div>' },
 
-        { attr: "total", view: 'currency', label: "SubTotal" },
-        //{ attr: "total",
-        //    view: function(item, column){
-        //        return '<div class="col-md-4">' + item.get('currency') + "</div>";
-        //},  label: "<div class='col-md-4'>Subtotal</div>" },
+        { attr: "total",
+            view: function(item, column) {
+                return '<div class="text-center">$' + item.get('total') + "</div>";
+        }, label: '<div class="text-center">Subtotal</div>' },
 
         //{ view: "remove", text: "Remove", label: false }
-        { view: "remove", text: '<i class="fa fa-times-circle-o fa-2x cart-remove">',
-            label: false }
-
+        { view: "remove", text: '<div class="text-center"><i class="fa fa-times-circle fa-2x cart-remove"></div>',
+            label: '<div style="width:0"></div>' }
     ]
 });
 
@@ -64,9 +60,9 @@ simpleCart.currency({
     accuracy: 0
 });
 
-<!-- Assign Bootstrap styles to simpleCart table/div -->
+<!-- Assign Bootstrap styles to simpleCart table -->
 simpleCart.bind("afterCreate", function() {
-    $(".simpleCart_items table").addClass("table").addClass("table-hover");
+    $(".simpleCart_items table").addClass("table").addClass("table-hover").addClass("cart-table");
     //$(".simpleCart_items div").addClass("div").addClass("col-lg-12");
 });
 
@@ -118,7 +114,8 @@ function updateCartDropdown() {
         var image = '<img class="img-responsive" src="' + item.get('image') + '"/>';
         var image_td = '<td width="25%">' + image + '</td>';
         var name_td = '<td>' + item.get('name') + '</td>';
-        var row = '<tr>' + image_td + name_td + '</tr>';
+        var qty_td = '<td>' + item.get('quantity') + '</td>';
+        var row = '<tr>' + image_td + name_td + qty_td + '</tr>';
         cart.append(row);
     });
 }
@@ -126,7 +123,7 @@ function updateCartDropdown() {
 function clearCartDropdown() {
     var cart = $('#cart-dropdown-table');
     cart.empty();
-    var row = '<tr><td>Your cart is empty, but you could <a href="/shop">Go Shopping</a></tr></td>';
+    var row = '<tr><td>Your cart is empty, but you could <br> <a href="/shop">Go Shopping</a></tr></td>';
     cart.append(row);
     $("#checkout_btn").bind('click', function(e){
         e.preventDefault();
@@ -153,16 +150,23 @@ $('.item-thumbnail').hover(
 <!-- item image viewer -->
 $('.flexslider').flexslider({
     animation: "slide",
-    controlNav: "thumbnails"
+    controlNav: "thumbnails",
+    smoothHeight: true,
+    useCss: true
 });
+
+//$('.flex-direction-nav').css({''})
 
 //////////////////
 // Contact Form //
 //////////////////
 
 $(document).ready(function() {
+    var $store_grid = $('.store-grid');
+
+    /* DESKTOP STORE FILTERS */
     // init isotope grid after images have loaded
-    var $grid = $('.store-grid').imagesLoaded(function() {
+    var $grid = $store_grid.imagesLoaded(function() {
         $grid.isotope({
             itemSelector: '.store-item',
             masonry: {
@@ -170,10 +174,15 @@ $(document).ready(function() {
                 isFitWidth: true,
                 gutter: 10
             },
-
             getSortData: {
-                price: '.price parseInt',
+                price_up: '.price parseInt',
+                price_down: '.price parseInt',
                 date: '.date'
+            },
+            sortAscending: {
+                price_up: true,
+                price_down: false,
+                date: true
             }
         });
     });
@@ -185,9 +194,44 @@ $(document).ready(function() {
     });
 
     // sort items on button click
-    $('.sort-by-button-group').on( 'click', 'button', function() {
+    $('.sortby-button-group').on( 'click', 'button', function() {
       var sortByValue = $(this).attr('data-sort-by');
       $grid.isotope({ sortBy: sortByValue });
+    });
+
+
+    /* MOBILE STORE FILTERS */
+    var $mobile_grid = $store_grid,
+    $category_select = $('#filters').find('select'),
+    $sortby_select = $('#sorting').find('select');
+
+    $mobile_grid.isotope({
+        itemSelector: '.store-item',
+        masonry: {
+            columnWidth: 250,
+            isFitWidth: true,
+            gutter: 10
+        },
+        getSortData: {
+            price_up: '.price parseInt',
+            price_down: '.price parseInt',
+            date: '.date'
+        },
+        sortAscending: {
+            price_up: true,
+            price_down: false,
+            date: true
+        }
+    });
+    // filter items on dropdown change
+    $category_select.change(function() {
+        var filters = $(this).val();
+        $mobile_grid.isotope({ filter: filters });
+    });
+    // sort items on dropdown change
+    $sortby_select.change(function() {
+        var sortByValue = $(this).val();
+        $mobile_grid.isotope({ sortBy: sortByValue });
     });
 
     /////////////////////////////////////////////////////////////
@@ -200,20 +244,57 @@ $(document).ready(function() {
     setInterval(function () { $("#btn_icon").attr('class', 'glyphicon glyphicon-envelope') }, 6000);
 
     // Contact phone is a tel link on mobile or a tooltip on desktop
-    if ($(window).width() < 768) {
+    if ($(window).width() < 568) {
         $('#phone').append("<a href='tel://314-630-8983'>phone</a>");
+        // Display the appropriate Shop filters
+        $('#mobile-filters').show();
+        $('#desktop-filters').hide();
+        // Display appropriate Shopping Cart
+        //$('#mobile-cart').show();
+        //$('#desktop-cart').hide();
+        // Make some icons smaller
+        $("i.cart-button").removeClass("fa-2x");
+        $("i.cart-qty").removeClass("fa-2x");
+        $("i.cart-remove").removeClass("fa-2x");
+        //simpleCart.cartStyle = "div";
     } else {
         $('#phone').append("<a href='#' data-toggle='tooltip' title='314-630-8983'>phone</a>");
         $('[data-toggle="tooltip"]').tooltip();
+        // Display the appropriate Shop filters
+        $('#mobile-filters').hide();
+        $('#desktop-filters').show();
+        // Display appropriate Shopping Cart
+        //$('#mobile-cart').hide();
+        //$('#desktop-cart').show();
+        //simpleCart.cartStyle = "table";
     }
-
 });
 
+/////////////////////
+// Admin Interface //
+/////////////////////
 
-/*$('#contactForm').validator().on('submit', function (e) {
-    if (e.isDefaultPrevented()) {
-        // handle the invalid form...
-    } else {
-        $("#btn_icon").attr('class', 'fa fa-spinner fa-spin fa-lg');
-    }
-})*/
+//// Product images in admin interface
+//$(document).ready( function() {
+//    var $grid2 = $('.product-image-grid').imagesLoaded(function() {
+//        $grid2.isotope({
+//            itemSelector: '.product-image',
+//            masonry: {
+//                columnWidth: 150,
+//                isFitWidth: true,
+//                gutter: 10
+//            }
+//        });
+//    });
+//});
+//
+//function toggle_dropzone() {
+//    $("#dropzone-area").toggle(500);
+//    var toggle_btn = $("#toggle-dropzone-btn");
+//
+//    if (toggle_btn.text() === "Upload Images") {
+//        toggle_btn.text("Hide Dropzone")
+//    } else {
+//        toggle_btn.text("Upload Images")
+//    }
+//}
