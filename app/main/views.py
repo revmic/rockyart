@@ -11,7 +11,7 @@ from flask import (
     jsonify
 )
 from flask_admin import AdminIndexView, expose
-from flask_admin.contrib.sqla import ModelView
+from flask.ext.admin.contrib.sqla import ModelView
 from flask.ext.uploads import UploadSet, IMAGES
 from flask.ext.login import login_required
 
@@ -48,7 +48,8 @@ def blog():
         try:
             caption = instagram['caption']['text']
         except Exception as e:
-            print(e, "\nThere doesn't appear to be a caption for this instagram\n", link)
+            print(e, "\nThere doesn't appear to be a caption "
+                     "for this instagram\n", link)
             caption = ""
         # Just in case we can't parse the date
         try:
@@ -108,6 +109,7 @@ def shop():
 
     for item in items:
         img_abs_path = os.path.join(img_base_dir, str(item.id))
+        main_img = None
         try:
             main_img = os.listdir(img_abs_path)[0]
         except:
@@ -278,7 +280,8 @@ class ProductView(ModelView):
                 print("Deleting")
                 db.session.delete(product)
                 # TODO delete images
-                flash("Deleted " + product.title + " (id " + str(product.id) + ")" )
+                flash("Deleted " + product.title +
+                      " (id " + str(product.id) + ")")
                 return redirect('/admin/product')
 
             return redirect('/admin/product/edit?id=' + product_id)

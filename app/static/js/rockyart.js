@@ -7,7 +7,11 @@
 simpleCart({
     checkout: {
         type: "PayPal" ,
-        email: "mhilema@gmail.com"
+        //email: "mhilema@gmail.com"
+        email: "rockyart_store@gmail.com",
+        sandbox: true,
+        success: "http://test.rockyart.com",
+        cancel: "http://test.rockyart.com/store"
     },
     shippingQuantityRate: 2,
 
