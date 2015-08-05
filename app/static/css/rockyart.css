@@ -1,8 +1,6 @@
-/*!
- * Start Bootstrap - Business Casual Bootstrap Theme (http://startbootstrap.com)
- * Code licensed under the Apache License v2.0.
- * For details, see http://www.apache.org/licenses/LICENSE-2.0.
- */
+/*
+    General Styles
+*/
 
 html {
     position: relative;
@@ -11,7 +9,12 @@ html {
 
 body {
     /* Margin bottom needs to be the same as footer height */
+    padding-top: 72px;
     margin-bottom: 72px;
+}
+
+th {
+    background-color: #ffffff;
 }
 
 @font-face {
@@ -52,6 +55,18 @@ p.watermark {
     height: 72px;
 }
 
+.table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
+  background-color: #fffbf4;
+}
+
+/*
+    Custom Containers
+*/
+
+.container-fluid {
+    width: 90%;
+}
+
 .box-shade {
     margin-bottom: 15px;
     /*padding-bottom: 15px;*/
@@ -66,10 +81,206 @@ p.watermark {
     background: none;
 }
 
+
 .haiku {
     white-space:pre-line;
     line-height: 300%;
 }
+
+/*
+    Shop Styles
+*/
+
+.store-grid {
+    padding: 25px;
+    margin: 0 auto;
+}
+.store-item {
+    float: left;
+    max-width: 250px;
+    /*height: 100px;*/
+    margin-bottom: 10px;
+    background: #aeaeae;
+    background: rgba(184, 184, 184, 0.3);
+    border-radius: 4px;
+}
+
+.item-thumbnail {
+    position: relative;
+    overflow: hidden;
+    /*background: none;*/
+}
+.item-caption {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    display: none;
+    text-align: center;
+    background: rgba(152, 151, 153, 0.73);
+    color: #fff !important;
+    z-index: 2;
+}
+.view-details {
+    position:relative;
+    top:25%;
+    width:90%
+}
+.category-button {
+    background:none!important;
+    border:none;
+    padding:0!important;
+    width: 100px;
+    height: 45px;
+    font: inherit;
+}
+.category-button-all {
+    /*background:none!important;*/
+    color: white;
+    width: 45px;
+    height: 45px;
+    border-radius: 4px;
+    position: relative;
+    bottom: 18px;
+}
+.quick-add-cart {
+    position: relative;
+    top: 120px;
+    left: 95px;
+}
+.gallery-logo {
+    font-size: 50px;
+    padding: 50px;
+}
+
+/*
+    Shopping Cart
+*/
+
+/* Cart Checkout */
+#cart-summary {
+    margin-right: 25px;
+    margin-bottom: 10px;
+}
+.cart-dropdown {
+    position: absolute;;
+    top: -5px;
+    right: 60px;
+
+}
+.cart-info {
+    color: darkgray;
+    position: relative;
+    top: 5px;
+}
+span.cart-button {
+    position:relative;
+    bottom:4px
+}
+
+.tooltip.left .tooltip-inner {
+    background-color: gray;
+}
+.tooltip.left .tooltip-arrow {
+    /*border-top-color: gray;*/
+    /*background-color: gray;*/
+    color: gray;
+}
+
+.table-condensed {
+    border-spacing: 4px;
+    border-collapse: separate;
+}
+
+.table-condensed td.title {
+    background:#ebeaec;
+    border-radius: 4px;
+    width: 200px;
+}
+
+.table-condensed td.value {
+    background: #fbfafc;
+    border-radius: 4px;
+    width: 100px;
+}
+
+/* change breadcrumb separator to white triangle */
+.breadcrumb > li + li:before {
+     content: "\25B7";
+     color: #aaa;
+}
+
+/* Cart Dropdown */
+.cart-dropdown-menu {
+    /* Position cart dropdown left of icon */
+    position: absolute;
+    top: 150%;
+    width:300px;
+    left: -225px;
+    /*right: 225px;*/
+    z-index: 1001;
+    display: none;
+    float: right;
+    min-width: 200px;
+    padding: 20px 10px;
+    margin: 0 0 0;
+    list-style: none;
+}
+.cart-toggle {
+    position: relative;
+    top: 12px;
+    background: none;
+    opacity: .1;
+}
+.cart-badge {
+    position:relative;
+    left:10px;
+}
+
+i.cart-remove {
+    color: #ff7b7e;
+    -o-transition:color .4s ease-out, background 2s ease-in;
+    -ms-transition:color .4s ease-out, background 2s ease-in;
+    -moz-transition:color .4s ease-out, background 2s ease-in;
+    -webkit-transition:color .4s ease-out, background 2s ease-in;
+    /* ...and now override with proper CSS property */
+    transition:color .4s ease-out, background 2s ease-in;
+}
+i.cart-remove:hover {
+    color: #b00000;
+}
+i.cart-add {
+    color: #f4f4f4;
+    -o-transition:color .4s ease-out, background 2s ease-in;
+    -ms-transition:color .4s ease-out, background 2s ease-in;
+    -moz-transition:color .4s ease-out, background 2s ease-in;
+    -webkit-transition:color .4s ease-out, background 2s ease-in;
+    /* ...and now override with proper CSS property */
+    transition:color .4s ease-out, background 2s ease-in;
+}
+i.cart-add:hover {
+    color: #005c00;
+}
+i.cart-qty {
+    color: darkgray;
+    -o-transition:color .4s ease-out, background 2s ease-in;
+    -ms-transition:color .4s ease-out, background 2s ease-in;
+    -moz-transition:color .4s ease-out, background 2s ease-in;
+    -webkit-transition:color .4s ease-out, background 2s ease-in;
+    /* ...and now override with proper CSS property */
+    transition:color .4s ease-out, background 2s ease-in;
+}
+
+i.cart-qty:hover {
+    color: darkgreen;
+}
+
+
+/*
+    Error Pages
+*/
 
 .error-template {
     padding: 15px 15px;
@@ -83,10 +294,194 @@ p.watermark {
     margin-right:10px;
 }
 
+/*
+    Admin Interface
+*/
+.product-image {
+    float: left;
+    width: 250px;
+    margin-bottom: 10px;
+    background: #aeaeae;
+    background: rgba(184, 184, 184, 0.3);
+    border-radius: 4px;
+}
+
+
 @media screen and (max-width:768px) {
     .haiku {
         line-height: 125%;
         font-size: medium;
         font-weight: lighter;
+    }
+    .container-fluid {
+        width: 100%;
+    }
+
+    .category-button {
+        background:none!important;
+        border:none;
+        padding:0!important;
+        width: 66px;
+        height: 30px;
+        font: inherit;
+    }
+    .category-button-all {
+        padding:0!important;
+        width: 30px;
+        height: 30px;
+        top: -10px;
+    }
+}
+
+@media only screen and (min-device-width : 320px) and (max-device-width : 568px) {
+    body, html {
+        font-size: small;
+    }
+
+    h1,
+    h2,
+    h3 {
+        font-size:medium;
+    }
+    h4,
+    h5,
+    h6 {
+        font-size:small;
+        letter-spacing: 0;
+    }
+
+
+    .box {
+        width: 100%;
+        padding: 5px;
+    }
+    .container {
+        width: 100%
+    }
+    .container-fluid {
+        width: 100%;
+    }
+    .box-container {
+        width: 100%;
+    }
+
+    .store-grid {
+        padding: 10px 0 5px 0;
+    }
+
+    .category-button {
+        background: none!important;
+        border: none;
+        padding: 0!important;
+        width: 50px;
+        height: 25px;
+    }
+    .category-button-all {
+        padding: 0!important;
+        width: 25px;
+        height: 25px;
+        top: -10px;
+    }
+
+    .cart-dropdown {
+        position: absolute;;
+        top: -5px;
+        right: 60px;
+
+    }
+    .cart-dropdown-menu {
+        width:250px;
+        left: -225px;
+    }
+    #cart-summary {
+        margin-left: 15px;
+        margin-bottom: 10px;
+    }
+    a.cart-button {
+        font-size:smaller;
+        width: 50%;
+    }
+    span.cart-button {
+        bottom:0;
+    }
+    .breadcrumb {
+        padding:0 0 0 10px;
+        margin-top: 0;
+    }
+
+
+    /*.cart-table {*/
+        /*width: 100%;*/
+    /*}*/
+    /*/!*.cart-table td {*!/*/
+        /*/!*width: 100%;*!/*/
+        /*/!*margin-left: 20px;*!/*/
+    /*/!*}*!/*/
+    /*/!* Zebra striping *!/*/
+    /*.cart-table tr:nth-of-type(odd) {*/
+      /*background: #eee;*/
+    /*}*/
+
+    /*/!* Force table to not be like tables anymore *!/*/
+    /*.cart-table table,*/
+    /*.cart-table thead,*/
+    /*.cart-table tbody,*/
+    /*.cart-table th,*/
+    /*.cart-table td,*/
+    /*.cart-table tr {*/
+		/*display: block;*/
+    /*}*/
+
+    /*/!* Hide table headers (but not display: none;, for accessibility) *!/*/
+    /*thead tr {*/
+		/*position: absolute;*/
+		/*top: -9999px;*/
+		/*left: -9999px;*/
+    /*}*/
+
+    /*tr { border: 1px solid #ccc; }*/
+
+    /*td {*/
+		/*/!* Behave  like a "row" *!/*/
+        /*width: 90%;*/
+		/*border: none;*/
+		/*border-bottom: 1px solid #eee;*/
+		/*position: relative;*/
+		/*padding-left: 50%;*/
+    /*}*/
+
+    /*td:before {*/
+		/*/!* Now like a table header *!/*/
+		/*position: absolute;*/
+		/*/!* Top/left values mimic padding *!/*/
+		/*top: 6px;*/
+		/*left: 6px;*/
+		/*width: 45%;*/
+		/*padding-right: 10px;*/
+		/*white-space: nowrap;*/
+    /*}*/
+
+    /*/!**/
+    /*Label the data*/
+    /**!/*/
+    /*td:nth-of-type(1):before { content: ""; }*/
+    /*td:nth-of-type(2):before { content: ""; }*/
+    /*td:nth-of-type(3):before { content: ""; }*/
+    /*td:nth-of-type(4):before { content: "Decrease"; }*/
+    /*td:nth-of-type(5):before { content: "Quantity"; }*/
+    /*td:nth-of-type(6):before { content: "Increase"; }*/
+    /*td:nth-of-type(7):before { content: "Subtotal"; }*/
+    /*td:nth-of-type(8):before { content: "Remove"; }*/
+
+    /*td.title {*/
+        /*display:block;*/
+        /*width: 200px;*/
+    /*}*/
+}
+
+
+@media screen and (min-width:1200px) {
+    .container-fluid {
+        width: 85%;
     }
 }
