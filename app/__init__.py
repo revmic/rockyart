@@ -5,6 +5,7 @@ from flask.ext.mail import Mail
 from flask.ext.moment import Moment
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.login import LoginManager
+from sqlalchemy import create_engine
 
 from config import config
 
@@ -30,12 +31,15 @@ def create_app(config_name):
     login_manager.init_app(app)
     # Explicitly creating db session using engine with options
     # to fix PythonAnywhere 5 minute timeout issue using pool_recycle
-    # db.init_app(app)
-    engine = db.create_engine(
-        app.config['SQLALCHEMY_DATABASE_URI'], pool_recycle=240)
-    db.session = db.scoped_session(
-        db.sessionmaker(autocommit=False, autoflush=False, bind=engine)
-    )
+    print('SQLALCHEMY_DATABASE_URI: ', app.config['SQLALCHEMY_DATABASE_URI'])
+    app.config['SQLALCHEMY_POOL_RECYCLE'] = 450
+    # app.config['SQLALCHEMY_POOL_TIMEOUT'] = 20
+    db.init_app(app)
+    # engine = create_engine(
+    #     app.config['SQLALCHEMY_DATABASE_URI'], pool_recycle=240)
+    # db.session = db.scoped_session(
+    #     db.sessionmaker(autocommit=False, autoflush=False, bind=engine)
+    # )
 
     # attach routes and custom error pages here
     from .main import main as main_blueprint

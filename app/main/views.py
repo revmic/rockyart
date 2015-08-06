@@ -2,19 +2,13 @@ import os
 import requests
 from datetime import datetime
 
-from flask import (
-    render_template,
-    redirect,
-    url_for,
-    flash,
-    request,
-    jsonify
-)
+from flask import render_template, redirect, url_for, flash, request, jsonify
 from flask_admin import AdminIndexView, expose
 from flask.ext.admin.contrib.sqla import ModelView
 from flask.ext.uploads import UploadSet, IMAGES
 from flask.ext.login import login_required
 
+import app
 from app import mailer, db, admin
 from app.main import main
 from app.models import Product, ProductImage, Order
@@ -226,8 +220,29 @@ def e500():
 # ADMIN VIEWS #
 ###############
 
-admin.base_template = "admin/manage_product.html"
 photos = UploadSet('photos', IMAGES)
+
+
+@main.route('/admin/products', methods=['GET', 'POST'])
+def products():
+    all_products = Product.query.all()
+    new_id = all_products[-1].id + 1
+
+    if request.method == "POST":
+        return redirect(url_for('products'))
+    return render_template("admin/products.html", products=all_products, new_id=new_id)
+
+
+@main.route('/admin/image/<image_id>/main', methods=['POST'])
+def main_image(image_id):
+    # get current main image if any and set image_id.main to false
+
+    # then set this image_id.main to true
+
+    if image_id == "main":
+        pass # set to false
+    else:
+        pass # set to true
 
 
 # @login_required
@@ -238,6 +253,7 @@ class ProductView(ModelView):
     def create_view(self):
         new_product = Product(creation_date=datetime.now(), quantity=1)
         form = ProductForm(request.form, new_product)
+        product_id = request.args.get('id')
 
         if request.method == 'POST':
             try:
@@ -253,8 +269,8 @@ class ProductView(ModelView):
             return redirect('/admin/product/edit?id=' + str(new_product.id))
 
         return self.render('admin/manage_product.html', form=form,
-                           product=new_product, creating=True,
-                           categories=self.categories)
+                           product=new_product, product_id=product_id,
+                           creating=True, categories=self.categories)
 
     @expose('/edit/', methods=('GET', 'POST'))
     def edit_view(self):
@@ -295,13 +311,13 @@ class ProductView(ModelView):
                 # TODO delete images
                 flash("Deleted " + product.title +
                       " (id " + str(product.id) + ")", "success")
-                return redirect('/admin/product')
+                return redirect('/admin/products')
 
             return redirect('/admin/product/edit?id=' + product_id)
 
         return self.render('admin/manage_product.html',
                            product=product, images=images, form=form,
-                           categories=self.categories)
+                           categories=self.categories, product_id=product.id)
 
     @staticmethod
     def save_product(product, form):
@@ -318,14 +334,15 @@ class ProductView(ModelView):
 
 
 # @login_required
-class DashboardView(AdminIndexView):
-    @expose('/')
-    def index(self):
-        return self.render('admin/admin_dashboard.html')
+# class DashboardView(AdminIndexView):
+#     @expose('/')
+#     def index(self):
+#         return self.render('admin/admin_dashboard.html')
 
 # admin.index_view = DashboardView(name='Dashboard', endpoint='dashboard',
 #   template='admin/admin_dashboard.html')
 # admin.add_view(DashboardView(name='Dashboard'))  #, endpoint='dashboard'))
+
 admin.add_view(ProductView(Product, db.session, name="Products"))
 admin.add_view(ModelView(Order, db.session, name="Orders"))
 admin.add_view(ModelView(ProductImage, db.session, name="Images"))

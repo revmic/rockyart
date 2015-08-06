@@ -60,5 +60,5 @@ target/
 .idea/
 *DS_Store
 *.sqlite
-img/gallery/
-img/store/
+img/gallery/*
+img/store/*

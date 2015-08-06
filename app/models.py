@@ -40,6 +40,9 @@ class Product(db.Model):
         return '<Product: title=%s, category=%s, price=%s, published=%s>' % \
                (self.title, self.category, self.price, self.published)
 
+    def __unicode__(self):
+        return self.title
+
 
 class ProductImage(db.Model):
     __tablename__ = 'product_images'

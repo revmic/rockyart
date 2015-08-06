@@ -294,19 +294,6 @@ i.cart-qty:hover {
     margin-right:10px;
 }
 
-/*
-    Admin Interface
-*/
-.product-image {
-    float: left;
-    width: 250px;
-    margin-bottom: 10px;
-    background: #aeaeae;
-    background: rgba(184, 184, 184, 0.3);
-    border-radius: 4px;
-}
-
-
 @media screen and (max-width:768px) {
     .haiku {
         line-height: 125%;

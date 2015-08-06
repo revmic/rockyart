@@ -10,8 +10,8 @@ simpleCart({
         //email: "mhilema@gmail.com"
         email: "rockyart_store@gmail.com",
         sandbox: true,
-        success: "http://test.rockyart.com",
-        cancel: "http://test.rockyart.com/store"
+        //success: "http://test.rockyart.com",
+        cancel: "/index"
     },
     shippingQuantityRate: 2,
 
@@ -64,9 +64,16 @@ simpleCart.currency({
     accuracy: 0
 });
 
+simpleCart.cancelUrl = "/shop"
+
+// Populate some data before checking out
+simpleCart.bind( 'beforeCheckout' , function( data ){
+  data.invoiceNumber = "ABC-123456789";
+});
+
 <!-- Assign Bootstrap styles to simpleCart table -->
 simpleCart.bind("afterCreate", function() {
-    $(".simpleCart_items table").addClass("table").addClass("table-hover").addClass("cart-table");
+    $(".simpleCart_items table").addClass("table").addClass("table-hover"); //.addClass("cart-table");
     //$(".simpleCart_items div").addClass("div").addClass("col-lg-12");
 });
 
@@ -96,6 +103,10 @@ simpleCart.bind("afterAdd" , function( item ) {
         cart.fadeOut(150);
         cart.fadeIn(350);
     }
+});
+
+simpleCart.bind("checkoutSuccess", function ( data ) {
+    window.location="/index"
 });
 
 simpleCart.bind('beforeAdd' , function( item ) {

@@ -1,0 +1,76 @@
+{% extends 'admin/master.html' %}
+
+{% block content %}
+
+    <style>
+        .table-admin {
+            width:90%;
+            margin: 0 auto !important;
+            float: none !important;
+            font-size: small;
+        }
+        .link-button {
+            background:none!important;
+            border:none;
+            padding:0!important;
+            font: inherit;
+        }
+    </style>
+
+    <div class="container" style="width:90%">
+        <a href="/admin/product/new?id={{ new_id }}" class="btn btn-success"><i class="fa fa-plus-square-o"></i> Add Product</a>
+    </div>
+
+    <table class="table table-hover table-admin">
+        <thead>
+            <tr>
+                <th>id</th>
+                <th>Controls</th>
+                <th>Image</th>
+                <th>Title</th>
+                <th>Category</th>
+                <th>Description</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Created</th>
+                <th>#Images</th>
+                <th class="text-center">Published</th>
+            </tr>
+        </thead>
+
+        <tbody>
+        {% for p in products %}
+            <tr {% if not p.published %} class="active" {% endif %}>
+                <td class="text-muted">{{ p.id }}</td>
+                <td>
+                    <a href="/admin/product/edit?id={{ p.id }}"><i class="fa fa-pencil-square-o fa-2x"></i></a>
+                    <form action="/admin/product/delete/?id={{ p.id }}" role="form" method="post" class="pull-right">
+                        <input type="hidden" name="id" id="id" value={{ p.id }} />
+                        <input type="hidden" name="url" id="url" value="/admin/products" />
+                        <button type="submit" name="delete" class="link-button">
+                            <i class="fa fa-trash-o fa-2x" style="color:indianred"></i>
+                        </button>
+                    </form>
+
+                </td>
+                <td>img</td>
+                <td>{{ p.title }}</td>
+                <td>{{ p.category }}</td>
+                <td>{{ p.description }}</td>
+                <td>${{ p.price|round|int }}</td>
+                <td>{{ p.quantity }}</td>
+                <td>{{ p.creation_date }}</td>
+                <td>#</td>
+                <td class="text-center">
+                    {% if p.published %}
+                        <i class="fa fa-check-circle-o fa-2x" style="color:forestgreen"></i>
+                    {% else %}
+                        <i class="fa fa-times-circle-o fa-2x" style="color:indianred"></i>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}
