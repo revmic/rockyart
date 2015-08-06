@@ -2,26 +2,13 @@
 
 {% block content %}
 
-    <style>
-        .table-admin {
-            width:90%;
-            margin: 0 auto !important;
-            float: none !important;
-            font-size: small;
-        }
-        .link-button {
-            background:none!important;
-            border:none;
-            padding:0!important;
-            font: inherit;
-        }
-    </style>
-
     <div class="container" style="width:90%">
+    <div class="row" style="padding-bottom:10px">
         <a href="/admin/product/new?id={{ new_id }}" class="btn btn-success"><i class="fa fa-plus-square-o"></i> Add Product</a>
     </div>
+    </div>
 
-    <table class="table table-hover table-admin">
+    <table class="table table-hover table-admin box">
         <thead>
             <tr>
                 <th>id</th>
@@ -31,9 +18,9 @@
                 <th>Category</th>
                 <th>Description</th>
                 <th>Price</th>
-                <th>Quantity</th>
+                <th class="text-center">Quantity</th>
                 <th>Created</th>
-                <th>#Images</th>
+                <th class="text-center">#Images</th>
                 <th class="text-center">Published</th>
             </tr>
         </thead>
@@ -53,14 +40,16 @@
                     </form>
 
                 </td>
-                <td>img</td>
+                <td>
+                    <img src="{{ url_for('static', filename=product_images[p.id][0].full_path) }}" style="width:50px">
+                </td>
                 <td>{{ p.title }}</td>
                 <td>{{ p.category }}</td>
                 <td>{{ p.description }}</td>
                 <td>${{ p.price|round|int }}</td>
-                <td>{{ p.quantity }}</td>
+                <td class="text-center">{{ p.quantity }}</td>
                 <td>{{ p.creation_date }}</td>
-                <td>#</td>
+                <td class="text-center">{{ product_images[p.id]|length }}</td>
                 <td class="text-center">
                     {% if p.published %}
                         <i class="fa fa-check-circle-o fa-2x" style="color:forestgreen"></i>

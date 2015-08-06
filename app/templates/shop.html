@@ -109,23 +109,44 @@
     </div>
 </div>
 
-
 <!-- Gallery Modal -->
 <div id="galleryModal" class="modal fade" role="dialog">
   <div class="modal-dialog modal-lg">
 
     <div class="modal-content">
-      <div class="modal-header" style="height:65px">
-        <button type="button" class="close" data-dismiss="modal"><i class="fa fa-times-circle-o fa-2x"></i></button>
+      <div class="modal-header text-center" style="height:65px">
+          <h1 style="display:inline">Gallery</h1>
+          <button type="button" class="close" data-dismiss="modal"><i class="fa fa-times-circle-o fa-2x"></i></button>
       </div>
-      <div class="modal-body">
-          <div class="text-center gallery-logo">Gallery</div>
-        <p>The gallery contains items that have been previously sold, created for pleasure, and some for keeps.
+      <div class="modal-body text-center">
+{#          <div class="text-center gallery-logo">Gallery</div>#}
+        <p class="text-left">The gallery contains items that have been previously sold, created for pleasure, and some for keeps.
             I would love to help you with your next custom piece, and I hope these images help to spark your creative genius.
+            Click on an image to start browsing.
         </p>
+        <div id="links">
+            {% for img in gallery_images %}
+                <a href="{{ url_for('static', filename=img.full_path) }}" title="" data-gallery>
+                    <img src="{{ url_for('static', filename=img.full_path) }}" class="gallery-item" alt="" width="100">
+                </a>
+{#                 <a href="{{ url_for('static', filename='img/gallery/%s/full/%s' % (c, i)) }}" title="" data-gallery>#}
+{#                    <img src="{{ url_for('static', filename='img/gallery/%s/thumb/%s' % (c, i)) }}" class="gallery-item" alt="" width="200">#}
+{#                </a>#}
+            {% endfor %}
+        </div>
       </div>
       <div class="modal-footer" style="height:65px">
-          <button type="button" class="btn btn-primary" data-gallery>View Gallery</button>
+          <!-- Populate gallery elements -->
+{#            <div id="links">#}
+{#                {% for img in gallery_images %}#}
+{#                    <a href="{{ url_for('static', filename=img.full_path) }}" title="" data-gallery>#}
+{#                    {% if loop.first %}#}
+{#                        <button type="button" class="btn btn-primary" style="position:relative; right:180px;">View Gallery</button>#}
+{#                    {% endif %}#}
+{#                    </a>#}
+{#                {% endfor %}#}
+{#            </div>#}
+
           <button type="button" class="btn btn-default" data-dismiss="modal">Continue Shopping</button>
       </div>
     </div>
@@ -138,8 +159,9 @@
     {% for item in items %}
         <div class="store-item simpleCart_shelfItem {{ item.category }} item-thumbnail text-center" data-category="{{ item.category }}">
             <img alt="image" class="item_image img-responsive"
-                 src="{{ url_for('static', filename=main_images[item.id]) }}">
-{#                 src="{{ url_for('static', filename='img/gallery/jewelry/full/j01.jpg') }}">#}
+                 {% if main_images[item.id] %}
+                    src="{{ url_for('static', filename=main_images[item.id]) }}"
+                 {% endif %} >
             <h6 class="item_name">{{ item.title }}</h6>
             <h6 style="display:inline">$</h6>
             <h3 class="item_price price text-muted" style="display:inline">{{ item.price|round|int }}</h3>
@@ -158,11 +180,6 @@
     {% endfor %}
     </div>
 </div>
-
-<!-- Populate gallery elements -->
-{% for img in gallery_images %}
-    <a href="{{ url_for('static', filename='img/gallery/jewelry/full/%s' % (img)) }}" title="" data-gallery></a>
-{% endfor %}
 
 <!-- Bootstrap Image Gallery lightbox -->
 <div id="blueimp-gallery" class="blueimp-gallery blueimp-gallery-controls">

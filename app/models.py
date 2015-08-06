@@ -48,7 +48,9 @@ class ProductImage(db.Model):
     __tablename__ = 'product_images'
     id = db.Column(db.Integer, primary_key=True)
     product_id = db.Column(db.Integer, db.ForeignKey('products.id'))
-    path = db.Column(db.String(128))
+    filename = db.Column(db.String(64))
+    full_path = db.Column(db.String(256))
+    thumb_path = db.Column(db.String(256))
     main_image = db.Column(db.Boolean, default=False)
     gallery_image = db.Column(db.Boolean, default=False)
 

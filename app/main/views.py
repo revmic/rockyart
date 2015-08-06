@@ -1,14 +1,15 @@
 import os
+import shutil
 import requests
 from datetime import datetime
 
 from flask import render_template, redirect, url_for, flash, request, jsonify
-from flask_admin import AdminIndexView, expose
+from flask_admin import expose
 from flask.ext.admin.contrib.sqla import ModelView
 from flask.ext.uploads import UploadSet, IMAGES
-from flask.ext.login import login_required
+# from flask.ext.login import login_required
+from sqlalchemy.sql.expression import true, false
 
-import app
 from app import mailer, db, admin
 from app.main import main
 from app.models import Product, ProductImage, Order
@@ -100,52 +101,38 @@ def gallery():
 
 @main.route('/shop', methods=['GET'])
 def shop():
-    # Get all shop items
+    """
+    Get all shop items, main images, and gallery images
+    """
     result = Product.query.all()
-    items = []
+    shop_items = []
+    main_images = {}
+    gallery_images = []
 
     # Only show shop item if it's published and is in stock
-    for item in result:
-        if item.published and item.quantity > 0:
-            items.append(item)
+    for product in result:
+        if product.published and product.quantity > 0:
+            shop_items.append(product)
 
-    # Get product main images
-    # Use absolute path for directory listing
-    img_base_dir = os.path.join(basedir, 'app/static/img/store')
-    main_images = {}
-
-    for item in items:
-        img_abs_path = os.path.join(img_base_dir, str(item.id))
-        main_img = None
+    for product in shop_items:
+        # Use in case none are set as main image
         try:
-            main_img = os.listdir(img_abs_path)[0]
-        except:
-            pass
+            main_img = product.images[0].full_path  # TODO make thumb_path
+        except IndexError:
+            main_img = None
 
-        img_rel_path = os.path.join('img/store/%s/%s' % (item.id, main_img))
-        main_images[item.id] = img_rel_path
+        # Then search for one that's properly set
+        for img in product.images:
+            if img.main_image:
+                main_img = img.full_path
+            if img.gallery_image:
+                gallery_images.append(img)
+
+        main_images[product.id] = main_img
 
     print(main_images)
 
-    # Use absolute path for directory listing
-    # img_path_abs = os.path.join(basedir, 'app/static/img/store/%s' % item_id)
-    # Use relative path to make url building easier
-    # img_path_rel = 'img/store/%s/' % item_id
-    # img_files = os.listdir(img_path_abs)
-    # item_images = []
-
-    # Get gallery items
-    gallery_images = []
-    img_dir = os.path.join(basedir, 'app', 'static', 'img', 'gallery')
-    img_path = os.path.join(img_dir, 'jewelry', 'full')
-
-    for img in os.listdir(img_path):
-        if 'j' in img and 'g' in img:
-            gallery_images.append(img)
-
-    gallery_images = sorted(gallery_images, reverse=True)
-
-    return render_template("shop.html", title='Rocky Shop', items=items,
+    return render_template("shop.html", title='Rocky Shop', items=shop_items,
                            gallery_images=gallery_images,
                            main_images=main_images)
 
@@ -190,12 +177,13 @@ def contact():
     if form.validate_on_submit():
         try:
             mailer.send_email("Customer Inquiry", "inquiry")
-        except:
+        except Exception as e:
             flash("Something went wrong while sending your message. "
                   "Please email rockypardo.art@gmail.com with your question. "
                   "And if you're feeling generous with your time, "
                   "send mhilema@gmail.com a message about this error. "
                   "Sorry about this!", "danger")
+            print(e)
         else:
             flash("Your message was sent successfully. "
                   "I'll get back to you soon!", "success")
@@ -226,23 +214,19 @@ photos = UploadSet('photos', IMAGES)
 @main.route('/admin/products', methods=['GET', 'POST'])
 def products():
     all_products = Product.query.all()
+    product_images = {}
     new_id = all_products[-1].id + 1
+
+    for p in all_products:
+        product_images[p.id] = \
+            ProductImage.query.filter_by(product_id=p.id).all()
+    print(product_images)
 
     if request.method == "POST":
         return redirect(url_for('products'))
-    return render_template("admin/products.html", products=all_products, new_id=new_id)
 
-
-@main.route('/admin/image/<image_id>/main', methods=['POST'])
-def main_image(image_id):
-    # get current main image if any and set image_id.main to false
-
-    # then set this image_id.main to true
-
-    if image_id == "main":
-        pass # set to false
-    else:
-        pass # set to true
+    return render_template("admin/products.html",products=all_products,
+                           product_images=product_images, new_id=new_id)
 
 
 # @login_required
@@ -265,7 +249,8 @@ class ProductView(ModelView):
                 print(msg)
                 print(e)
 
-            self.save_product(new_product, form)
+            self.save(new_product, form)
+
             return redirect('/admin/product/edit?id=' + str(new_product.id))
 
         return self.render('admin/manage_product.html', form=form,
@@ -275,52 +260,43 @@ class ProductView(ModelView):
     @expose('/edit/', methods=('GET', 'POST'))
     def edit_view(self):
         product_id = request.args.get('id')
-        img_path_abs = os.path.join(
-            basedir, 'app/static/img/store/%s' % product_id)
-        img_path_rel = 'img/store/%s/' % product_id
-        images = []
-
-        try:
-            for img in os.listdir(img_path_abs):
-                images.append(os.path.join(img_path_rel, img))
-        except FileNotFoundError:
-            # images = ['img/store/placeholder.jpg']
-            print("No images for product id: " + product_id)
-
         product = Product.query.filter_by(id=product_id).first()
+        product_images = ProductImage.query.filter_by(
+            product_id=product_id).all()
         form = ProductForm(request.form, product)
 
-        # if form.validate_on_submit():
-        # TODO break up into functions
-        if request.method == 'POST':
-            print(request.form)
-            if 'save' in request.form:
-                self.save_product(product, form)
-            if 'publish' in request.form:
-                self.save_product(product, form)
-                publish_product(product.id)
-                if product.published:
-                    flash("Published " + product.title, "success")
-                else:
-                    flash("Unpublished " + product.title, "success")
-            if 'publish_add' in request.form:
-                print("Publish and add another")
-            if 'delete' in request.form:
-                print("Deleting")
-                db.session.delete(product)
-                # TODO delete images
-                flash("Deleted " + product.title +
-                      " (id " + str(product.id) + ")", "success")
-                return redirect('/admin/products')
+        # image_paths = []
+        #
+        # for img in product_images:
+        #     image_paths.append(img.full_path)
 
+        if not product_images:
+            print("No images for product id:", product_id)
+        else:
+            print("Product images:", product_images)
+
+        # Handle different form requests by name
+        # if form.validate_on_submit():
+        if request.method == 'POST':
+            if 'save' in request.form:
+                self.save(product, form)
+            elif 'publish' in request.form:
+                self.save(product, form)
+                self.publish(product.id)
+            elif 'publish_add' in request.form:
+                print("Publish and add another")
+            elif 'delete' in request.form:
+                self.delete(product)
+
+            # Go back to edit screen if not redirected elsewhere
             return redirect('/admin/product/edit?id=' + product_id)
 
         return self.render('admin/manage_product.html',
-                           product=product, images=images, form=form,
+                           product=product, images=product_images, form=form,
                            categories=self.categories, product_id=product.id)
 
     @staticmethod
-    def save_product(product, form):
+    def save(product, form):
         product.title = form.title.data
         product.category = form.category.data
         product.quantity = form.quantity.data
@@ -332,23 +308,48 @@ class ProductView(ModelView):
         print(msg)
         flash(msg, "success")
 
+    @staticmethod
+    def publish(product_id):
+        """
+        Toggles a product between published and unpublished
+        """
+        product = Product.query.filter_by(id=product_id).first()
 
-# @login_required
-# class DashboardView(AdminIndexView):
-#     @expose('/')
-#     def index(self):
-#         return self.render('admin/admin_dashboard.html')
+        # product.published = True
+        print("Publishing product " + str(product_id))
 
-# admin.index_view = DashboardView(name='Dashboard', endpoint='dashboard',
-#   template='admin/admin_dashboard.html')
-# admin.add_view(DashboardView(name='Dashboard'))  #, endpoint='dashboard'))
+        if not product.published:
+            product.published = True
+            flash("Published " + product.title, "success")
+        else:
+            product.published = False
+            flash("Unpublished " + product.title, "success")
 
-admin.add_view(ProductView(Product, db.session, name="Products"))
-admin.add_view(ModelView(Order, db.session, name="Orders"))
-admin.add_view(ModelView(ProductImage, db.session, name="Images"))
+        db.session.commit()
+
+    @staticmethod
+    def delete(product):
+        print("Deleting product " + str(product.id))
+        product_images = ProductImage.query.filter_by(
+            product_id=product.id).all()
+        img_path_abs = os.path.join(
+            basedir, 'app/static/img/store/%s' % product.id)
+
+        shutil.rmtree(img_path_abs, ignore_errors=True)
+
+        for img in product_images:
+            db.session.delete(img)
+
+        db.session.delete(product)
+        db.session.commit()
+
+        flash("Deleted " + product.title +
+              " (id " + str(product.id) + ")", "success")
+
+        return redirect('/admin/products')
 
 
-@main.route('/admin/upload', methods=['POST'])
+@main.route('/admin/image/upload', methods=['POST'])
 def upload():
     f = request.files['file']
     pid = request.args.get("product_id")
@@ -358,43 +359,34 @@ def upload():
     if not os.path.exists(upload_dir):
         os.mkdir(upload_dir)
 
+    # Save to filesystem
     f.save(os.path.join(upload_dir, f.filename))
     file_size = os.path.getsize(os.path.join(upload_dir, f.filename))
 
     # TODO create thumbs
 
-    # TODO Write to db ??? Could do FS operations on ID directory
+    # Save to database
+    rel_path = 'img/store/%s/%s' % (pid, f.filename)
+    image = ProductImage(product_id=pid, full_path=rel_path, thumb_path='')
+    db.session.add(image)
+    db.session.commit()
 
     print(jsonify(name=f.filename, size=file_size))
     return jsonify(name=f.filename, size=file_size)
 
 
-# @main.route('/admin/product/<id>/publish', methods=['POST'])
-def publish_product(id):
-    """
-    Toggles a product between published and unpublished
-    """
-    product = Product.query.filter_by(id=id).first()
-
-    # product.published = True
-    print(product.published)
-
-    if not product.published:
-        product.published = True
-    else:
-        product.published = False
-
-    db.session.commit()
-    return True
-
-
-@main.route('/admin/remove', methods=['POST'])
+@main.route('/admin/image/remove', methods=['POST'])
 def remove():
     """Delete an uploaded file."""
     # img_file = ProductImage.query.get_or_404(img)
     product_id = request.args.get("product_id")
     img_arg = request.args.get("img").lstrip(os.path.sep)  # del leading /
-    img_path = os.path.join(basedir, 'app', img_arg)
+    img_path = os.path.join(basedir, 'app/static', img_arg)
+    db_img = ProductImage.query.filter_by(full_path=img_arg).first()
+    print(db_img)
+
+    db.session.delete(db_img)
+    db.session.commit()
 
     try:
         print("Removing " + img_path)
@@ -407,3 +399,39 @@ def remove():
 
     redirect_url = '/admin/product/edit?id=' + product_id
     return redirect(redirect_url)
+
+
+@main.route('/admin/image/<image_id>/main', methods=['POST'])
+def main_image(image_id):
+    image = ProductImage.query.filter_by(id=image_id).first()
+    print("Making", os.path.basename(image.full_path), "a main image")
+
+    # get current main image if any and set image.main to false
+    all_images = ProductImage.query.all()
+    for img in all_images:
+        img.main_image = False
+
+    # then set this one to true
+    image.main_image = True
+
+    return jsonify(name=image_id)
+
+
+@main.route('/admin/image/<image_id>/gallery', methods=['POST'])
+def gallery_image(image_id):
+    image = ProductImage.query.filter_by(id=image_id).first()
+    fname = os.path.basename(image.full_path)
+
+    if image.gallery_image:
+        print("Setting image", fname, "to FALSE")
+        image.gallery_image = False
+    else:
+        print("Setting image", fname, "to TRUE")
+        image.gallery_image = True
+
+    return jsonify(name=fname)
+
+
+admin.add_view(ProductView(Product, db.session, name="Products"))
+admin.add_view(ModelView(Order, db.session, name="Orders"))
+admin.add_view(ModelView(ProductImage, db.session, name="Images"))
