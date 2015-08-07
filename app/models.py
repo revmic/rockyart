@@ -20,7 +20,7 @@ class Order(db.Model):
                                lazy='dynamic')
 
     def __repr__(self):
-        return '<Order: id=%s, status=%s, date=%s>' % \
+        return '<Order: id=%s, status=%s, ordered=%s>' % \
                (self.id, self.status, self.order_date)
 
 

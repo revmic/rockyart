@@ -10,8 +10,15 @@ simpleCart({
         //email: "mhilema@gmail.com"
         email: "rockyart_store@gmail.com",
         sandbox: true,
-        //success: "http://test.rockyart.com",
-        cancel: "/index"
+        success: function() {
+            alert("Successful paypal transaction");
+            return "http://localhost:5001"
+        },
+        cancel: function() {
+            alert("Canceled paypal transaction");
+            return "http://localhost:5001/shop"
+        }
+        //method: "GET"
     },
     shippingQuantityRate: 2,
 
@@ -22,7 +29,7 @@ simpleCart({
         { attr: "image",
             view: function(item, column) {
                 if ($(window).width() > 600) {
-                    return "<div class='text-center'><img width='150px' src='" + item.get('image') + "'></div>";
+                    return "<div class='text-center'><img style='max-width:150px' src='" + item.get('image') + "'></div>";
                 } else {
                     return "";
                     //return "<div class='text-center'><img width='150px' src='" + item.get('image') + "'></div>";
@@ -31,7 +38,7 @@ simpleCart({
 
         //{ attr: "name", label: "Name" },
         { attr: "name",
-            view: function(item, column){
+            view: function(item, column) {
                 return '<div>' + item.get('name') + "</div>";
         },  label: "<div'>Item</div>" },
 
@@ -42,7 +49,7 @@ simpleCart({
 
         //{ attr: "quantity", label: "Qty" },
         { attr: "quantity",
-            view: function(item, column){
+            view: function(item, column) {
                 return '<div class="text-center">' + item.get('quantity') + "</div>";
         },  label: '<div class="text-center" style="width:0">Qty</div>' },
 
@@ -179,11 +186,16 @@ $('.flexslider').flexslider({
 $(document).ready(function() {
     var $store_grid = $('.store-grid');
 
-    /* DESKTOP STORE FILTERS */
+    var $mobile_grid = $store_grid,
+    $category_select = $('#filters').find('select'),
+    $sortby_select = $('#sorting').find('select');
+
+
     // init isotope grid after images have loaded
     var $grid = $store_grid.imagesLoaded(function() {
         $grid.isotope({
             itemSelector: '.store-item',
+            isInitLayout: true,
             masonry: {
                 columnWidth: 250,
                 isFitWidth: true,
@@ -200,8 +212,30 @@ $(document).ready(function() {
                 date: true
             }
         });
+
+        //$mobile_grid = $grid;
+
+        //$mobile_grid.isotope({
+        //    itemSelector: '.store-item',
+        //    masonry: {
+        //        columnWidth: 250,
+        //        isFitWidth: true,
+        //        gutter: 10
+        //    },
+        //    getSortData: {
+        //        price_up: '.price parseInt',
+        //        price_down: '.price parseInt',
+        //        date: '.date'
+        //    },
+        //    sortAscending: {
+        //        price_up: true,
+        //        price_down: false,
+        //        date: true
+        //    }
+        //});
     });
 
+    /* DESKTOP FILTERS VIEW */
     // filter items on button click
     $('.filter-button-group').on( 'click', 'button', function() {
       var filterValue = $(this).attr('data-filter');
@@ -215,29 +249,7 @@ $(document).ready(function() {
     });
 
 
-    /* MOBILE STORE FILTERS */
-    var $mobile_grid = $store_grid,
-    $category_select = $('#filters').find('select'),
-    $sortby_select = $('#sorting').find('select');
-
-    $mobile_grid.isotope({
-        itemSelector: '.store-item',
-        masonry: {
-            columnWidth: 250,
-            isFitWidth: true,
-            gutter: 10
-        },
-        getSortData: {
-            price_up: '.price parseInt',
-            price_down: '.price parseInt',
-            date: '.date'
-        },
-        sortAscending: {
-            price_up: true,
-            price_down: false,
-            date: true
-        }
-    });
+    /* MOBILE STORE FILTERS VIEW */
     // filter items on dropdown change
     $category_select.change(function() {
         var filters = $(this).val();

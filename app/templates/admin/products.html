@@ -34,19 +34,21 @@
                     <form action="/admin/product/delete/?id={{ p.id }}" role="form" method="post" class="pull-right">
                         <input type="hidden" name="id" id="id" value={{ p.id }} />
                         <input type="hidden" name="url" id="url" value="/admin/products" />
-                        <button type="submit" name="delete" class="link-button">
+                        <button type="submit" name="delete" class="link-button"
+                            onclick="return confirm('Are you sure you want to delete this record?');">
                             <i class="fa fa-trash-o fa-2x" style="color:indianred"></i>
                         </button>
                     </form>
 
                 </td>
                 <td>
-                    <img src="{{ url_for('static', filename=product_images[p.id][0].full_path) }}" style="width:50px">
+{#                    <img src="{{ url_for('static', filename=product_images[p.id][0].full_path) }}" style="width:50px">#}
                 </td>
                 <td>{{ p.title }}</td>
                 <td>{{ p.category }}</td>
                 <td>{{ p.description }}</td>
-                <td>${{ p.price|round|int }}</td>
+{#                <td>${{ p.price|round|int }}</td>#}
+            <td></td>
                 <td class="text-center">{{ p.quantity }}</td>
                 <td>{{ p.creation_date }}</td>
                 <td class="text-center">{{ product_images[p.id]|length }}</td>

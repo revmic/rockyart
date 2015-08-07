@@ -43,7 +43,6 @@
         color: #fff !important;
         z-index: 2;
     }
-
     i.image-remove {
         color: #adadad;
         position: relative;
@@ -55,11 +54,9 @@
         /* ...and now override with proper CSS property */
         transition:color .4s ease-out, background 2s ease-in;
     }
-
     i.image-remove:hover {
         color: #b00000;
     }
-
     i.image-set {
         color: white;
         -o-transition:color .4s ease-out, background 2s ease-in;
@@ -69,10 +66,9 @@
         /* ...and now override with proper CSS property */
         transition:color .4s ease-out, background 2s ease-in;
     }
-
-    i.image-set:hover {
-        color: #005c00;
-    }
+{#    i.image-set:hover {#}
+{#        color: #005c00;#}
+{#    }#}
     .table-admin {
         width:90%;
         margin: 0 auto !important;
@@ -119,9 +115,9 @@
 
 {#                    <li><a href="/admin">Dashboard</a></li>#}
 {#                    <li><a href="{{ url_for('main.gallery', c='jewelry') }}">Shop</a></li>#}
-                    <li><a href="{{ url_for('main.products') }}">Products</a></li>
-                    <li><a href="{{ url_for('main.products') }}">Orders</a></li>
-                    <li><a href="{{ url_for('main.products') }}">Images</a></li>
+                    <li><a href="{{ url_for('main.view_products') }}">Products</a></li>
+                    <li><a href="{{ url_for('main.view_orders') }}">Orders</a></li>
+                    <li><a href="{{ url_for('main.image_admin') }}">Images</a></li>
                     <li><a href="{{ url_for('main.shop') }}" style="font-weight:bold">The Shop</a></li>
                 </ul>
             </div>
@@ -148,45 +144,10 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/2.2.1/isotope.pkgd.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/3.1.8/imagesloaded.min.js"></script>
 <script src="{{ url_for('static', filename='js/dropzone.js') }}"></script>
+<script src="{{ url_for('static', filename='js/rockyadmin.js') }}"></script>
 
 <script>
-// Product images in admin interface
-$(document).ready( function() {
-    var $grid = $('.product-image-grid').imagesLoaded(function() {
-        $grid.isotope({
-            itemSelector: '.product-image',
-            masonry: {
-                columnWidth: 250,
-                isFitWidth: true,
-                gutter: 10
-            }
-        });
-    });
-    //Dropzone.addRemoveLinks();
-});
 
-<!-- Image controls popover -->
-$("[rel='tooltip']").tooltip();
-
-$('.item-thumbnail').hover(
-    function() {
-        $(this).find('.image-controls').fadeIn(250);
-    },
-    function() {
-        $(this).find('.image-controls').fadeOut(250);
-    }
-);
-
-function toggle_dropzone() {
-    $("#dropzone-area").toggle(500);
-    var toggle_btn = $("#toggle-dropzone-btn");
-
-    if (toggle_btn.text() === "Upload Images") {
-        toggle_btn.text("Hide Dropzone")
-    } else {
-        toggle_btn.text("Upload Images")
-    }
-}
 
 
 </script>

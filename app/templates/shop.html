@@ -127,7 +127,7 @@
         <div id="links">
             {% for img in gallery_images %}
                 <a href="{{ url_for('static', filename=img.full_path) }}" title="" data-gallery>
-                    <img src="{{ url_for('static', filename=img.full_path) }}" class="gallery-item" alt="" width="100">
+                    <img src="{{ url_for('static', filename=img.thumb_path) }}" class="gallery-item" alt="" style="max-width:100px">
                 </a>
 {#                 <a href="{{ url_for('static', filename='img/gallery/%s/full/%s' % (c, i)) }}" title="" data-gallery>#}
 {#                    <img src="{{ url_for('static', filename='img/gallery/%s/thumb/%s' % (c, i)) }}" class="gallery-item" alt="" width="200">#}

@@ -1,42 +1,6 @@
 {% extends "admin/master.html" %}
 
 {% block content %}
-    <script>
-    $(document).ready(function(){
-        $("#dropzone-area").hide();
-    });
-
-    function toggle_gallery(img_id) {
-{#        alert("Add to gallery " + img_id);#}
-
-        var toggle = $.ajax({
-            type: 'POST',
-            url: '/admin/image/'+img_id+'/gallery',
-            dataType: 'html',
-            async:false
-        });
-        toggle.done(function() {
-            $("#image-gallery"+img_id).css("color", "forestgreen")
-        });
-    }
-
-    function toggle_main(img_id) {
-{#        alert("Set as main image " + img_id);#}
-
-        var toggle = $.ajax({
-            type: 'POST',
-            url: '/admin/image/'+img_id+'/main',
-            dataType: 'html',
-            async:false
-        });
-        toggle.done(function() {
-            var img_class = $(".image-main");
-            var img_main = $("#image-main"+img_id);
-            img_class.css("color", "white");
-            img_main.css("color", "#017DFF");
-        });
-    }
-    </script>
 
     <div class="container text-center well" style="max-width:800px; padding:5px">
     <h2>
@@ -49,16 +13,18 @@
     </h2>
     </div>
 
+    <input type="hidden" id="product_id" value="{{ product_id }}">
+
     <div class="container well text-center" style="max-width:800px">
         <div class="row">
             <div class="product-image-grid">
             {% for img in images %}
                 <div class="product-image item-thumbnail text-center">
                     <img alt="image" class="img-responsive"
-                         src="{{ url_for('static', filename=img.full_path) }}">
+                         src="{{ url_for('static', filename=img.thumb_path) }}">
 
                     <form class="text-right" id="removeImage" role="form" method="post"
-                          action="/admin/image/remove?img={{ img.full_path }}&product_id={{ product.id }}">
+                          action="/admin/image/{{ img.id }}/remove">
                         <button type="submit" style="background:none!important; border:none; padding:5px!important;">
                             <i class="fa fa-times-circle-o fa-inverse fa-3x image-remove"></i>
                         </button>
@@ -92,14 +58,18 @@
         </div>
 
         <div class="row">
-            <button class="btn btn-default" id="toggle-dropzone-btn"
-                    onclick="toggle_dropzone()" style="margin-bottom:10px">Upload Images</button>
+            {% if creating %}
+                <p>Upload photos here after Saving ...</p>
+            {% else %}
+                <button class="btn btn-success" id="toggle-dropzone-btn"
+                        onclick="toggle_dropzone()" style="margin-bottom:10px">Upload Images</button>
 
-            <div class="container" id="dropzone-area" style="max-width:780px">
-                <form action="/admin/image/upload?product_id={{ product_id }}"
-                      class="dropzone" id="image-dropzone" method="post">
-                </form>
-            </div>
+                <div class="container" id="dropzone-area" style="max-width:780px">
+                    <form action="/admin/image/upload?product_id={{ product_id }}"
+                          class="dropzone" id="image-dropzone" method="post">
+                    </form>
+                </div>
+            {% endif %}
         </div>
     </div>
 
@@ -219,4 +189,9 @@
             </div>
         </form>
     </div>
+
+<script>
+
+</script>
+
 {% endblock %}
