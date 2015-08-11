@@ -944,6 +944,8 @@
 					// check for return and success URLs in the options
 					if (opts.success) {
 						data['return'] = opts.success;
+						//simpleCart.empty();
+						//alert("success")
 					}
 					if (opts.cancel) {
 						data.cancel_return = opts.cancel;

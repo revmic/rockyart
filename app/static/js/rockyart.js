@@ -11,18 +11,25 @@ simpleCart({
         email: "rockyart_store@gmail.com",
         sandbox: true,
         success: function() {
-            alert("Successful paypal transaction");
-            return "http://localhost:5001"
+            //alert("Successful paypal transaction");
+            //simpleCart.empty();
+            return "http://localhost:5001/cart/success"
         },
         cancel: function() {
-            alert("Canceled paypal transaction");
-            return "http://localhost:5001/shop"
+            //alert("Canceled paypal transaction");
+            return "http://localhost:5001/cart"
         }
         //method: "GET"
     },
-    shippingQuantityRate: 2,
+    shippingQuantityRate: 0,
+
+    //checkoutSuccess: func(),
 
     cartStyle : "table",
+
+    excludeFromCheckout: ['thumb'],
+
+    data: {'order_id': 12345, 'name': "First Last"},
 
     cartColumns: [
         //{view:'image', attr:'thumb', label: false},
@@ -67,11 +74,13 @@ simpleCart({
     ]
 });
 
+//function func() {
+//    alert("Checkout Success Event");
+//}
+
 simpleCart.currency({
     accuracy: 0
 });
-
-simpleCart.cancelUrl = "/shop"
 
 // Populate some data before checking out
 simpleCart.bind( 'beforeCheckout' , function( data ){
@@ -112,8 +121,9 @@ simpleCart.bind("afterAdd" , function( item ) {
     }
 });
 
-simpleCart.bind("checkoutSuccess", function ( data ) {
-    window.location="/index"
+simpleCart.bind("checkoutSuccess", function () {
+    window.location="/index";
+    alert("checkoutSuccess event")
 });
 
 simpleCart.bind('beforeAdd' , function( item ) {
@@ -150,6 +160,10 @@ function clearCartDropdown() {
     $("#checkout_btn").bind('click', function(e){
         e.preventDefault();
     })
+}
+
+function recordOrder() {
+
 }
 
 
@@ -273,55 +287,29 @@ $(document).ready(function() {
     // Contact phone is a tel link on mobile or a tooltip on desktop
     if ($(window).width() < 568) {
         $('#phone').append("<a href='tel://314-630-8983'>phone</a>");
+
         // Display the appropriate Shop filters
-        $('#mobile-filters').show();
-        $('#desktop-filters').hide();
-        // Display appropriate Shopping Cart
-        //$('#mobile-cart').show();
-        //$('#desktop-cart').hide();
+        $('#mobile-filters').removeClass("hidden");
+
         // Make some icons smaller
         $("i.cart-button").removeClass("fa-2x");
         $("i.cart-qty").removeClass("fa-2x");
         $("i.cart-remove").removeClass("fa-2x");
         //simpleCart.cartStyle = "div";
+
+        // Display appropriate Shopping Cart
+        //$('#mobile-cart').show();
+        //$('#desktop-cart').hide();
     } else {
         $('#phone').append("<a href='#' data-toggle='tooltip' title='314-630-8983'>phone</a>");
         $('[data-toggle="tooltip"]').tooltip();
+
         // Display the appropriate Shop filters
-        $('#mobile-filters').hide();
-        $('#desktop-filters').show();
+        $('#desktop-filters').removeClass("hidden");
+
         // Display appropriate Shopping Cart
         //$('#mobile-cart').hide();
         //$('#desktop-cart').show();
         //simpleCart.cartStyle = "table";
     }
 });
-
-/////////////////////
-// Admin Interface //
-/////////////////////
-
-//// Product images in admin interface
-//$(document).ready( function() {
-//    var $grid2 = $('.product-image-grid').imagesLoaded(function() {
-//        $grid2.isotope({
-//            itemSelector: '.product-image',
-//            masonry: {
-//                columnWidth: 150,
-//                isFitWidth: true,
-//                gutter: 10
-//            }
-//        });
-//    });
-//});
-//
-//function toggle_dropzone() {
-//    $("#dropzone-area").toggle(500);
-//    var toggle_btn = $("#toggle-dropzone-btn");
-//
-//    if (toggle_btn.text() === "Upload Images") {
-//        toggle_btn.text("Hide Dropzone")
-//    } else {
-//        toggle_btn.text("Upload Images")
-//    }
-//}

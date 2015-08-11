@@ -12,9 +12,14 @@
 }
 </style>
 
+{#<div style="position: relative; height: 50px; width: 100px">#}
+{#    <img class="img-rounded img-responsive" src="{{ url_for('static', filename='img/app/necklaces.jpg') }}" style="position:absolute; top:0; left:0">#}
+{#    <p style="position:absolute; left: 25px; top: 0; color:whitesmoke;font-size:12px; z-index: 10">necklaces</p>#}
+{#</div>#}
+
 <div class="box">
 
-    <div id="mobile-filters" class="container">
+    <div id="mobile-filters" class="container hidden">
         <!-- Categories -->
         <div id="filters">
             <label for="category-select" class="col-xs-3">Category</label>
@@ -46,7 +51,7 @@
     </div>
 
 
-    <div id="desktop-filters">
+    <div id="desktop-filters" class="hidden">
         <!-- Categories -->
         <div class="row text-center" style="margin-top:-15px; margin-bottom: -5px">
             <div class="btn-group filter-button-group">
@@ -56,16 +61,19 @@
                     </div>
                 </button>
                 <button data-filter=".necklace" class="item-thumbnail category-button">
-                    <img class="img-rounded img-responsive" src="{{ url_for('static', filename='img/app/necklaces.jpg') }}">
+                    <div style="position: relative; height: 80px; width: 100px">
+                        <img class="img-rounded img-responsive" src="{{ url_for('static', filename='img/app/necklaces.jpg') }}" style="position:absolute; top:0; left:0">
+                    </div>
                     <div class="item-caption">
                         <h6>Necklaces</h6>
                     </div>
                 </button>
-                <button data-filter=".earring" class="item-thumbnail category-button">
+                <button data-filter=".earring" class="item-thumbnail category-button" style="color:red;">
                     <img class="img-rounded img-responsive" src="{{ url_for('static', filename='img/app/earings.jpg') }}">
                     <div class="item-caption">
                         <h6>Earrings</h6>
                     </div>
+{#                    test2#}
                 </button>
                 <button data-filter=".ring" class="item-thumbnail category-button">
                     <img class="img-rounded img-responsive" src="{{ url_for('static', filename='img/app/rings.jpg') }}">
