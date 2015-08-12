@@ -125,7 +125,7 @@ def shop():
         # Use the first image in case none are set as main
         # And also gather up the gallery images
         try:
-            main_img = product.images[0].thumb_path  # TODO make thumb_path
+            main_img = product.images[0].thumb_path
         except IndexError:
             main_img = None
 

@@ -127,7 +127,9 @@ simpleCart.bind("checkoutSuccess", function () {
 });
 
 simpleCart.bind('beforeAdd' , function( item ) {
-    //updateCartDropdown();
+    // Add to cart alert
+    $('#add-'+item.get('name').replace(/ /g,'')).modal('show');
+
     // Only allow one of an item in the cart
     if (simpleCart.has(item) != false) {
         //alert("This item is already in your cart");
@@ -157,9 +159,9 @@ function clearCartDropdown() {
     cart.empty();
     var row = '<tr><td>Your cart is empty, but you could <br> <a href="/shop">Go Shopping</a></tr></td>';
     cart.append(row);
-    $("#checkout_btn").bind('click', function(e){
+    $("#checkout_btn").bind('click', function(e) {
         e.preventDefault();
-    })
+    });
 }
 
 function recordOrder() {

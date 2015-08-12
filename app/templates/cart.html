@@ -11,7 +11,7 @@
             <hr>
             <ol class="breadcrumb" style="padding:0 0 0 15px; margin-top: -15px">
                 <li><a href="{{ url_for('main.index') }}">Home</a></li>
-                <li><a href="{{ url_for('main.shop') }}">Shop</a></li>
+                <li><a href="{{ url_for('main.shop') }}">Back to Shop</a></li>
                 <li class="active">Cart</li>
             </ol>
         </div>
@@ -63,5 +63,23 @@
 
 {#<div id="mobile-cart">#}
 {#</div>#}
+
+{# Empty Cart Modal #}
+<div id="empty-cart" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="height:65px">
+                <button type="button" class="close" data-dismiss="modal"><i class="fa fa-times-circle-o fa-2x"></i></button>
+            </div>
+            <div class="modal-body text-center">
+                <p>Empty your shopping cart?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+                <button type="submit" class="simpleCart_empty btn btn-default">Yes</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 {% endblock %}

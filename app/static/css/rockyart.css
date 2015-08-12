@@ -463,7 +463,8 @@ i.cart-qty:hover {
     }
 
     .nav>li>a {
-        padding: 20px 10px 20px 10px;
+        /*padding: 20px 10px 20px 10px;*/
+        padding: 20px;
     }
 
     .navbar-nav>li>a {

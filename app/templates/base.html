@@ -65,7 +65,7 @@
                             <a class="navbar-brand" href="{{ url_for('main.index') }}">Rocky Pardo</a>
                         </a>
                     </li>
-                    <li><a href="{{ url_for('main.index') }}">Home</a></li>
+{#                    <li><a href="{{ url_for('main.index') }}">Home</a></li>#}
 {#                    <li><a href="{{ url_for('main.gallery', c='jewelry') }}">Shop</a></li>#}
                     <li><a href="{{ url_for('main.shop') }}">Shop</a></li>
                     <li><a href="{{ url_for('main.blog') }}">Posts</a></li>
@@ -141,6 +141,18 @@
     <script>
 
 </script>
+
+{# Global Modals #}
+
+
+<div id="remove-cart-modal" class="modal fade" role="dialog">
+    <h1>remove</h1>
+</div>
+
+<div id="empty-cart-modal" class="modal fade" role="dialog">
+    <h1>empty</h1>
+</div>
+
 
 </body>
 </html>
