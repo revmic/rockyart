@@ -4,7 +4,7 @@ from datetime import datetime
 
 import requests
 from PIL import Image
-from flask import render_template, redirect, url_for, flash, request, jsonify
+from flask import render_template, redirect, url_for, flash, request, jsonify, g
 from flask_admin import expose
 from flask.ext.admin.contrib.sqla import ModelView
 from flask.ext.uploads import UploadSet, IMAGES
@@ -12,7 +12,7 @@ from flask.ext.login import login_required, current_user
 
 from app import mailer, db, admin
 from app.main import main
-from app.models import Product, ProductImage, Order
+from app.models import Product, ProductImage, Order, User
 from app.main.forms import ContactForm, ProductForm
 from config import basedir, INSTAGRAM_KEY
 
@@ -214,9 +214,22 @@ def e500():
 
 photos = UploadSet('photos', IMAGES)
 
+from flask.ext.httpauth import HTTPBasicAuth
+auth = HTTPBasicAuth()
+
+
+@auth.verify_password
+def verify_password(username, password):
+    user = User.query.filter_by(username=username).first()
+    if not user or not user.verify_password(password):
+        return False
+    g.user = user
+    return True
+
 
 @main.route('/admin/products', methods=['GET', 'POST'])
-@login_required
+#@login_required
+@auth.login_required
 def view_products():
     all_products = Product.query.all()
     product_images = {}
@@ -237,19 +250,19 @@ def view_products():
 class ProductView(ModelView):
     categories = ['necklace', 'ring', 'earring', 'bracelet']
 
-    @expose('/')
-    def index(self):
-        if not current_user.is_authenticated():
-            return redirect(url_for('view_products'))
-        return super(ProductView, self).index()
+    # @expose('/')
+    # @auth.login_required
+    # def index(self):
+    #     if not current_user.is_authenticated():
+    #         return redirect(url_for('view_products'))
+    #     return super(ProductView, self).index()
 
     @expose('/new/', methods=('GET', 'POST'))
-    @login_required
+    @auth.login_required
     def create_view(self):
         new_product = Product(creation_date=datetime.now(), quantity=1)
         form = ProductForm(request.form, new_product)
         product_id = request.args.get('id')
-        # record_exists = db.session.query(Product).filter_by(id=product_id).count()
 
         if request.method == 'POST':
             # if not record_exists:
@@ -271,7 +284,7 @@ class ProductView(ModelView):
                            creating=True, categories=self.categories)
 
     @expose('/edit/', methods=('GET', 'POST'))
-    @login_required
+    @auth.login_required
     def edit_view(self):
         product_id = request.args.get('id')
         product = Product.query.filter_by(id=product_id).first()
@@ -323,7 +336,7 @@ class ProductView(ModelView):
         flash(msg, "success")
 
     @staticmethod
-    @login_required
+    @auth.login_required
     def publish(product_id):
         """
         Toggles a product between published and unpublished
@@ -343,7 +356,7 @@ class ProductView(ModelView):
         db.session.commit()
 
     @staticmethod
-    @login_required
+    @auth.login_required
     def delete(product):
         print(info, "Deleting product " + str(product.id))
         product_images = ProductImage.query.filter_by(
@@ -364,16 +377,15 @@ class ProductView(ModelView):
 
         return redirect('/admin/products')
 
-
 @main.route('/admin/orders', methods=['GET', 'PUT'])
-@login_required
+@auth.login_required
 def view_orders():
     all_orders = Order.query.all()
     return render_template("admin/orders.html", orders=all_orders)
 
 
 @main.route('/admin/orders/<oid>/edit', methods=['GET', 'PUT'])
-@login_required
+@auth.login_required
 def edit_order(oid):
     order = Order.query.filter_by(id=oid).first()
     products = Product.query.filter_by(order_id=oid).all()
@@ -383,7 +395,7 @@ def edit_order(oid):
 
 
 @main.route('/admin/images', methods=['GET', 'PUT'])
-@login_required
+@auth.login_required
 def image_admin():
     images = ProductImage.query.all()
     gallery_product = Product.query.filter_by(title="gallery")
@@ -393,7 +405,7 @@ def image_admin():
 
 
 @main.route('/admin/image/upload', methods=['POST'])
-@login_required
+@auth.login_required
 def upload():
     f = request.files['file']
     pid = request.args.get("product_id")
@@ -424,7 +436,7 @@ def upload():
 
 
 @main.route('/admin/image/<image_id>/thumb', methods=['POST'])
-@login_required
+@auth.login_required
 def create_thumb(image_id):
     fullsize_path = ProductImage.query.filter_by(id=image_id).first().full_path
     image_name = os.path.basename(fullsize_path)
@@ -452,7 +464,7 @@ def make_thumb(infile, outfile):
 
 
 @main.route('/admin/image/<image_id>/main', methods=['POST'])
-@login_required
+@auth.login_required
 def main_image(image_id):
     image = ProductImage.query.filter_by(id=image_id).first()
     print(info, "Making", os.path.basename(image.full_path), "the main image")
@@ -469,7 +481,7 @@ def main_image(image_id):
 
 
 @main.route('/admin/image/<image_id>/gallery', methods=['POST'])
-@login_required
+@auth.login_required
 def gallery_image(image_id):
     image = ProductImage.query.filter_by(id=image_id).first()
     fname = os.path.basename(image.full_path)
@@ -485,7 +497,7 @@ def gallery_image(image_id):
 
 
 @main.route('/admin/image/<image_id>/remove', methods=['POST'])
-@login_required
+@auth.login_required
 def remove(image_id):
     """Delete an uploaded file."""
     img = ProductImage.query.filter_by(id=image_id).first()

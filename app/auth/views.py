@@ -1,4 +1,4 @@
-from flask import render_template, redirect, request, url_for, flash
+from flask import render_template, redirect, request, flash, g
 from flask.ext.login import login_user, logout_user, login_required
 
 from app.auth import auth
@@ -16,8 +16,8 @@ def login():
 
         if user is not None and user.verify_password(form.password.data):
             login_user(user, False)  # or form.remember_me.data
-            return redirect(request.args.get('next') or url_for('admin'))
-        flash('Invalid username or password', 'warning')
+            return redirect(request.args.get('next') or '/admin')
+        flash('Invalid username or password', 'danger')
     return render_template('auth/login.html', form=form)
 
 
@@ -25,5 +25,6 @@ def login():
 @login_required
 def logout():
     logout_user()
-    flash('You have been logged out.', 'success')
+    g.user = None
+    flash('You have been logged out.', 'info')
     return redirect('/admin')

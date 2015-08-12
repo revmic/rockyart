@@ -125,8 +125,10 @@
                     <li><a href="{{ url_for('main.image_admin') }}">Images</a></li>
                     <li><a href="{{ url_for('main.shop') }}" style="font-weight:bold">The Shop</a></li>
                 </ul>
-                {% if current_user.is_authenticated() %}
-                    <a id='logout' class='btn btn-danger float-right' href="{{ url_for('auth.logout') }}">Log Out</a>
+{#                {% if current_user.is_authenticated() %}#}
+                {% if g.user %}
+                    <div class="text-right" style="margin-top:10px; color:white">{{ g.user.username }}</div>
+{#                    <a id='logout' class='btn btn-danger float-right' href="{{ url_for('auth.logout') }}">Log Out</a>#}
 {#                {% else %}#}
 {#                    <a href="{{ url_for('auth.login') }}">Log In</a>#}
                 {% endif %}
