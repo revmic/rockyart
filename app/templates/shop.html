@@ -57,23 +57,20 @@
             <div class="btn-group filter-button-group">
                 <button data-filter="*" class="item-thumbnail category-button-all" style="box-shadow:none"><i class="fa fa-asterisk"></i>
                      <div class="item-caption">
-                        <h6>All</h6>
-                    </div>
+                         <h6>All</h6>
+                     </div>
                 </button>
                 <button data-filter=".necklace" class="item-thumbnail category-button">
-                    <div style="position: relative; height: 80px; width: 100px">
-                        <img class="img-rounded img-responsive" src="{{ url_for('static', filename='img/app/necklaces.jpg') }}" style="position:absolute; top:0; left:0">
-                    </div>
+                    <img class="img-rounded img-responsive" src="{{ url_for('static', filename='img/app/necklaces.jpg') }}">
                     <div class="item-caption">
                         <h6>Necklaces</h6>
                     </div>
                 </button>
-                <button data-filter=".earring" class="item-thumbnail category-button" style="color:red;">
+                <button data-filter=".earring" class="item-thumbnail category-button">
                     <img class="img-rounded img-responsive" src="{{ url_for('static', filename='img/app/earings.jpg') }}">
                     <div class="item-caption">
                         <h6>Earrings</h6>
                     </div>
-{#                    test2#}
                 </button>
                 <button data-filter=".ring" class="item-thumbnail category-button">
                     <img class="img-rounded img-responsive" src="{{ url_for('static', filename='img/app/rings.jpg') }}">
@@ -188,8 +185,8 @@
                         <p><strong>{{ item.title }}</strong> was added to your Shopping Cart!</p>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" data-dismiss="modal">Continue Shopping</button>
-                        <a href="{{ url_for('main.cart') }}" class="btn btn-default">View Cart</a>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Continue Shopping</button>
+                        <a href="{{ url_for('main.cart') }}" class="btn btn-primary">View Cart</a>
                     </div>
                 </div>
             </div>

@@ -12,12 +12,11 @@ simpleCart({
         sandbox: true,
         success: function() {
             //alert("Successful paypal transaction");
-            //simpleCart.empty();
-            return "http://localhost:5001/cart/success"
+            return window.location.href + "/success"
         },
         cancel: function() {
             //alert("Canceled paypal transaction");
-            return "http://localhost:5001/cart"
+            return window.location.href
         }
         //method: "GET"
     },
@@ -294,7 +293,7 @@ $(document).ready(function() {
         $('#mobile-filters').removeClass("hidden");
 
         // Make some icons smaller
-        $("i.cart-button").removeClass("fa-2x");
+        $("i.cart-button").removeClass("fa-2x").addClass("btn-xs");
         $("i.cart-qty").removeClass("fa-2x");
         $("i.cart-remove").removeClass("fa-2x");
         //simpleCart.cartStyle = "div";
@@ -302,6 +301,7 @@ $(document).ready(function() {
         // Display appropriate Shopping Cart
         //$('#mobile-cart').show();
         //$('#desktop-cart').hide();
+        $('#transaction-button').hide();
     } else {
         $('#phone').append("<a href='#' data-toggle='tooltip' title='314-630-8983'>phone</a>");
         $('[data-toggle="tooltip"]').tooltip();
@@ -313,5 +313,6 @@ $(document).ready(function() {
         //$('#mobile-cart').hide();
         //$('#desktop-cart').show();
         //simpleCart.cartStyle = "table";
+        $('#transaction-text').hide();
     }
 });

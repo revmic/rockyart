@@ -661,5 +661,9 @@ i.cart-qty:hover {
     }
     .container-fluid {
         width: 85%;
+        max-width: 1200px;
+    }
+    .container {
+        max-width: 1200px;
     }
 }
