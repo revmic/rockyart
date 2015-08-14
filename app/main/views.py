@@ -8,7 +8,7 @@ from flask import render_template, redirect, url_for, flash, request, jsonify, g
 from flask_admin import expose
 from flask.ext.admin.contrib.sqla import ModelView
 from flask.ext.uploads import UploadSet, IMAGES
-from flask.ext.login import login_required, current_user
+# from flask.ext.login import login_required, current_user
 
 from app import mailer, db, admin
 from app.main import main
@@ -25,7 +25,22 @@ error = 'ERROR'
 @main.route('/')
 @main.route('/index')
 def index():
-    return render_template("index.html", title='Home')
+    carousel_pid = Product.query.filter_by(title='carousel').first()
+    carousel_paths = []
+
+    if carousel_pid:
+        carousel_id = carousel_pid.id
+        carousel_imgs = \
+            ProductImage.query.filter_by(product_id=carousel_id).all()
+
+        for img in carousel_imgs:
+            carousel_paths.append(img.full_path)
+    else:
+        print(error, "The carousel product doesn't seem to exist. "
+                     "Create it in the product interface.")
+
+    return render_template(
+        "index.html", title='Home', carousel_images=carousel_paths)
 
 
 @main.route('/blog')
@@ -228,7 +243,7 @@ def verify_password(username, password):
 
 
 @main.route('/admin/products', methods=['GET', 'POST'])
-#@login_required
+# @login_required
 @auth.login_required
 def view_products():
     all_products = Product.query.all()
@@ -377,6 +392,7 @@ class ProductView(ModelView):
 
         return redirect('/admin/products')
 
+
 @main.route('/admin/orders', methods=['GET', 'PUT'])
 @auth.login_required
 def view_orders():
@@ -518,7 +534,8 @@ def remove(image_id):
         print(e)
         flash("Could not remove " + img_path_abs, "danger")
     else:
-        flash("Successfully removed " + os.path.basename(img_path_abs), "success")
+        flash("Successfully removed " +
+              os.path.basename(img_path_abs), "success")
 
     print(request.path)
     if request.args.get('redirect'):
