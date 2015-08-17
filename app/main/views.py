@@ -483,14 +483,18 @@ def make_thumb(infile, outfile):
 @auth.login_required
 def main_image(image_id):
     image = ProductImage.query.filter_by(id=image_id).first()
-    print(info, "Making", os.path.basename(image.full_path), "the main image")
 
-    # get current main image if any and set image.main to false
-    all_images = ProductImage.query.all()
-    for img in all_images:
+    # get product images and set them all to false
+    product_images = ProductImage.query.filter_by(
+        product_id=image.product_id).all()
+
+    print(info, "Unsetting main image for " + str(image.product_id))
+
+    for img in product_images:
         img.main_image = False
 
     # then set this one to true
+    print(info, "Making", os.path.basename(image.full_path), "the main image")
     image.main_image = True
 
     return jsonify(name=image_id)

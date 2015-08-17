@@ -29,7 +29,7 @@ class Product(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(64), index=True)
     category = db.Column(db.String(64), index=True)
-    description = db.Column(db.String(256), index=True)
+    description = db.Column(db.String(512), index=True)
     price = db.Column(db.Float, default=0.0, index=True)
     quantity = db.Column(db.Integer, default=1)
     creation_date = db.Column(db.Date)

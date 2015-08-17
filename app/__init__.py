@@ -32,7 +32,7 @@ def create_app(config_name):
     # Explicitly creating db session using engine with options
     # to fix PythonAnywhere 5 minute timeout issue using pool_recycle
     print('SQLALCHEMY_DATABASE_URI: ', app.config['SQLALCHEMY_DATABASE_URI'])
-    app.config['SQLALCHEMY_POOL_RECYCLE'] = 450
+    app.config['SQLALCHEMY_POOL_RECYCLE'] = 400
     # app.config['SQLALCHEMY_POOL_TIMEOUT'] = 20
     db.init_app(app)
     # engine = create_engine(

@@ -7,9 +7,9 @@
 simpleCart({
     checkout: {
         type: "PayPal" ,
-        //email: "mhilema@gmail.com"
-        email: "rockyart_store@gmail.com",
-        sandbox: true,
+        email: "rockypardo.art@gmail.com",
+        //email: "rockyart_store@gmail.com",
+        sandbox: false,
         success: function() {
             //alert("Successful paypal transaction");
             return window.location.href + "/success"
