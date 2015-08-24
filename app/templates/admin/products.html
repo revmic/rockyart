@@ -18,9 +18,10 @@
                 <th>Category</th>
                 <th>Description</th>
                 <th>Price</th>
-                <th class="text-center">Quantity</th>
+                <th class="text-center">Qty</th>
                 <th>Created</th>
-                <th class="text-center">#Images</th>
+                <th class="text-center">#Imgs</th>
+                <th class="text-center">#Opts</th>
                 <th class="text-center">Published</th>
             </tr>
         </thead>
@@ -42,16 +43,19 @@
 
                 </td>
                 <td>
-{#                    <img src="{{ url_for('static', filename=product_images[p.id][0].full_path) }}" style="width:50px">#}
+                    {% if product_images[p.id] %}
+                        <img src="{{ url_for('static', filename=product_images[p.id][0].thumb_path) }}" style="width:50px">
+                    {% endif %}
                 </td>
                 <td>{{ p.title }}</td>
                 <td>{{ p.category }}</td>
                 <td>{{ p.description }}</td>
-{#                <td>${{ p.price|round|int }}</td>#}
-            <td></td>
+                <td>${{ p.price|round|int }}</td>
+{#            <td></td>#}
                 <td class="text-center">{{ p.quantity }}</td>
                 <td>{{ p.creation_date }}</td>
                 <td class="text-center">{{ product_images[p.id]|length }}</td>
+                <td class="text-center">{{ product_options[p.id]|length }}</td>
                 <td class="text-center">
                     {% if p.published %}
                         <i class="fa fa-check-circle-o fa-2x" style="color:forestgreen"></i>

@@ -232,9 +232,10 @@ footer p {
     padding: 0;
     display: none;
     text-align: center;
-    background: rgba(152, 151, 153, 0.73);
-    color: #fff !important;
+    background: rgba(255, 255, 255, 0.75);
+    color: #464646 !important;
     z-index: 2;
+    border-radius: 4px;
 }
 .view-details {
     position:relative;
@@ -245,18 +246,9 @@ footer p {
     background:none!important;
     border:none;
     padding:0!important;
-    width: 100px;
-    height: 45px;
+    width: 150px;
+    height: 75px;
     font: inherit;
-}
-.category-button-all {
-    /*background:none!important;*/
-    color: white;
-    width: 45px;
-    height: 45px;
-    border-radius: 4px;
-    position: relative;
-    bottom: 18px;
 }
 .quick-add-cart {
     position: relative;
@@ -366,8 +358,8 @@ i.cart-remove {
 i.cart-remove:hover {
     color: #b00000;
 }
-i.cart-add {
-    color: #f4f4f4;
+i.add-cart-btn {
+    color: #464646;
     -o-transition:color .4s ease-out, background 2s ease-in;
     -ms-transition:color .4s ease-out, background 2s ease-in;
     -moz-transition:color .4s ease-out, background 2s ease-in;
@@ -375,8 +367,8 @@ i.cart-add {
     /* ...and now override with proper CSS property */
     transition:color .4s ease-out, background 2s ease-in;
 }
-i.cart-add:hover {
-    color: #005c00;
+i.add-cart-btn:hover {
+    color: darkgreen;
 }
 i.cart-qty {
     color: darkgray;
@@ -490,20 +482,14 @@ i.cart-qty:hover {
         width: 100%;
     }
 
-    .category-button {
-        background:none!important;
-        border:none;
-        padding:0!important;
-        width: 66px;
-        height: 30px;
-        font: inherit;
-    }
-    .category-button-all {
-        padding:0!important;
-        width: 30px;
-        height: 30px;
-        top: -10px;
-    }
+    /*.category-button {*/
+        /*background:none!important;*/
+        /*border:none;*/
+        /*padding:0!important;*/
+        /*width: 100px;*/
+        /*height: 50px;*/
+        /*font: inherit;*/
+    /*}*/
 }
 
 @media only screen and (min-device-width : 320px) and (max-device-width : 568px) {
@@ -523,7 +509,6 @@ i.cart-qty:hover {
         letter-spacing: 0;
     }
 
-
     .box {
         width: 100%;
         padding: 5px;
@@ -542,19 +527,13 @@ i.cart-qty:hover {
         padding: 10px 0 5px 0;
     }
 
-    .category-button {
-        background: none!important;
-        border: none;
-        padding: 0!important;
-        width: 50px;
-        height: 25px;
-    }
-    .category-button-all {
-        padding: 0!important;
-        width: 25px;
-        height: 25px;
-        top: -10px;
-    }
+    /*.category-button {*/
+        /*background: none!important;*/
+        /*border: none;*/
+        /*padding: 0!important;*/
+        /*width: 50px;*/
+        /*height: 25px;*/
+    /*}*/
 
     .cart-dropdown {
         position: absolute;;

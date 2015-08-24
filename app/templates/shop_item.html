@@ -1,19 +1,46 @@
 {% extends "base.html" %}
 
+{% block head %}
+    {{ super() }}
+    <meta property="og:url"           content="{{ request.url }}" />
+    <meta property="og:type"          content="website" />
+    <meta property="og:title"         content="{{ item.title }}" />
+    <meta property="og:description"   content="{{ item.description }}" />
+    <meta property="og:image"         content="{{ request.host }}/static/{{ images[0] }}" />
+{% endblock %}
+
 {% block content %}
+
+<script>
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '855177671263227',
+      xfbml      : true,
+      version    : 'v2.4'
+    });
+  };
+
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "//connect.facebook.net/en_US/sdk.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
+</script>
+
 <style>
     .item_image {
         display: none;
+    }
+    .flex-direction-nav a.flex-next, .flex-direction-nav a.flex-prev {
+        display:none;
     }
 </style>
 
 <div class="box" style="padding:0;">
     <div class="row">
-        <div class="col-lg-12">
-{#            <h3 class="text-center" style="margin-bottom: -15px">#}
-{#                <i class="fa fa-cart-arrow-down" style="color:darkgray"></i> Shopping Cart#}
-{#            </h3>#}
-{#            <hr>#}
+        <div class="col-sm-12">
             <ol class="breadcrumb" style="padding:15px 0 0 15px">
                 <li><a href="{{ url_for('main.index') }}">Home</a></li>
                 <li><a href="{{ url_for('main.shop') }}">Back to Shop</a></li>
@@ -49,16 +76,117 @@
 
         </div>
 
-        <div class="col-lg-6 text-left">
+{#    <script>#}
+{#        function item_add_qty (title, price, image) {#}
+{#            simpleCart.add({#}
+{#                name: title ,#}
+{#                price: price ,#}
+{#                quantity: $('#qty').val(),#}
+{#                image: image#}
+{#            });#}
+{#        }#}
+{#    </script>#}
+
+        <div class="col-sm-6">
             <div class="simpleCart_shelfItem">
                 <!-- Add a hidden reference to the item image for simplecart -->
                 <img alt="image" src="{{ url_for('static', filename=images[0]) }}" class="item_image" />
                 <h4 class="item_name" style="display:inline">{{ item.title }}</h4>
-                <h3 class="item_price text-muted text-right" style="display:inline">${{ item.price|round|int }}</h3>
-                <hr>
+                <h3 class="item_price text-muted text-right" style="display:inline">$<span id="price">{{ item.options[0].price|round|int }}</span></h3>
+{#                <h3 class="item_price text-muted text-right" style="display:inline">${{ item.price|round|int }}</h3>#}
+{#                <h3 class="item_price text-muted text-right" style="display:inline">${{ item.options[0].price|round|int }}</h3>#}
+
+                <hr style="max-width:1000px">
+
                 <p>{{ item.description }}</p>
-                <hr>
-                <a class="item_add btn btn-success" href="javascript:"><i class="fa fa-cart-plus"></i> Add to Cart</a>
+
+                <hr style="max-width:1000px">
+
+                <label for="item_size">{{ option_label }}</label>
+
+                <br>
+
+                {# Build map of options and prices #}
+                {% for opt in item.options %}
+                    <input type="hidden" name="opt_{{ opt.name|replace(' ', '') }}_price" id="opt_{{ opt.name|replace(' ', '') }}_price" value="{{ opt.price }}" />
+                {% endfor %}
+
+                <select id="item_size" class="item_size form-control" onchange="update_price(this);" style="width:240px; display:inline-block">
+                    {% for opt in item.options %}
+                        <option value="{{ opt.name|replace(' ', '') }}">{{ opt.name }}</option>
+                    {% endfor %}
+                </select>
+
+                <hr style="max-width:1000px">
+
+                <style>
+                    .qty-btn {
+                        background-color: darkgray;
+                        border-color: #868686;
+                        color: white;
+                    }
+                    .qty-btn:hover {
+                        background-color: darkgreen;
+                        color: white;
+                    }
+                </style>
+
+                <div class="form-inline" style="padding:0 10px 10px 0">
+
+                    <div class="input-group quantity-select" style="width:90px;">
+                        <span class="input-group-btn">
+                            <button id="qty-minus" class="btn qty-btn">-
+{#                                <i class="fa fa-minus-square cart-qty"></i>#}
+                            </button>
+                        </span>
+
+                        <label for="qty"></label>
+                        <input id="qty" type="text" class="form-control qty-value item_Quantity" value="1" disabled style="width:40px"/>
+                        <input type="hidden" id="max_qty" value="{{ item.quantity }}" />
+
+                        <span class="input-group-btn">
+                            <button id="qty-plus" class="btn qty-btn">+
+{#                                <i class="fa fa-plus-square cart-qty"></i>#}
+                            </button>
+                        </span>
+                    </div>
+
+                    <button class="btn btn-default item_add" style="display:inline">
+                        <i class="fa fa-cart-plus"></i> Add to Cart
+                    </button>
+
+                </div>
+
+                {# Social media buttons #}
+                <a href="//www.pinterest.com/pin/create/button/?url=http%3A%2F%{{ request.host }}%2Fshop%2F{{ item.id }}&media=http%3A%2F%2F{{ request.host }}%2Fstatic%2F{{ images[0]|replace('/', '%2F') }}&description=Rocky%20Pardo%20Jewelry" data-pin-do="buttonPin" data-pin-config="none" data-pin-color="white" data-pin-height="28">
+                    <img src="//assets.pinterest.com/images/pidgets/pinit_fg_en_rect_white_28.png" />
+                </a>
+
+                <script>
+                    function facebook_share() {
+                        window.open('http://www.facebook.com/sharer/sharer.php?u=[url]&t=[title]',
+                                'facebook_share', 'height=320, width=640, toolbar=no, menubar=no, scrollbars=no, resizable=no, location=no, directories=no, status=no');
+                    }
+                </script>
+
+                <style>
+                    .facebook-btn {
+                        height: 28px;
+                        margin-top: -20px;
+                        position: relative;
+                        vertical-align: middle;
+                        line-height: 0
+                    }
+                    .facebook-btn i {
+                        color: #3b5998;
+                    }
+                    a.facebook-btn:hover {
+                        background-color: white;
+                    }
+                </style>
+
+                <a class="btn btn-default facebook-btn" href="javascript:" onclick='facebook_share()'><i class="fa fa-facebook"></i> Share</a>
+
             </div>
         </div>
 
@@ -110,12 +238,12 @@
                 <button type="button" class="close" data-dismiss="modal"><i class="fa fa-times-circle-o fa-2x"></i></button>
             </div>
             <div class="modal-body text-center">
-                <img src="{{ url_for('static', filename=images[0]) }}" style="max-width:256px">
                 <p><strong>{{ item.title }}</strong> was added to your Shopping Cart!</p>
+                <img src="{{ url_for('static', filename=images[0]) }}" style="max-width:256px">
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal">Continue Shopping</button>
-                <a href="{{ url_for('main.cart') }}" class="btn btn-default">View Cart</a>
+                <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-diamond"></i> Continue Shopping</button>
+                <a href="{{ url_for('main.cart') }}" class="btn btn-primary"><i class="fa fa-shopping-cart"></i> View Cart</a>
             </div>
         </div>
     </div>

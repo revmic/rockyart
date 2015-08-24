@@ -8,17 +8,18 @@
 {#        <button class="btn btn-default" id="toggle-dropzone-btn"#}
 {#                onclick="toggle_dropzone()" style="margin-bottom:10px">Upload Images</button>#}
 
-        <div class="container" id="dropzone-area" style="max-width:1040px">
+        <div class="container" id="dropzone-area2" style="max-width:1040px">
             <form action="/admin/image/upload?product_id={{ gallery.id }}"
                   class="dropzone" id="image-dropzone" method="post">
             </form>
+            <p style="font-size: x-small; margin-top: -10px">* Upload gallery images here that aren't related to any product</p>
         </div>
+
     </div>
 
-
-    <div class="container well text-center" style="max-width:1040px">
+    <div class="container well text-center" style="max-width:1080px">
         <div class="row">
-            <div class="product-image-grid">
+            <div class="product-image-grid" style="margin: 0 auto">
             {% for img in images %}
                 <div class="product-image item-thumbnail text-center">
                     <img alt="image" class="img-responsive"

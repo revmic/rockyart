@@ -26,6 +26,32 @@ function toggle_dropzone() {
     }
 }
 
+function add_option() {
+    var uri = $('#option_uri').val();
+    var formData = {
+        "option_value": $('#option_name').val()
+    };
+
+    if (! $('#option_name').val()) {
+        alert("Must enter an option name");
+        return;
+    }
+
+    $.ajax({
+        type: 'POST',
+        url: uri,
+        data: formData,
+        dataType: 'json',
+        encode: true,
+        success: function(res) {
+            console.log(res)
+        },
+        error: function(err) {
+            console.log(err)
+        }
+    })
+}
+
 function toggle_gallery(img_id) {
     //alert("Add to gallery " + img_id);
 

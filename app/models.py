@@ -29,16 +29,17 @@ class Product(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(64), index=True)
     category = db.Column(db.String(64), index=True)
-    description = db.Column(db.String(512), index=True)
+    description = db.Column(db.String(500), index=True)
     price = db.Column(db.Float, default=0.0, index=True)
     quantity = db.Column(db.Integer, default=1)
     creation_date = db.Column(db.Date)
     published = db.Column(db.Boolean, default=False)
     images = db.relationship("ProductImage")
+    options = db.relationship("ProductOption")
 
     def __repr__(self):
-        return '<Product: title=%s, category=%s, price=%s, published=%s>' % \
-               (self.title, self.category, self.price, self.published)
+        return '<Product: title=%s, category=%s, price=%s>' % \
+               (self.title, self.category, self.price)
 
     def __unicode__(self):
         return self.title
@@ -48,11 +49,29 @@ class ProductImage(db.Model):
     __tablename__ = 'product_images'
     id = db.Column(db.Integer, primary_key=True)
     product_id = db.Column(db.Integer, db.ForeignKey('products.id'))
+    # product = db.relationship(Product, backref='products')
     filename = db.Column(db.String(64))
     full_path = db.Column(db.String(256))
     thumb_path = db.Column(db.String(256))
     main_image = db.Column(db.Boolean, default=False)
     gallery_image = db.Column(db.Boolean, default=False)
+
+    def __repr__(self):
+        return '<Image: product_id=%s, filename=%s, path=%s>' % \
+               (self.product_id, self.filename, self.full_path)
+
+    def __unicode__(self):
+        return self.full_path
+
+
+class ProductOption(db.Model):
+    __tablename__ = 'product_options'
+    id = db.Column(db.Integer, primary_key=True)
+    product_id = db.Column(db.Integer, db.ForeignKey('products.id'))
+    # product = db.relationship(Product, backref='products')
+    name = db.Column(db.String(64))
+    price = db.Column(db.Float, default=0.0, index=True)
+    quantity = db.Column(db.Integer, default=1)
 
 
 class Role(db.Model):

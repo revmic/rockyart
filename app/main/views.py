@@ -12,7 +12,7 @@ from flask.ext.uploads import UploadSet, IMAGES
 
 from app import mailer, db, admin
 from app.main import main
-from app.models import Product, ProductImage, Order, User
+from app.models import Product, ProductImage, ProductOption, Order, User
 from app.main.forms import ContactForm, ProductForm
 from config import basedir, INSTAGRAM_KEY
 
@@ -126,38 +126,55 @@ def shop():
     """
     Get all shop items, main images, gallery images, and render the storefront
     """
-    result = Product.query.all()
+    results = Product.query.all()
     shop_items = []
     main_images = {}
+    price_ranges = {}
     gallery_images = []
 
     # Only show shop item if it's published and is in stock
-    for product in result:
+    for product in results:
         if product.published and product.quantity > 0:
             shop_items.append(product)
 
-    for product in result:
+    for product in results:
         # Use the first image in case none are set as main
-        # And also gather up the gallery images
+        main_img = ''
         try:
             main_img = product.images[0].thumb_path
         except IndexError:
-            main_img = None
+            pass
 
         # Then search for one that's properly set
-        for img in product.images:
-            if img.main_image:
-                main_img = img.thumb_path
-            if img.gallery_image:
-                gallery_images.append(img)
+        try:
+            for img in product.images:
+                if img.main_image:
+                    main_img = img.thumb_path
+                if img.gallery_image:
+                    gallery_images.append(img)
+        except IndexError:
+            pass
 
         main_images[product.id] = main_img
+
+        # Figure out if there's a range in pricing or not
+        try:
+            price_lo = product.options[0].price
+            price_hi = product.options[-1].price
+        except:
+            continue
+
+        if price_lo == price_hi:
+            # Use the string of the integer value
+            price_ranges[product.id] = str(int(price_lo))
+        else:
+            price_ranges[product.id] = "%d-%d" % (price_lo, price_hi)
 
     print(debug, main_images)
 
     return render_template("shop.html", title='Rocky Shop', items=shop_items,
-                           gallery_images=gallery_images,
-                           main_images=main_images)
+                           main_images=main_images, price_ranges=price_ranges,
+                           gallery_images=gallery_images)
 
 
 @main.route('/shop/<item_id>')
@@ -168,6 +185,12 @@ def shop_item(item_id):
         flash('Item not found (id: %s)' % item_id, "warning")
         return redirect(url_for('main.shop'))
 
+    opt_label = "Option:"
+    if item.category == "necklace" or item.category == "bracelet":
+        opt_label = "Length:"
+    elif item.category == "ring" or item.category == "earring":
+        opt_label = "Size:"
+
     item_images = ProductImage.query.filter_by(product_id=item_id).all()
     image_paths = []
 
@@ -176,7 +199,8 @@ def shop_item(item_id):
 
     print(debug, item_images)
 
-    return render_template('shop_item.html', item=item, images=image_paths)
+    return render_template('shop_item.html', item=item, images=image_paths,
+                           option_label=opt_label)
 
 
 @main.route('/cart', methods=['GET'])
@@ -248,18 +272,23 @@ def verify_password(username, password):
 def view_products():
     all_products = Product.query.all()
     product_images = {}
+    product_options = {}
     new_id = all_products[-1].id + 1
 
     for p in all_products:
         product_images[p.id] = \
             ProductImage.query.filter_by(product_id=p.id).all()
-    print(debug, product_images)
+        product_options[p.id] = \
+            ProductOption.query.filter_by(product_id=p.id).all()
+
+    # print(debug, product_images)
 
     if request.method == "POST":
         return redirect(url_for('view_products'))
 
     return render_template("admin/products.html", products=all_products,
-                           product_images=product_images, new_id=new_id)
+                           product_images=product_images, new_id=new_id,
+                           product_options=product_options)
 
 
 class ProductView(ModelView):
@@ -305,6 +334,10 @@ class ProductView(ModelView):
         product = Product.query.filter_by(id=product_id).first()
         product_images = ProductImage.query.filter_by(
             product_id=product_id).all()
+        product_options = ProductOption.query.filter_by(
+            product_id=product_id).all()
+        # product_options = [{'name': 'size 1', 'price': 123, 'quantity': 2},
+        #                    {'name': 'size 2', 'price': 134, 'quantity': 1}]
         form = ProductForm(request.form, product)
 
         # image_paths = []
@@ -320,6 +353,7 @@ class ProductView(ModelView):
         # Handle different form requests by name
         # if form.validate_on_submit():
         if request.method == 'POST':
+            # Main form elements
             if 'save' in request.form:
                 self.save(product, form)
             elif 'publish' in request.form:
@@ -330,12 +364,22 @@ class ProductView(ModelView):
             elif 'delete' in request.form:
                 self.delete(product)
 
-            # Go back to edit screen if not redirected elsewhere
+            # Option form elements
+            elif 'save_option' in request.form:
+                self.save_option(product)
+            elif 'update_option' in request.form:
+                self.update_option()
+                print(request.form)
+            elif 'remove_option' in request.form:
+                self.remove_option()
+
+            # Go back to edit screen if not redirected elsewhere by prev request
             return redirect('/admin/product/edit?id=' + product_id)
 
         return self.render('admin/manage_product.html',
                            product=product, images=product_images, form=form,
-                           categories=self.categories, product_id=product.id)
+                           categories=self.categories, product_id=product.id,
+                           options=product_options)
 
     @staticmethod
     def save(product, form):
@@ -392,6 +436,41 @@ class ProductView(ModelView):
 
         return redirect('/admin/products')
 
+    @staticmethod
+    @auth.login_required
+    def save_option(product):
+        print(info, "Saving option for", product.title)
+        opt = ProductOption(product_id=product.id,
+                            name=request.form['opt_name'],
+                            price=request.form['opt_price'],
+                            quantity=request.form['opt_qty'])
+        db.session.add(opt)
+        db.session.commit()
+
+    @staticmethod
+    @auth.login_required
+    def update_option():
+        opt_id = request.form['update_option']
+        print(info, "Updating option id", opt_id)
+
+        option = ProductOption.query.filter_by(id=opt_id).first()
+        print(request.form)
+        option.name = request.form['opt_name_'+opt_id]
+        option.price = request.form['opt_price_'+opt_id]
+        option.quantity = request.form['opt_qty_'+opt_id]
+        # db.session.add(option)
+        # db.session.commit()
+
+    @staticmethod
+    @auth.login_required
+    def remove_option():
+        opt_id = request.form['remove_option']
+        option = ProductOption.query.filter_by(id=opt_id).first()
+        print(info, "Removing", option.name, "option")
+
+        db.session.delete(option)
+        db.session.commit()
+
 
 @main.route('/admin/orders', methods=['GET', 'PUT'])
 @auth.login_required
@@ -414,7 +493,7 @@ def edit_order(oid):
 @auth.login_required
 def image_admin():
     images = ProductImage.query.all()
-    gallery_product = Product.query.filter_by(title="gallery")
+    gallery_product = Product.query.filter_by(title="gallery").first()
 
     return render_template("admin/image_admin.html", images=images,
                            gallery=gallery_product)
@@ -549,6 +628,16 @@ def remove(image_id):
         redirect_url = '/admin/product/edit?id=' + str(product_id)
 
     return redirect(redirect_url)
+
+
+@main.route('/admin/product/<pid>/options/add', methods=['POST', 'DELETE'])
+@auth.login_required
+def product_options(pid):
+    option_value = request.form['option_value']
+
+    print("Adding option", option_value, "for product id", pid)
+
+    return ""
 
 
 admin.add_view(ProductView(Product, db.session, name="Products"))

@@ -26,9 +26,7 @@ simpleCart({
 
     cartStyle : "table",
 
-    excludeFromCheckout: ['thumb'],
-
-    data: {'order_id': 12345, 'name': "First Last"},
+    excludeFromCheckout: ['id', 'image'],
 
     cartColumns: [
         //{view:'image', attr:'thumb', label: false},
@@ -47,6 +45,16 @@ simpleCart({
             view: function(item, column) {
                 return '<div>' + item.get('name') + "</div>";
         },  label: "<div'>Item</div>" },
+
+        //{ attr: "size",
+            //view: function(item, column) {
+                //alert(item.get('size'));
+                //var arr = item.get('size').split(" ");
+                //var size_val = arr[arr.length -1];
+                //return '<div>size ' + item.get('size') + "</div>";
+        //},  label: "<div'>Opt</div>" },
+
+        { attr: "size", view: 'size', label: "Size" },
 
         { attr: "price", view: 'currency', label: "Price" },
 
@@ -136,7 +144,27 @@ simpleCart.bind('beforeAdd' , function( item ) {
     }
 });
 
-cart_items = [];
+function show_spinner() {
+    var icon = $("#checkout_icon");
+    icon.removeClass("fa-cc-paypal");
+    icon.addClass("fa-spinner fa-spin");
+}
+
+$(".qty-btn").on("click", function () {
+    var $button = $(this);
+    var $max_qty = $("#max_qty").val();
+    var oldValue = $button.closest('.quantity-select').find("input.qty-value").val();
+
+    if ($button.attr('id') == "qty-plus" && oldValue < $max_qty) {
+        var newVal = parseFloat(oldValue) + 1;
+    } else if ($button.attr('id') == "qty-minus" && oldValue > 1) {
+        var newVal = parseFloat(oldValue) - 1;
+    } else {
+        var newVal = oldValue;
+    }
+
+    $button.closest('.quantity-select').find("input.qty-value").val(newVal);
+});
 
 function updateCartDropdown() {
     // build the cart dropdown from simpleCart contents
@@ -156,16 +184,14 @@ function updateCartDropdown() {
 function clearCartDropdown() {
     var cart = $('#cart-dropdown-table');
     cart.empty();
-    var row = '<tr><td>Your cart is empty, but you could <br> <a href="/shop">Go Shopping</a></tr></td>';
+    var row = '<tr><td>Your cart is empty, but you could <a href="/shop">Go Shopping</a></tr></td>';
     cart.append(row);
     $("#checkout_btn").bind('click', function(e) {
         e.preventDefault();
     });
 }
 
-function recordOrder() {
-
-}
+function recordOrder() {}
 
 
 //////////////////
@@ -191,6 +217,12 @@ $('.flexslider').flexslider({
     smoothHeight: true,
     useCss: true
 });
+
+function update_price(opt) {
+    var option_price_id = "#opt_" + opt.value + "_price";
+    var price = Math.round($(option_price_id).val());
+    $('#price').html(price);
+}
 
 //$('.flex-direction-nav').css({''})
 
@@ -224,7 +256,7 @@ $(document).ready(function() {
             sortAscending: {
                 price_up: true,
                 price_down: false,
-                date: true
+                date: false
             }
         });
 
@@ -285,12 +317,12 @@ $(document).ready(function() {
     // Reset after a time in case of invalid form
     setInterval(function () { $("#btn_icon").attr('class', 'glyphicon glyphicon-envelope') }, 6000);
 
-    // Contact phone is a tel link on mobile or a tooltip on desktop
-    if ($(window).width() < 568) {
+    // Assume device using the viewport size
+    if ($(window).width() < 768) {
         $('#phone').append("<a href='tel://314-630-8983'>phone</a>");
 
         // Display the appropriate Shop filters
-        $('#mobile-filters').removeClass("hidden");
+        $('#mobile-category-filters').removeClass("hidden");
 
         // Make some icons smaller
         $("i.cart-button").removeClass("fa-2x").addClass("btn-xs");
@@ -307,7 +339,7 @@ $(document).ready(function() {
         $('[data-toggle="tooltip"]').tooltip();
 
         // Display the appropriate Shop filters
-        $('#desktop-filters').removeClass("hidden");
+        $('#desktop-category-filters').removeClass("hidden");
 
         // Display appropriate Shopping Cart
         //$('#mobile-cart').hide();
@@ -316,3 +348,14 @@ $(document).ready(function() {
         $('#transaction-text').hide();
     }
 });
+
+// Need to test this
+//function is_touch_device() {
+// return (('ontouchstart' in window)
+//      || (navigator.MaxTouchPoints > 0)
+//      || (navigator.msMaxTouchPoints > 0));
+//}
+//
+//if (!is_touch_device()) {
+// document.getElementById('touchOnly').style.display='none';
+//}

@@ -7,7 +7,7 @@
     position: relative;
     top: 8px;
 }
-#mobile-filters {
+#mobile-category-filters {
     padding: 0;
 }
 </style>
@@ -19,7 +19,20 @@
 
 <div class="box">
 
-    <div id="mobile-filters" class="container hidden">
+    <div id="mobile-category-filters" class="container hidden">
+        <div class="row text-center">
+            <div class="col-xs-6" style="padding: 0 2px 8px 30px">
+                <button class="btn btn-block btn-sm btn-default" data-toggle="modal" data-target="#galleryModal">
+                    <i class="fa fa-diamond"></i> Gallery
+                </button>
+            </div>
+            <div class="col-xs-6" style="padding: 0 30px 8px 2px">
+                <a class="btn btn-block btn-sm btn-primary" href="{{ url_for('main.cart') }}">
+                    <i class="fa fa-shopping-cart"></i> Checkout
+                </a>
+            </div>
+        </div>
+
         <!-- Categories -->
         <div id="filters">
             <label for="category-select" class="col-xs-3">Category</label>
@@ -51,43 +64,44 @@
     </div>
 
 
-    <div id="desktop-filters" class="hidden">
+    <div id="desktop-category-filters" class="hidden">
         <!-- Categories -->
         <div class="row text-center" style="margin-top:-15px; margin-bottom: -5px">
             <div class="btn-group filter-button-group">
-                <button data-filter="*" class="item-thumbnail category-button-all" style="box-shadow:none"><i class="fa fa-asterisk"></i>
+                <button data-filter="*" class="item-thumbnail category-button" style="width:75px">
+                    <img class="img-rounded img-responsive" src="{{ url_for('static', filename='img/app/heavy_asterisk.png') }}">
                      <div class="item-caption">
-                         <h6>All</h6>
+                         <h4 style="margin-top:20px">All</h4>
                      </div>
                 </button>
                 <button data-filter=".necklace" class="item-thumbnail category-button">
                     <img class="img-rounded img-responsive" src="{{ url_for('static', filename='img/app/necklaces.jpg') }}">
                     <div class="item-caption">
-                        <h6>Necklaces</h6>
+                        <h4 style="margin-top:20px">Necklaces</h4>
                     </div>
                 </button>
                 <button data-filter=".earring" class="item-thumbnail category-button">
                     <img class="img-rounded img-responsive" src="{{ url_for('static', filename='img/app/earrings.jpg') }}">
                     <div class="item-caption">
-                        <h6>Earrings</h6>
+                        <h4 style="margin-top:20px">Earrings</h4>
                     </div>
                 </button>
                 <button data-filter=".ring" class="item-thumbnail category-button">
                     <img class="img-rounded img-responsive" src="{{ url_for('static', filename='img/app/rings.jpg') }}">
                     <div class="item-caption">
-                        <h6>Rings</h6>
+                        <h4 style="margin-top:20px">Rings</h4>
                     </div>
                 </button>
                 <button data-filter=".bracelet" class="item-thumbnail category-button">
                     <img class="img-rounded img-responsive" src="{{ url_for('static', filename='img/app/bracelets.jpg') }}">
                     <div class="item-caption">
-                        <h6>Bracelets</h6>
+                        <h4 style="margin-top:20px">Bracelets</h4>
                     </div>
                 </button>
                 <button type="button" class="item-thumbnail category-button" data-toggle="modal" data-target="#galleryModal">
                     <img class="img-rounded img-responsive" src="{{ url_for('static', filename='img/app/gallery.png') }}">
                     <div class="item-caption">
-                        <h6>Gallery</h6>
+                        <h4 style="margin-top:20px">Gallery</h4>
                     </div>
                 </button>
             </div>
@@ -159,16 +173,16 @@
                  {% endif %} >
             <h6 class="item_name">{{ item.title }}</h6>
             <h6 style="display:inline">$</h6>
-            <h3 class="item_price price text-muted" style="display:inline">{{ item.price|round|int }}</h3>
+            <h3 class="item_price price text-muted" style="display:inline">{{ price_ranges[item.id] }}</h3>
             <div style="margin-bottom:10px"></div>
 
             <div class="item-caption">
                 <a class="btn btn-default btn-lg view-details" href="{{ url_for('main.shop_item', item_id=item.id) }}">
                     VIEW DETAILS
                 </a>
-                <a class="item_add btn quick-add-cart" href="javascript:">
-                    <i class="fa fa-cart-plus fa-inverse fa-3x cart-add"></i>
-                </a>
+{#                <a class="item_add btn quick-add-cart" href="javascript:">#}
+{#                    <i class="fa fa-cart-plus fa-inverse fa-3x add-cart-btn"></i>#}
+{#                </a>#}
             </div>
             <div class="hidden date">{{ item.creation_date }}</div>
         </div>
