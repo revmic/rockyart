@@ -259,6 +259,31 @@ footer p {
     font-size: 50px;
     padding: 50px;
 }
+.qty-btn {
+    background-color: darkgray;
+    border-color: #868686;
+    color: white;
+}
+.qty-btn:hover {
+    background-color: darkgreen;
+    color: white;
+}
+.facebook-btn {
+    height: 28px;
+    margin-top: -20px;
+    position: relative;
+    vertical-align: middle;
+    line-height: 0;
+    border-radius: 2px;
+}
+.facebook-btn i {
+    color: #3b5998;
+}
+a.facebook-btn:hover {
+    background-color: white;
+}
+
+
 
 /*
     Shopping Cart

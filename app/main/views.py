@@ -8,6 +8,7 @@ from flask import render_template, redirect, url_for, flash, request, jsonify, g
 from flask_admin import expose
 from flask.ext.admin.contrib.sqla import ModelView
 from flask.ext.uploads import UploadSet, IMAGES
+from sqlalchemy import func
 # from flask.ext.login import login_required, current_user
 
 from app import mailer, db, admin
@@ -134,7 +135,7 @@ def shop():
 
     # Only show shop item if it's published and is in stock
     for product in results:
-        if product.published and product.quantity > 0:
+        if product.published:
             shop_items.append(product)
 
     for product in results:
@@ -179,10 +180,15 @@ def shop():
 
 @main.route('/shop/<item_id>')
 def shop_item(item_id):
-    item = Product.query.filter_by(id=item_id).first()
+    if item_id.isdigit():
+        item = Product.query.filter_by(id=item_id).first()
+    else:
+        print(item_id.replace('-', ' '))
+        search_item = item_id.replace('-', ' ')
+        item = Product.query.filter(func.lower(Product.title) == search_item).first()
 
     if not item:
-        flash('Item not found (id: %s)' % item_id, "warning")
+        flash('Item not found in shop (id: %s)' % item_id, "warning")
         return redirect(url_for('main.shop'))
 
     opt_label = "Option:"
@@ -191,13 +197,11 @@ def shop_item(item_id):
     elif item.category == "ring" or item.category == "earring":
         opt_label = "Size:"
 
-    item_images = ProductImage.query.filter_by(product_id=item_id).all()
     image_paths = []
 
-    for img in item_images:
+    # print(debug, item.images)
+    for img in item.images:
         image_paths.append(img.full_path)
-
-    print(debug, item_images)
 
     return render_template('shop_item.html', item=item, images=image_paths,
                            option_label=opt_label)

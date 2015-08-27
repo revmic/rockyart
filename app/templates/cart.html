@@ -33,13 +33,17 @@
             </tr>
             <tr>
                 <td class="title">Shipping</td>
-                <td>FREE</td>
+                <td>
+                    <a href="javascript:" data-toggle="modal" data-target="#shipping-info">
+                        See Details
+                    </a>
+                </td>
 {#                <td class="simpleCart_shipping"></td>#}
             </tr>
-            <tr>
-                <td class="title">Order Total</td>
-                <td class="simpleCart_grandTotal"></td>
-            </tr>
+{#            <tr>#}
+{#                <td class="title">Order Total</td>#}
+{#                <td class="simpleCart_grandTotal"></td>#}
+{#            </tr>#}
         </table>
     </div>
 
@@ -54,7 +58,7 @@
                 <i class="fa fa-trash-o fa-2x cart-button"></i>
             </a>
             <a href="javascript:" onclick="show_spinner()" class="simpleCart_checkout btn btn-primary">
-                <span class="cart-button">Checkout with</span>
+                <span class="cart-button">Checkout </span>
                 <i id="checkout_icon" class="fa fa-cc-paypal fa-2x cart-button"></i>
             </a>
         </p>
@@ -81,6 +85,65 @@
             </div>
         </div>
     </div>
+</div>
+
+{# Shipping Info Modal #}
+<div id="shipping-info" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="height:65px">
+                <h4>Shipping Rates</h4>
+                <button type="button" class="close" data-dismiss="modal" style="position:relative; bottom:40px">
+                    <i class="fa fa-times-circle-o fa-2x"></i>
+                </button>
+            </div>
+            <br>
+
+            <div class="modal-body text-center">
+
+                <div class="col-md-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="text-center">Domestic (USA)</h4>
+                        </div>
+{#                        <div class="panel-body text-center">#}
+{#                            <p class="lead"><strong>$10 / month</strong></p>#}
+{#                        </div>#}
+                        <ul class="list-group list-group-flush text-center">
+                            <li class="list-group-item"><i class="icon-ok text-danger"></i>Orders under $100 - <strong>$5</strong></li>
+                            <li class="list-group-item"><i class="icon-ok text-danger"></i>$100 and over - <strong>FREE</strong></li>
+                        </ul>
+
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="text-center"><i class="fa fa-globe"></i> International</h4>
+                        </div>
+{#                        <div class="panel-body text-center">#}
+{#                            <p class="lead"><strong>$10 / month</strong></p>#}
+{#                        </div>#}
+                        <ul class="list-group list-group-flush text-center">
+                            <li class="list-group-item"><i class="icon-ok text-danger"></i>Orders under $200 - <strong>$25</strong></li>
+                            <li class="list-group-item"><i class="icon-ok text-danger"></i>$200 and over - <strong>FREE</strong></li>
+                        </ul>
+
+                    </div>
+                </div>
+
+                <div>
+                    <p>You can see your order total on PayPal when you select "Checkout" without being obligated to purchase. Please don't hesitate to <a href="{{ url_for('main.contact') }}">contact me</a> for a customized quote.</p>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+                </div>
+
+            </div><!-- .modal-body -->
+        </div><!-- .modal-content -->
+    </div><!-- .modal-dialog -->
 </div>
 
 {% endblock %}

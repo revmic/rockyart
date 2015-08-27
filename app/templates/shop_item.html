@@ -131,61 +131,75 @@
                     }
                 </style>
 
-                <div class="form-inline" style="padding:0 10px 10px 0">
+                <div class="form-inline" style="padding:0 10px 10px 0; width:100%">
 
-                    <div class="input-group quantity-select" style="width:90px;">
-                        <span class="input-group-btn">
-                            <button id="qty-minus" class="btn qty-btn">-
-{#                                <i class="fa fa-minus-square cart-qty"></i>#}
-                            </button>
-                        </span>
+                    <div style="display:inline-flex">
+                        <div class="input-group quantity-select" style="width:110px;">
+                            <span class="input-group-btn">
+                                <button id="qty-minus" class="btn qty-btn">-</button>
+                            </span>
 
-                        <label for="qty"></label>
-                        <input id="qty" type="text" class="form-control qty-value item_Quantity" value="1" disabled style="width:40px"/>
-                        <input type="hidden" id="max_qty" value="{{ item.quantity }}" />
+                            <label for="qty"></label>
+                            <input id="qty" type="text" class="form-control qty-value item_Quantity" value="1" disabled style="width:45px"/>
+                            <input type="hidden" id="max_qty" value="{{ item.quantity }}" />
 
-                        <span class="input-group-btn">
-                            <button id="qty-plus" class="btn qty-btn">+
-{#                                <i class="fa fa-plus-square cart-qty"></i>#}
-                            </button>
-                        </span>
+                            <span class="input-group-btn">
+                                <button id="qty-plus" class="btn qty-btn">+</button>
+                            </span>
+                        </div>
                     </div>
 
-                    <button class="btn btn-default item_add" style="display:inline">
+                    <button class="btn btn-default item_add" style="position:relative; top: 6px">
                         <i class="fa fa-cart-plus"></i> Add to Cart
                     </button>
 
                 </div>
 
                 {# Social media buttons #}
-                <a href="//www.pinterest.com/pin/create/button/?url=http%3A%2F%{{ request.host }}%2Fshop%2F{{ item.id }}&media=http%3A%2F%2F{{ request.host }}%2Fstatic%2F{{ images[0]|replace('/', '%2F') }}&description=Rocky%20Pardo%20Jewelry" data-pin-do="buttonPin" data-pin-config="none" data-pin-color="white" data-pin-height="28">
-                    <img src="//assets.pinterest.com/images/pidgets/pinit_fg_en_rect_white_28.png" />
-                </a>
-
-                <script>
-                    function facebook_share() {
-                        window.open('http://www.facebook.com/sharer/sharer.php?u=[url]&t=[title]',
-                                'facebook_share', 'height=320, width=640, toolbar=no, menubar=no, scrollbars=no, resizable=no, location=no, directories=no, status=no');
-                    }
-                </script>
-
                 <style>
-                    .facebook-btn {
+                    .share-btn {
                         height: 28px;
                         margin-top: -20px;
                         position: relative;
                         vertical-align: middle;
                         line-height: 0
                     }
-                    .facebook-btn i {
-                        color: #3b5998;
+                    .share-btn i {
+                        font-size:22px;
+                        position:relative;
+                        bottom:3px;
+                        right:3px
                     }
-                    a.facebook-btn:hover {
+                    a.share-btn:hover {
                         background-color: white;
                     }
                 </style>
 
-                <a class="btn btn-default facebook-btn" href="javascript:" onclick='facebook_share()'><i class="fa fa-facebook"></i> Share</a>
+                <script>
+                    function facebook_share(url, title) {
+                        window.open('http://www.facebook.com/sharer/sharer.php?u=' + url + '&t=' + title,
+                                'facebook_share', 'height=320, width=640, toolbar=no, menubar=no, scrollbars=no, resizable=no, location=no, directories=no, status=no');
+                    }
+                    function google_share(url) {
+                        window.open('https://plus.google.com/share?url=' + url,
+                                'google_share', 'height=320, width=640, toolbar=no, menubar=no, scrollbars=no, resizable=no, location=no, directories=no, status=no');
+                    }
+                </script>
+
+                <a href="//www.pinterest.com/pin/create/button/?url=http%3A%2F%{{ request.host }}%2Fshop%2F{{ item.id }}&media=http%3A%2F%2F{{ request.host }}%2Fstatic%2F{{ images[0]|replace('/', '%2F') }}&description=Rocky%20Pardo%20Jewelry" data-pin-do="buttonPin" data-pin-config="none" data-pin-color="white" data-pin-height="28">
+                    <img src="//assets.pinterest.com/images/pidgets/pinit_fg_en_rect_white_28.png" />
+                </a>
+
+{#                <div class="g-plus" data-action="share" data-annotation="none" data-height="28" data-href="{{ request.url }}"></div>#}
+{#                <a href="https://plus.google.com/share?url={{ request.url }}" target="_blank">google</a>#}
+
+                <a class="btn btn-default share-btn" href="javascript:" onclick='google_share("{{ request.url }}")'>
+                    <i class="fa fa-google-plus" style="color:#D50F25"></i> <span style="position:relative; bottom: 8px"><strong>Share</strong></span>
+                </a>
+
+                <a class="btn btn-default share-btn" href="javascript:" onclick='facebook_share("{{ request.url }}", "{{ item.title }}")'>
+                    <i class="fa fa-facebook" style="color:#3b5998; font-size:22px; position:relative; bottom:3px; right:3px"></i> <span style="position:relative; bottom: 8px"><strong>Share</strong></span>
+                </a>
 
             </div>
         </div>

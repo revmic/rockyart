@@ -43,7 +43,8 @@ simpleCart({
         //{ attr: "name", label: "Name" },
         { attr: "name",
             view: function(item, column) {
-                return '<div>' + item.get('name') + "</div>";
+                return '<div>' + item.get('name') + '</div>';
+                //return '<div><a href="/shop/' + 1 + '">' + item.get('name') + "</a></div>";
         },  label: "<div'>Item</div>" },
 
         //{ attr: "size",
