@@ -15,25 +15,20 @@
             <div id="carousel-main" class="carousel slide">
                 <!-- Indicators -->
                 <ol class="carousel-indicators hidden-xs">
-                    <li data-target="#carousel-main" data-slide-to="0" class="active"></li>
-                    <li data-target="#carousel-main" data-slide-to="1"></li>
-                    <li data-target="#carousel-main" data-slide-to="2"></li>
+                    {% for image in carousel_images %}
+                        <li data-target="#carousel-main" data-slide-to="{{ loop.index }}"
+                            {% if loop.index0 == 0 %} class="active" {% endif %}></li>
+                    {% endfor %}
                 </ol>
 
                 <!-- Wrapper for slides -->
                 <div class="carousel-inner">
-                    <div class="item active">
-                        <img class="img-responsive img-full"
-                             src={{ url_for('static', filename="img/gallery/jewelry/full/j1.jpg") }} alt="">
-                    </div>
-                    <div class="item">
-                        <img class="img-responsive img-full"
-                             src={{ url_for('static', filename="img/gallery/jewelry/full/j6.jpg") }} alt="">
-                    </div>
-                    <div class="item">
-                        <img class="img-responsive img-full"
-                             src={{ url_for('static', filename="img/gallery/jewelry/full/j7.jpg") }} alt="">
-                    </div>
+                    {% for image in carousel_images %}
+                        <div class="item {% if loop.index0 == 0 %} active {% endif %} }">
+                            <img class="img-responsive img-full"
+                                 src={{ url_for('static', filename=image) }}>
+                        </div>
+                    {% endfor %}
                 </div>
 
                 <!-- Controls -->
@@ -44,30 +39,7 @@
                     <span class="icon-next"></span>
                 </a>
             </div>
-{#            <h2 class="brand-before">#}
-{#                <small>Welcome to</small>#}
-{#            </h2>#}
-{#            <h1 class="brand-name">Rocky Pardo Art Studio</h1>#}
-{#            <hr class="tagline-divider">#}
-{#            <h2>#}
-{#                <small>#}
-{#                    <strong>Rocky Pardo</strong>#}
-{#                </small>#}
-{#            </h2>#}
-        </div>
-    </div>
-</div>
 
-<div class="row">
-    <div class="box">
-        <div class="col-lg-12">
-            <hr>
-            <h2 class="intro-text text-center">Rock the <strong>Hops</strong> - August 15, 2015</h2>
-            <hr>
-            <hr class="visible-xs">
-            <p>Looking for something to do this weekend? Come out to Alton for beer, art, and music at some really great venues! I will be selling my jewelry at Old Bakery Beer Co. Get some holiday shopping done early with unique artist created treasures! (-;</p>
-            <p>Event details <a href="https://www.facebook.com/events/402076579977508/">can be found here</a></p>
-            <br><br>
         </div>
     </div>
 </div>
@@ -78,7 +50,7 @@
             <hr>
             <h2 class="intro-text text-center">About <strong>Me</strong></h2>
             <hr>
-            <img class="img-responsive img-border img-left" src="{{ url_for('static', filename='img/studio2_200x150.jpg') }}" alt="">
+            <img class="img-responsive img-border img-left" src="{{ url_for('static', filename='img/app/studio2_200x150.jpg') }}" style="max-width:200px" alt="studio">
             <hr class="visible-xs">
             <p>My name is Rocky. I live and create in Edwardsville, Illinois amidst fruit trees, a feisty pup, and a hop farm. I received a BFA in metalsmithing at Southern Illinois University Edwardsville. I absolutely love what I do and I especially love creating jewelry. I hope you enjoy my work.</p>
             <br><br>
@@ -93,9 +65,18 @@
             <h2 class="intro-text text-center">Artist <strong>Statement</strong></h2>
             <hr>
             <p>My fascination with the minutia within a grand whole is one of the drives behind my art. I relish in the little observed, hard to find, quiet and lavishly ornate beauties of the small and insignificant; or “unevents” as I see them. I examine the world as if to hold every dust mite and sand grain under a microscope, breaking down the smallest into even smaller. It is from that point that I then create my art ...</p>
-            <div class="text-center"><a href="{{ url_for('main.blog') }}" class="btn btn-default btn-sm">Read More</a></div>
+            <div class="text-center"><a href="{{ url_for('main.statement') }}" class="btn btn-default btn-sm">Read More</a></div>
         </div>
     </div>
 </div>
 
 {% endblock %}
+<script>
+$(document).ready(function() {
+    <!-- Activate Index Carousel -->
+    $('.carousel').carousel({
+        interval: 5000 //changes the speed
+    })
+});
+</script>
+
