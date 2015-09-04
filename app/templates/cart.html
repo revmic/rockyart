@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="box" style="padding:0;">
+    <div class="row">
+        <div class="col-lg-12">
+            <h3 class="text-center" style="margin-bottom: -15px">
+                <i class="fa fa-cart-arrow-down" style="color:darkgray"></i> Shopping Cart
+            </h3>
+            <hr>
+            <ol class="breadcrumb" style="padding:0 0 0 15px; margin-top: -15px">
+                <li><a href="{{ url_for('main.index') }}">Home</a></li>
+                <li><a href="{{ url_for('main.shop') }}">Back to Shop</a></li>
+                <li class="active">Cart</li>
+            </ol>
+        </div>
+    </div>
+</div>
+
+<div id="desktop-cart" class="box">
+    <div class="table-responsive" style="margin-bottom:-35px">
+        <div class="simpleCart_items"></div>
+    </div>
+
+    <hr style="opacity:0.4">
+
+    <div class="row">
+        <table id="cart-summary" class="table-condensed pull-right">
+            <tr>
+                <td class="title">Cart Subtotal</td>
+                <td class="simpleCart_total value"></td>
+            </tr>
+            <tr>
+                <td class="title">Shipping</td>
+                <td>
+                    <a href="javascript:" data-toggle="modal" data-target="#shipping-info">
+                        See Details
+                    </a>
+                </td>
+{#                <td class="simpleCart_shipping"></td>#}
+            </tr>
+{#            <tr>#}
+{#                <td class="title">Order Total</td>#}
+{#                <td class="simpleCart_grandTotal"></td>#}
+{#            </tr>#}
+        </table>
+    </div>
+
+    <div class="row">
+        <p class="text-right" style="padding-right: 25px">
+            <a id="transaction-button" href="javascript:" data-toggle='tooltip' data-placement="left"
+               title='For all our sakes, none of your financial information is stored on this site. Transactions happen securely through Paypal.'>
+                <i class="fa fa-info-circle fa-2x cart-info"></i>
+            </a>
+            <a href="javascript:" class="simpleCart_empty btn btn-default">
+                <span class="cart-button">Empty Cart</span>
+                <i class="fa fa-trash-o fa-2x cart-button"></i>
+            </a>
+            <a href="javascript:" onclick="show_spinner()" class="simpleCart_checkout btn btn-primary">
+                <span class="cart-button">Checkout </span>
+                <i id="checkout_icon" class="fa fa-cc-paypal fa-2x cart-button"></i>
+            </a>
+        </p>
+    </div>
+    <p id="transaction-text" class="small">*Transaction processed securely via PayPal</p>
+</div>
+
+{#<div id="mobile-cart">#}
+{#</div>#}
+
+{# Empty Cart Modal #}
+<div id="empty-cart" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="height:65px">
+                <button type="button" class="close" data-dismiss="modal"><i class="fa fa-times-circle-o fa-2x"></i></button>
+            </div>
+            <div class="modal-body text-center">
+                <p>Empty your shopping cart?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+                <button type="submit" class="simpleCart_empty btn btn-default">Yes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{# Shipping Info Modal #}
+<div id="shipping-info" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="height:65px">
+                <h4>Shipping Rates</h4>
+                <button type="button" class="close" data-dismiss="modal" style="position:relative; bottom:40px">
+                    <i class="fa fa-times-circle-o fa-2x"></i>
+                </button>
+            </div>
+            <br>
+
+            <div class="modal-body text-center">
+
+                <div class="col-md-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="text-center">Domestic (USA)</h4>
+                        </div>
+{#                        <div class="panel-body text-center">#}
+{#                            <p class="lead"><strong>$10 / month</strong></p>#}
+{#                        </div>#}
+                        <ul class="list-group list-group-flush text-center">
+                            <li class="list-group-item"><i class="icon-ok text-danger"></i>Orders under $100 - <strong>$5</strong></li>
+                            <li class="list-group-item"><i class="icon-ok text-danger"></i>$100 and over - <strong>FREE</strong></li>
+                        </ul>
+
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="text-center"><i class="fa fa-globe"></i> International</h4>
+                        </div>
+{#                        <div class="panel-body text-center">#}
+{#                            <p class="lead"><strong>$10 / month</strong></p>#}
+{#                        </div>#}
+                        <ul class="list-group list-group-flush text-center">
+                            <li class="list-group-item"><i class="icon-ok text-danger"></i>Orders under $200 - <strong>$25</strong></li>
+                            <li class="list-group-item"><i class="icon-ok text-danger"></i>$200 and over - <strong>FREE</strong></li>
+                        </ul>
+
+                    </div>
+                </div>
+
+                <div>
+                    <p>You can see your order total on PayPal when you select "Checkout" without being obligated to purchase. Please don't hesitate to <a href="{{ url_for('main.contact') }}">contact me</a> for a customized quote.</p>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+                </div>
+
+            </div><!-- .modal-body -->
+        </div><!-- .modal-content -->
+    </div><!-- .modal-dialog -->
+</div>
+
+{% endblock %}

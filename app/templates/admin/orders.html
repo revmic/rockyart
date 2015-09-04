@@ -1,0 +1,49 @@
+{% extends 'admin/master.html' %}
+
+{% block content %}
+
+{#    <div class="container" style="width:90%">#}
+{#        <div class="row" style="padding-bottom:10px">#}
+{#            <a href="/admin/product/new?id={{ new_id }}" class="btn btn-success"><i class="fa fa-plus-square-o"></i> Add Product</a>#}
+{#        </div>#}
+{#    </div>#}
+
+    <table class="table table-hover table-admin box">
+        <thead>
+            <tr>
+                <th>id</th>
+                <th>Controls</th>
+                <th>Image</th>
+                <th>Order Date</th>
+                <th>Expected Delivery</th>
+                <th>Ship Date</th>
+                <th>Products</th>
+                <th>Status</th>
+{#                <th class="text-center">Quantity</th>#}
+{#                <th>Created</th>#}
+{#                <th class="text-center">#Images</th>#}
+{#                <th class="text-center">Published</th>#}
+            </tr>
+        </thead>
+
+        <tbody>
+        {% for o in orders %}
+        <tr>
+            <td>{{ o.id }}</td>
+            <td></td>
+            <td></td>
+            <td>{{ o.order_date }}</td>
+            <td></td>
+            <td></td>
+            <td>PRODUCTS</td>
+            <td>{{ status }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{#    {% for o in orders %}#}
+{#        <div>{{ o }}</div>#}
+{#    {% endfor %}#}
+
+{% endblock %}

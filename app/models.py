@@ -1,7 +1,77 @@
 from flask.ext.login import UserMixin, AnonymousUserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from . import db, login_manager
+from app import db, login_manager
+
+
+order_line = db.Table('association',
+    db.Column('product_id', db.Integer, db.ForeignKey('products.id')),
+    db.Column('order_id', db.Integer, db.ForeignKey('orders.id'))
+)
+
+
+class Order(db.Model):
+    __tablename__ = 'orders'
+    id = db.Column(db.Integer, primary_key=True)
+    order_date = db.Column(db.DateTime, index=True)
+    status = db.Column(db.String(64), index=True)
+    products = db.relationship("Product", secondary=order_line,
+                               backref=db.backref('orders', lazy='dynamic'),
+                               lazy='dynamic')
+
+    def __repr__(self):
+        return '<Order: id=%s, status=%s, ordered=%s>' % \
+               (self.id, self.status, self.order_date)
+
+
+class Product(db.Model):
+    __tablename__ = 'products'
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(64), index=True)
+    category = db.Column(db.String(64), index=True)
+    description = db.Column(db.String(500), index=True)
+    price = db.Column(db.Float, default=0.0, index=True)
+    quantity = db.Column(db.Integer, default=1)
+    creation_date = db.Column(db.Date)
+    published = db.Column(db.Boolean, default=False)
+    images = db.relationship("ProductImage")
+    options = db.relationship("ProductOption")
+
+    def __repr__(self):
+        return '<Product: title=%s, category=%s, price=%s>' % \
+               (self.title, self.category, self.price)
+
+    def __unicode__(self):
+        return self.title
+
+
+class ProductImage(db.Model):
+    __tablename__ = 'product_images'
+    id = db.Column(db.Integer, primary_key=True)
+    product_id = db.Column(db.Integer, db.ForeignKey('products.id'))
+    # product = db.relationship(Product, backref='products')
+    filename = db.Column(db.String(64))
+    full_path = db.Column(db.String(256))
+    thumb_path = db.Column(db.String(256))
+    main_image = db.Column(db.Boolean, default=False)
+    gallery_image = db.Column(db.Boolean, default=False)
+
+    def __repr__(self):
+        return '<Image: product_id=%s, filename=%s, path=%s>' % \
+               (self.product_id, self.filename, self.full_path)
+
+    def __unicode__(self):
+        return self.full_path
+
+
+class ProductOption(db.Model):
+    __tablename__ = 'product_options'
+    id = db.Column(db.Integer, primary_key=True)
+    product_id = db.Column(db.Integer, db.ForeignKey('products.id'))
+    # product = db.relationship(Product, backref='products')
+    name = db.Column(db.String(64))
+    price = db.Column(db.Float, default=0.0, index=True)
+    quantity = db.Column(db.Integer, default=1)
 
 
 class Role(db.Model):
@@ -10,7 +80,7 @@ class Role(db.Model):
     name = db.Column(db.String(64), unique=True)
     default = db.Column(db.Boolean, default=False, index=True)
     permissions = db.Column(db.Integer)
-    users = db.relationship('User', backref='role', lazy='dynamic')
+    users = db.relationship('User', backref='roles', lazy='dynamic')
 
     @staticmethod
     def insert_roles():
@@ -83,3 +153,4 @@ class Permission:
     WRITE_ARTICLES = 0x04
     MODERATE_COMMENTS = 0x08
     ADMINISTER = 0x80
+

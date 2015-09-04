@@ -1,0 +1,71 @@
+{% extends 'admin/master.html' %}
+
+{% block content %}
+
+    <div class="container" style="width:90%">
+    <div class="row" style="padding-bottom:10px">
+        <a href="/admin/product/new?id={{ new_id }}" class="btn btn-success"><i class="fa fa-plus-square-o"></i> Add Product</a>
+    </div>
+    </div>
+
+    <table class="table table-hover table-admin box">
+        <thead>
+            <tr>
+                <th>id</th>
+                <th>Controls</th>
+                <th>Image</th>
+                <th>Title</th>
+                <th>Category</th>
+                <th>Description</th>
+                <th>Price</th>
+                <th class="text-center">Qty</th>
+                <th>Created</th>
+                <th class="text-center">#Imgs</th>
+                <th class="text-center">#Opts</th>
+                <th class="text-center">Published</th>
+            </tr>
+        </thead>
+
+        <tbody>
+        {% for p in products %}
+            <tr {% if not p.published %} class="active" {% endif %}>
+                <td class="text-muted">{{ p.id }}</td>
+                <td>
+                    <a href="/admin/product/edit?id={{ p.id }}"><i class="fa fa-pencil-square-o fa-2x"></i></a>
+                    <form action="/admin/product/delete/?id={{ p.id }}" role="form" method="post" class="pull-right">
+                        <input type="hidden" name="id" id="id" value={{ p.id }} />
+                        <input type="hidden" name="url" id="url" value="/admin/products" />
+                        <button type="submit" name="delete" class="link-button"
+                            onclick="return confirm('Are you sure you want to delete this record?');">
+                            <i class="fa fa-trash-o fa-2x" style="color:indianred"></i>
+                        </button>
+                    </form>
+
+                </td>
+                <td>
+                    {% if product_images[p.id] %}
+                        <img src="{{ url_for('static', filename=product_images[p.id][0].thumb_path) }}" style="width:50px">
+                    {% endif %}
+                </td>
+                <td>{{ p.title }}</td>
+                <td>{{ p.category }}</td>
+                <td>{{ p.description }}</td>
+                <td>${{ p.price|round|int }}</td>
+{#            <td></td>#}
+                <td class="text-center">{{ p.quantity }}</td>
+                <td>{{ p.creation_date }}</td>
+                <td class="text-center">{{ product_images[p.id]|length }}</td>
+                <td class="text-center">{{ product_options[p.id]|length }}</td>
+                <td class="text-center">
+                    {% if p.published %}
+                        <i class="fa fa-check-circle-o fa-2x" style="color:forestgreen"></i>
+                    {% else %}
+                        <i class="fa fa-times-circle-o fa-2x" style="color:indianred"></i>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

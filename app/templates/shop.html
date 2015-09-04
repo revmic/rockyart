@@ -1,0 +1,248 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+#filters label {
+    position: relative;
+    top: 8px;
+}
+#mobile-category-filters {
+    padding: 0;
+}
+</style>
+
+{#<div style="position: relative; height: 50px; width: 100px">#}
+{#    <img class="img-rounded img-responsive" src="{{ url_for('static', filename='img/app/necklaces.jpg') }}" style="position:absolute; top:0; left:0">#}
+{#    <p style="position:absolute; left: 25px; top: 0; color:whitesmoke;font-size:12px; z-index: 10">necklaces</p>#}
+{#</div>#}
+
+<div class="box">
+
+    <div id="mobile-category-filters" class="container hidden">
+        <div class="row text-center">
+            <div class="col-xs-6" style="padding: 0 2px 8px 30px">
+                <button class="btn btn-block btn-sm btn-default" data-toggle="modal" data-target="#galleryModal">
+                    <i class="fa fa-diamond"></i> Gallery
+                </button>
+            </div>
+            <div class="col-xs-6" style="padding: 0 30px 8px 2px">
+                <a class="btn btn-block btn-sm btn-primary" href="{{ url_for('main.cart') }}">
+                    <i class="fa fa-shopping-cart"></i> Checkout
+                </a>
+            </div>
+        </div>
+
+        <!-- Categories -->
+        <div id="filters">
+            <label for="category-select" class="col-xs-3">Category</label>
+
+            <div class="col-xs-9">
+                <select id="category-select" class="form-control">
+                    <option value="*">All</option>
+                    <option value=".necklace">Necklaces</option>
+                    <option value=".bracelet">Bracelets</option>
+                    <option value=".ring">Rings</option>
+                    <option value=".earring">Earrings</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Sorting -->
+        <div id="sorting">
+            <label for="sortby-select" class="col-xs-3">Sort</label>
+
+            <div class="col-xs-9">
+                <select id="sortby-select" class="form-control">
+                    <option value="none">None</option>
+                    <option value="date">Newest First</option>
+                    <option value="price_up">Price Ascending</option>
+                    <option value="price_down">Price Descending</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="desktop-category-filters" class="hidden">
+        <!-- Categories -->
+        <div class="row text-center" style="margin-top:-15px; margin-bottom: -5px">
+            <div class="btn-group filter-button-group">
+                <button data-filter="*" class="item-thumbnail category-button" style="width:75px">
+                    <img class="img-rounded img-responsive" src="{{ url_for('static', filename='img/app/heavy_asterisk.png') }}">
+                     <div class="item-caption">
+                         <h4 style="margin-top:20px">All</h4>
+                     </div>
+                </button>
+                <button data-filter=".necklace" class="item-thumbnail category-button">
+                    <img class="img-rounded img-responsive" src="{{ url_for('static', filename='img/app/necklaces.jpg') }}">
+                    <div class="item-caption">
+                        <h4 style="margin-top:20px">Necklaces</h4>
+                    </div>
+                </button>
+                <button data-filter=".earring" class="item-thumbnail category-button">
+                    <img class="img-rounded img-responsive" src="{{ url_for('static', filename='img/app/earrings.jpg') }}">
+                    <div class="item-caption">
+                        <h4 style="margin-top:20px">Earrings</h4>
+                    </div>
+                </button>
+                <button data-filter=".ring" class="item-thumbnail category-button">
+                    <img class="img-rounded img-responsive" src="{{ url_for('static', filename='img/app/rings.jpg') }}">
+                    <div class="item-caption">
+                        <h4 style="margin-top:20px">Rings</h4>
+                    </div>
+                </button>
+                <button data-filter=".bracelet" class="item-thumbnail category-button">
+                    <img class="img-rounded img-responsive" src="{{ url_for('static', filename='img/app/bracelets.jpg') }}">
+                    <div class="item-caption">
+                        <h4 style="margin-top:20px">Bracelets</h4>
+                    </div>
+                </button>
+                <button type="button" class="item-thumbnail category-button" data-toggle="modal" data-target="#galleryModal">
+                    <img class="img-rounded img-responsive" src="{{ url_for('static', filename='img/app/gallery.png') }}">
+                    <div class="item-caption">
+                        <h4 style="margin-top:20px">Gallery</h4>
+                    </div>
+                </button>
+            </div>
+        </div>
+
+        <!-- Sorting -->
+        <div class="row text-center" style="margin-bottom: -15px">
+            <div class="btn-group sortby-button-group">
+                <button class="btn btn-default btn-sm" data-sort-by="date">
+                    newest first <i class="fa fa-clock-o"></i>
+                </button>
+                <button class="btn btn-default btn-sm" data-sort-by="price_up">
+                    price <i class="fa fa-chevron-up" style="color:dodgerblue"></i>
+                </button>
+                <button class="btn btn-default btn-sm" data-sort-by="price_down">
+                    price <i class="fa fa-chevron-down" style="color:dodgerblue"></i>
+                </button>
+                <button class="btn btn-default btn-sm">
+                    clear sort <i class="fa fa-minus-square-o" style="color:red"></i>
+                </button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Gallery Modal -->
+<div id="galleryModal" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg">
+
+    <div class="modal-content">
+      <div class="modal-header text-center" style="height:65px">
+          <h1 style="display:inline">Gallery</h1>
+          <button type="button" class="close" data-dismiss="modal"><i class="fa fa-times-circle-o fa-2x"></i></button>
+      </div>
+      <div class="modal-body text-center">
+{#          <div class="text-center gallery-logo">Gallery</div>#}
+        <p class="text-left">The gallery contains items that have been previously sold, created for pleasure, and some for keeps.
+            I would love to help you with your next custom piece, and I hope these images help to spark your creative genius.
+            Click on an image to start browsing.
+        </p>
+        <div id="links">
+            {% for img in gallery_images %}
+                <a href="{{ url_for('static', filename=img.full_path) }}" title="" data-gallery>
+                    <img src="{{ url_for('static', filename=img.thumb_path) }}" class="gallery-item" alt="" style="max-width:100px">
+                </a>
+{#                 <a href="{{ url_for('static', filename='img/gallery/%s/full/%s' % (c, i)) }}" title="" data-gallery>#}
+{#                    <img src="{{ url_for('static', filename='img/gallery/%s/thumb/%s' % (c, i)) }}" class="gallery-item" alt="" width="200">#}
+{#                </a>#}
+            {% endfor %}
+        </div>
+      </div>
+      <div class="modal-footer" style="height:65px">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Continue Shopping</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="box">
+    <div class="store-grid">
+
+    {% for item in items %}
+        <div class="store-item simpleCart_shelfItem {{ item.category }} item-thumbnail text-center" data-category="{{ item.category }}">
+            <img alt="image" class="item_image img-responsive"
+                 {% if main_images[item.id] %}
+                    src="{{ url_for('static', filename=main_images[item.id]) }}"
+                 {% endif %} >
+            <h6 class="item_name">{{ item.title }}</h6>
+            <h6 style="display:inline">$</h6>
+            <h3 class="item_price price text-muted" style="display:inline">{{ price_ranges[item.id] }}</h3>
+            <div style="margin-bottom:10px"></div>
+
+            <div class="item-caption">
+                <a class="btn btn-default btn-lg view-details" href="{{ url_for('main.shop_item', item_id=item.id) }}">
+                    VIEW DETAILS
+                </a>
+{#                <a class="item_add btn quick-add-cart" href="javascript:">#}
+{#                    <i class="fa fa-cart-plus fa-inverse fa-3x add-cart-btn"></i>#}
+{#                </a>#}
+            </div>
+            <div class="hidden date">{{ item.creation_date }}</div>
+        </div>
+
+        {# Added to Cart Modal #}
+        <div id="add-{{ item.title.replace(' ', '') }}" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header" style="height:65px">
+                        <button type="button" class="close" data-dismiss="modal"><i class="fa fa-times-circle-o fa-2x"></i></button>
+                    </div>
+                    <div class="modal-body text-center">
+                        <img src="{{ url_for('static', filename=main_images[item.id]) }}" style="max-width:256px">
+                        <p><strong>{{ item.title }}</strong> was added to your Shopping Cart!</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Continue Shopping</button>
+                        <a href="{{ url_for('main.cart') }}" class="btn btn-primary">View Cart</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+
+    </div>
+</div>
+
+<!-- Bootstrap Image Gallery lightbox -->
+<div id="blueimp-gallery" class="blueimp-gallery blueimp-gallery-controls">
+    <!-- The container for the modal slides -->
+    <div class="slides"></div>
+    <!-- Controls for the borderless lightbox -->
+    <h3 class="title"></h3>
+    <a class="prev">‹</a>
+    <a class="next">›</a>
+    <a class="close">×</a>
+    <a class="play-pause"></a>
+    <ol class="indicator"></ol>
+    <!-- The modal dialog, which will be used to wrap the lightbox content -->
+    <div class="modal fade">
+        <div class="modal-dialog modal-primary">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" aria-hidden="true"><i class="fa fa-times-circle-o"></i></button>
+{#                    <h4 class="modal-title"></h4>#}
+                </div>
+                <div class="modal-body next"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left prev">
+                        <i class="glyphicon glyphicon-chevron-left"></i>
+                        Previous
+                    </button>
+                    <button type="button" class="btn btn-primary next">
+                        Next
+                        <i class="glyphicon glyphicon-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
