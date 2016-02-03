@@ -131,7 +131,7 @@ simpleCart.bind("afterAdd" , function( item ) {
 
 simpleCart.bind("checkoutSuccess", function () {
     window.location="/index";
-    alert("checkoutSuccess event")
+    //alert("checkoutSuccess event")
 });
 
 simpleCart.bind('beforeAdd' , function( item ) {
@@ -145,10 +145,12 @@ simpleCart.bind('beforeAdd' , function( item ) {
     }
 });
 
-function show_spinner() {
+function checkout() {
     var icon = $("#checkout_icon");
     icon.removeClass("fa-cc-paypal");
     icon.addClass("fa-spinner fa-spin");
+    // Empty POST to trigger email in Flask
+    $.post();
 }
 
 $(".qty-btn").on("click", function () {

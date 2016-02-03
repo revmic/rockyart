@@ -116,6 +116,10 @@ footer p {
   background-color: #fffbf4;
 }
 
+a[disabled] {
+    color: gray;
+}
+
 /*
     Custom Containers
 */

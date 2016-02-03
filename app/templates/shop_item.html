@@ -6,7 +6,7 @@
     <meta property="og:type"          content="website" />
     <meta property="og:title"         content="{{ item.title }}" />
     <meta property="og:description"   content="{{ item.description }}" />
-    <meta property="og:image"         content="{{ request.host }}/static/{{ images[0] }}" />
+    <meta property="og:image"         content="http://{{ request.host }}/static/{{ images[0] }}" />
 {% endblock %}
 
 {% block content %}
@@ -186,7 +186,7 @@
                     }
                 </script>
 
-                <a href="//www.pinterest.com/pin/create/button/?url=http%3A%2F%{{ request.host }}%2Fshop%2F{{ item.id }}&media=http%3A%2F%2F{{ request.host }}%2Fstatic%2F{{ images[0]|replace('/', '%2F') }}&description=Rocky%20Pardo%20Jewelry" data-pin-do="buttonPin" data-pin-config="none" data-pin-color="white" data-pin-height="28">
+                <a href="//www.pinterest.com/pin/create/button/?url=http%3A%2F%2F{{ request.host }}%2Fshop%2F{{ item.id }}&media=http%3A%2F%2F{{ request.host }}%2Fstatic%2F{{ images[0]|replace('/', '%2F') }}&description=Rocky%20Pardo%20Jewelry" data-pin-do="buttonPin" data-pin-config="none" data-pin-color="white" data-pin-height="28">
                     <img src="//assets.pinterest.com/images/pidgets/pinit_fg_en_rect_white_28.png" />
                 </a>
 

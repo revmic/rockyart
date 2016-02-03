@@ -5,7 +5,7 @@ from datetime import datetime
 import requests
 from PIL import Image
 from flask import render_template, redirect, url_for, flash, request, jsonify, g
-from flask_admin import expose
+from flask_admin import expose, AdminIndexView
 from flask.ext.admin.contrib.sqla import ModelView
 from flask.ext.uploads import UploadSet, IMAGES
 from sqlalchemy import func
@@ -207,14 +207,17 @@ def shop_item(item_id):
                            option_label=opt_label)
 
 
-@main.route('/cart', methods=['GET'])
+@main.route('/cart', methods=['GET', 'POST'])
 def cart():
+    if request.method == "POST":
+        mailer.send_email("Checkout Clicked!", "checkout_click")
+
     return render_template("cart.html", title='Shopping Cart')
 
 
 @main.route('/cart/success', methods=['GET', 'POST'])
 def cart_success():
-    return render_template("order_successful.html", title='Order Successful')
+    return render_template("order_success.html", title='Order Successful')
 
 
 @main.route('/contact', methods=['GET', 'POST'])
@@ -295,15 +298,30 @@ def view_products():
                            product_options=product_options)
 
 
+# @main.route('/admin/index')
+# @auth.login_required
+# def admin_index():
+#     print("hello")
+#     return render_template("admin/index.html", a='A')
+
+class AdminDashboardView(AdminIndexView):
+    @expose('/')
+    def index(self):
+        arg = 'hello'
+        return self.render('admin/index.html', arg=arg)
+
+
 class ProductView(ModelView):
     categories = ['necklace', 'ring', 'earring', 'bracelet']
 
     # @expose('/')
     # @auth.login_required
     # def index(self):
-    #     if not current_user.is_authenticated():
-    #         return redirect(url_for('view_products'))
-    #     return super(ProductView, self).index()
+    #     # if not current_user.is_authenticated():
+    #     #     return redirect(url_for('view_products'))
+    #     # return super(ProductView, self).index()
+    #     print("Inside index")
+    #     return self.render('admin/index.html', a='asdf')
 
     @expose('/new/', methods=('GET', 'POST'))
     @auth.login_required
@@ -647,3 +665,4 @@ def product_options(pid):
 admin.add_view(ProductView(Product, db.session, name="Products"))
 admin.add_view(ModelView(Order, db.session, name="Orders"))
 admin.add_view(ModelView(ProductImage, db.session, name="Images"))
+# admin.add_view(AdminDashboardView(name="Dashboard"))

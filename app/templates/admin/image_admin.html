@@ -21,7 +21,7 @@
         <div class="row">
             <div class="product-image-grid" style="margin: 0 auto">
             {% for img in images %}
-                <div class="product-image item-thumbnail text-center">
+                <div id="product-images" class="product-image item-thumbnail text-center">
                     <img alt="image" class="img-responsive"
                          src="{{ url_for('static', filename=img.thumb_path) }}">
 
@@ -51,3 +51,10 @@
     </div>
 
 {% endblock %}
+
+{#<script src="//cdnjs.cloudflare.com/ajax/libs/Sortable/1.2.1/Sortable.min.js"></script>#}
+{##}
+{#<script>#}
+{#    var list = document.getElementById("product-image");#}
+{#    Sortable.create(list);#}
+{#</script>#}

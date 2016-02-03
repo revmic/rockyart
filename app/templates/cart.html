@@ -47,6 +47,7 @@
         </table>
     </div>
 
+    <form id="checkout" method="post"></form>
     <div class="row">
         <p class="text-right" style="padding-right: 25px">
             <a id="transaction-button" href="javascript:" data-toggle='tooltip' data-placement="left"
@@ -57,7 +58,7 @@
                 <span class="cart-button">Empty Cart</span>
                 <i class="fa fa-trash-o fa-2x cart-button"></i>
             </a>
-            <a href="javascript:" onclick="show_spinner()" class="simpleCart_checkout btn btn-primary">
+            <a href="javascript:" onclick="checkout()" class="simpleCart_checkout btn btn-primary">
                 <span class="cart-button">Checkout </span>
                 <i id="checkout_icon" class="fa fa-cc-paypal fa-2x cart-button"></i>
             </a>
@@ -113,7 +114,6 @@
                             <li class="list-group-item"><i class="icon-ok text-danger"></i>Orders under $100 - <strong>$5</strong></li>
                             <li class="list-group-item"><i class="icon-ok text-danger"></i>$100 and over - <strong>FREE</strong></li>
                         </ul>
-
                     </div>
                 </div>
 
@@ -129,7 +129,6 @@
                             <li class="list-group-item"><i class="icon-ok text-danger"></i>Orders under $200 - <strong>$25</strong></li>
                             <li class="list-group-item"><i class="icon-ok text-danger"></i>$200 and over - <strong>FREE</strong></li>
                         </ul>
-
                     </div>
                 </div>
 
@@ -145,5 +144,15 @@
         </div><!-- .modal-content -->
     </div><!-- .modal-dialog -->
 </div>
+<script>
+$(document).ready(function() {
+    // alert(simpleCart.quantity());
+    if (simpleCart.quantity() != 0) {
+        $('.simpleCart_checkout').hide();
+        $('.simpleCart_empty').hide();
+        $(".simpleCart_items").after("<h4 class='text-center' style='padding-bottom:10px'>Your cart is empty</h4>");
+    }
+});
+</script>
 
 {% endblock %}
