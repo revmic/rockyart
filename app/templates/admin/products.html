@@ -50,7 +50,15 @@
                 <td>{{ p.title }}</td>
                 <td>{{ p.category }}</td>
                 <td>{{ p.description }}</td>
-                <td>${{ p.price|round|int }}</td>
+                    {% if product_options[p.id] %}
+                        {% if product_options[p.id][0] == product_options[p.id][-1] %}
+                            <td>${{ product_options[p.id][0].price|round|int }}</td>
+                        {% else %}
+                            <td>${{ product_options[p.id][0].price|round|int }}-{{ product_options[p.id][-1].price|round|int }}</td>
+                        {% endif %}
+                    {% else %}
+                        <td>--</td>
+                    {% endif %}
 {#            <td></td>#}
                 <td class="text-center">{{ p.quantity }}</td>
                 <td>{{ p.creation_date }}</td>
