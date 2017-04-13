@@ -62,3 +62,4 @@ target/
 *.sqlite
 */img/gallery/*
 */img/store/*
+app/static/img/store/*
