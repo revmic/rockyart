@@ -16,7 +16,7 @@ class Config:
     # This is an email that will automatically become admin
     # ROCKY_ADMIN = os.environ.get('ROCKY_ADMIN')
     ROCKY_ADMIN = 'mhilema@gmail.com'
-    MAIL_SERVER = 'smtp.googlemail.com'
+    MAIL_SERVER = 'smtp.gmail.com'
     MAIL_PORT = 587
     MAIL_USE_TLS = True
     MAIL_USERNAME = configp['mail']['username']
